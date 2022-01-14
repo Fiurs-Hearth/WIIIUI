@@ -1,0 +1,3051 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
+
+    <Script file="WIIIUI.lua"/>
+     <!-- Generic frame for inheritance  --> 
+    <Frame name="WIIIUI_Frame" framestrata="LOW" parent="UIParent" virtual="true">
+        <Size x="1" y="1" />
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>        
+        <Scripts>
+            <OnLoad>
+                Wc3UI_OnLoad()
+            </OnLoad>
+        </Scripts>  
+    </Frame>
+
+    <!-- Force reload frame -->
+    <Frame name="WIIIUI_ForceReload" framestrata="DIALOG" parent="UIParent">
+        <Size x="1000" y="400"/>
+		<Anchors>
+			<Anchor point="CENTER">	
+				<Offset x="0" y="0"/>
+			</Anchor>
+		</Anchors>
+        
+		<Backdrop bgFile="Interface/BUTTONS/UI-QuickslotRed">
+			<Color r="1" g="1" b="1" a="1" />
+			<BackgroundInsets>
+				<AbsInset left="0" right="0" top="0" bottom="0"/>
+			</BackgroundInsets>
+		</Backdrop>
+
+        <Frames>
+            <Button name="$parentButton" inherits="OptionsButtonTemplate" text="FIRST TIME RUNNING ADDON, CLICK HERE TO RELOAD!">
+                <Size x="600" y="150"/>
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ReloadUI();
+                     </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad>
+               this:Hide()
+            </OnLoad>
+        </Scripts>
+    </Frame>
+
+    <!-- Cogwheel hover frame -->
+    <Frame name="WIIIUI_cogwheel_hover" framestrata="HIGH" parent="UIParent">
+        <Size x="30" y="30"/>
+        <Anchors>
+			<Anchor point="BOTTOMRIGHT">	
+				<Offset x="7" y="-6"/>
+			</Anchor>
+		</Anchors> 
+        <Scripts>
+            <OnEnter>
+                WIIIUI_cogwheel:Show()
+            </OnEnter>
+            <OnLeave>
+                WIIIUI_cogwheel:Hide()
+            </OnLeave>
+            <OnMouseDown>
+                WIIIUI_cogwheel:SetBackdropColor(0.75,0.75,0.75, 1)
+                if(WIIIUI_menu:IsVisible())then
+                    WIIIUI_menu:Hide()
+                else
+                    WIIIUI_menu:Show()
+                end
+            </OnMouseDown>
+            <OnMouseUp>
+                WIIIUI_cogwheel:SetBackdropColor(1, 1, 1, 1) 
+            </OnMouseUp>
+        </Scripts>
+    </Frame>
+
+    <!-- Cogwheel toggle menu -->
+    <Frame name="WIIIUI_cogwheel" framestrata="DIALOG" parent="UIParent">
+        <Size x="30" y="30"/>
+		<Anchors>
+			<Anchor point="BOTTOMRIGHT">	
+				<Offset x="7" y="-6"/>
+			</Anchor>
+		</Anchors>
+        
+		<Backdrop bgFile="Interface\AddOns\WIIIUI\art\other\cogwheel">
+			<Color r="1" g="1" b="1" a="1" />
+			<BackgroundInsets>
+				<AbsInset left="0" right="0" top="0" bottom="0"/>
+			</BackgroundInsets>
+		</Backdrop>
+        <Scripts>
+            <OnLoad>
+                this:Hide()
+            </OnLoad>
+        </Scripts>
+    </Frame>
+
+    <!-- Menu frame -->
+    <Frame name="WIIIUI_menu"  movable="true" parent="UIParent" framestrata="DIALOG">
+        <Size x="650" y="600"/>
+		<Anchors>
+			<Anchor point="LEFT">	
+				<Offset x="200" y="0"/>
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background" edgeFile="Interface/DialogFrame/UI-DialogBox-Border">
+			<Color r="0" g="0" b="0" a="0.75" />
+			<BackgroundInsets>
+				<AbsInset left="10" right="10" top="10" bottom="10"/>
+			</BackgroundInsets>
+		</Backdrop>
+
+        <Frames>
+            <!-- Close window button -->
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+				<Size x="30" y="30"/>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset x="5" y="5"/>
+					</Anchor>
+				</Anchors>
+			</Button>
+            <!-- Human theme -->
+            <Button name="$parentButtonThemeHuman" inherits="OptionsButtonTemplate" text="Human">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="15" y="-55"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("human")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Orc theme -->
+            <Button name="$parentButtonThemeOrc" inherits="OptionsButtonTemplate" text="Orc">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="110" y="-55"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("orc")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Undead theme -->
+            <Button name="$parentButtonThemeUndead" inherits="OptionsButtonTemplate" text="Undead">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="205" y="-55"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("undead")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Night Elf theme -->
+            <Button name="$parentButtonThemeNightElf" inherits="OptionsButtonTemplate" text="Night Elf">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="300" y="-55"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("nightelf")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Custom1 theme -->
+            <Button name="$parentButtonThemeCustom1" inherits="OptionsButtonTemplate" text="Custom1">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="15" y="-85"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("custom1")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Custom2 theme -->
+            <Button name="$parentButtonThemeCustom2" inherits="OptionsButtonTemplate" text="Custom2">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="110" y="-85"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("custom2")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Custom3 theme -->
+            <Button name="$parentButtonThemeCustom3" inherits="OptionsButtonTemplate" text="Custom3">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="205" y="-85"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("custom3")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Custom4 theme -->
+            <Button name="$parentButtonThemeCustom4" inherits="OptionsButtonTemplate" text="Custom4">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="300" y="-85"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("custom4")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Custom5 theme -->
+            <Button name="$parentButtonThemeCustom5" inherits="OptionsButtonTemplate" text="Custom5">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="15" y="-115"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("custom5")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Custom6 theme -->
+            <Button name="$parentButtonThemeCustom6" inherits="OptionsButtonTemplate" text="Custom6">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="110" y="-115"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("custom6")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Custom7 theme -->
+            <Button name="$parentButtonThemeCustom7" inherits="OptionsButtonTemplate" text="Custom7">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="205" y="-115"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("custom7")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Custom8 theme -->
+            <Button name="$parentButtonThemeCustom8" inherits="OptionsButtonTemplate" text="Custom8">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="300" y="-115"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SetTheme("custom8")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Editbox UI scale -->
+            <EditBox name="$parentEditboxUIScale" numeric="true" letters="3">
+                <Size>
+                    <AbsDimension x="110" y="62"></AbsDimension>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="30" y="0"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="0.2" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="RIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0.7" right="1.0" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+                <Scripts>
+                    <OnEscapePressed>
+                        this:ClearFocus()
+                        WIIIUI_menu:Hide()
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        CheckResizeInput()
+                    </OnEnterPressed>
+                    <OnMouseWheel>
+                        number = this:GetText()
+                        if(arg1 == 1)then
+                            number = number + 1
+                        else
+                            number = number - 1
+                        end
+                        this:SetText(number)
+                        CheckResizeInput()
+                    </OnMouseWheel>
+                </Scripts>
+                <FontString inherits="ChatFontNormal"></FontString>
+            </EditBox>
+            <!-- Extend bottom right frame -->
+            <EditBox name="$parentEditboxExtendBottomRight" numeric="true" letters="3">
+                <Size>
+                    <AbsDimension x="110" y="62"></AbsDimension>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="165" y="0"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="0.2" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="RIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0.7" right="1.0" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+                <Scripts>
+                    <OnLoad>
+                        extendNumber = this:GetText()
+                    </OnLoad>
+                    <OnEscapePressed>
+                        this:ClearFocus()
+                        WIIIUI_menu:Hide()
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        CheckExtendInput(extendNumber)
+                    </OnEnterPressed>
+                    <OnTextChanged>
+                        extendNumber = this:GetText()
+                    </OnTextChanged>
+                    <OnMouseWheel>
+                        number = this:GetText()
+                        if(arg1 == 1)then
+                            number = number + 1
+                        else
+                            number = number - 1
+                        end
+                        this:SetText(number)
+                        CheckExtendInput(number)
+                    </OnMouseWheel>
+                </Scripts>
+                <FontString inherits="ChatFontNormal"></FontString>
+            </EditBox>
+            <!-- Editbox Portaring Aligner Horizontal -->
+            <EditBox name="$parentEditboxPortraitHorizontal" numeric="true" letters="4">
+                <Size>
+                    <AbsDimension x="55" y="62"></AbsDimension>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="395" y="0"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="0.2" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="RIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0.7" right="1.0" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+                <Scripts>
+                    <OnEscapePressed>
+                        this:ClearFocus()
+                        WIIIUI_menu:Hide()
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        CheckResizeInput()
+                    </OnEnterPressed>
+                    <OnMouseWheel>                       
+                        number = this:GetText()
+                        if(arg1 == 1)then
+                            number = number + 1
+                        else
+                            if(number == "0")then
+                                number = 0    
+                            else
+                                number = number - 1
+                            end
+                        end
+                        this:SetText(number)
+                        CheckResizeInput()
+                    </OnMouseWheel>
+                </Scripts>
+                <FontString inherits="ChatFontNormal"></FontString>
+            </EditBox>
+            <!-- Editbox Portaring Aligner Vertical -->
+            <EditBox name="$parentEditboxPortraitVertical" numeric="true" letters="4">
+                <Size>
+                    <AbsDimension x="55" y="62"></AbsDimension>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="470" y="0"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="0.2" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="RIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0.7" right="1.0" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+                <Scripts>
+                    <OnEscapePressed>
+                        this:ClearFocus()
+                        WIIIUI_menu:Hide()
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        CheckResizeInput()
+                    </OnEnterPressed>
+                    <OnMouseWheel>                       
+                        number = this:GetText()
+                        if(arg1 == 1)then
+                            number = number + 1
+                        else
+                            if(number == "0")then
+                                number = 0    
+                            else
+                                number = number - 1
+                            end
+                        end
+                        this:SetText(number)
+                        CheckResizeInput()
+                    </OnMouseWheel>
+                </Scripts>
+                <FontString inherits="ChatFontNormal"></FontString>
+            </EditBox>
+            <!-- Editbox Portrait scale -->
+            <EditBox name="$parentEditboxPortraitScale" numeric="true" letters="3">
+                <Size>
+                    <AbsDimension x="65" y="12"></AbsDimension>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="300" y="25"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="0.2" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="RIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0.7" right="1.0" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+                <Scripts>
+                    <OnEscapePressed>
+                        this:ClearFocus()
+                        WIIIUI_menu:Hide()
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        CheckPortraitScaleChange()
+                    </OnEnterPressed>
+                    <OnMouseWheel>                       
+                        number = this:GetText()
+                        if(arg1 == 1)then
+                            number = number + 1
+                        else
+                            if(number == "0")then
+                                number = 0    
+                            else
+                                number = number - 1
+                            end
+                        end
+                        this:SetText(number)
+                        CheckPortraitScaleChange()
+                    </OnMouseWheel>
+                </Scripts>
+                <FontString inherits="ChatFontNormal"></FontString>
+            </EditBox>
+            <!-- Editbox Castbar alignment -->
+            <EditBox name="$parentEditboxCastbarAlignment" numeric="true" letters="4">
+                <Size>
+                    <AbsDimension x="65" y="62"></AbsDimension>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="180" y="-205"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="0.2" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="RIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0.7" right="1.0" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+                <Scripts>
+                    <OnEscapePressed>
+                        this:ClearFocus()
+                        WIIIUI_menu:Hide()
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        ChangeCastbarAlignment()
+                    </OnEnterPressed>
+                    <OnMouseWheel>                       
+                        number = this:GetText()
+                        if(arg1 == 1)then
+                            number = number + 1
+                        else
+                            if(number == "0")then
+                                number = 0    
+                            else
+                                number = number - 1
+                            end
+                        end
+                        this:SetText(number)
+                        ChangeCastbarAlignment()
+                    </OnMouseWheel>
+                </Scripts>
+                <FontString inherits="ChatFontNormal"></FontString>
+            </EditBox>
+            <!-- Editbox HP threshold alignment -->
+            <EditBox name="$parentEditboxHPThreshold" numeric="true" letters="5">
+                <Size>
+                    <AbsDimension x="65" y="62"></AbsDimension>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="310" y="-205"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="0.2" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="RIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0.7" right="1.0" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+                <Scripts>
+                    <OnEscapePressed>
+                        this:ClearFocus()
+                        WIIIUI_menu:Hide()
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        ChangeHPThreshold()
+                    </OnEnterPressed>
+                    <OnMouseWheel>                       
+                        number = this:GetText()
+                        if(arg1 == 1)then
+                            number = number + 1
+                        else
+                            if(number == "0")then
+                                number = 0    
+                            else
+                                number = number - 1
+                            end
+                        end
+                        this:SetText(number)
+                        ChangeHPThreshold()
+                    </OnMouseWheel>
+                </Scripts>
+                <FontString inherits="ChatFontNormal"></FontString>
+            </EditBox>
+            <!-- Hide grid checkbutton-->
+            <CheckButton name="$parentCheckButton" inherits="OptionsCheckButtonTemplate" checked="false">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="20" y="70"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckButtonText:SetText("Hide actionbar grid texture")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeHideGride()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Hide Micro buttons-->
+            <CheckButton name="$parentCheckButtonMicro" inherits="OptionsCheckButtonTemplate" checked="false">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="220" y="70"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckButtonMicroText:SetText("Hide Microbuttons")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeHideMicro()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Show HP as % -->
+            <CheckButton name="$parentCheckHPPercent" inherits="OptionsCheckButtonTemplate" checked="true">
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                            <AbsDimension x="-95" y="75"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckHPPercentText:SetText("Show HP as %")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeHPPercent()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Show Power as % -->
+            <CheckButton name="$parentCheckPowerPercent" inherits="OptionsCheckButtonTemplate" checked="true">
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                            <AbsDimension x="-105" y="45"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckPowerPercentText:SetText("Show power as %")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangePowerPercent()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Hide Chat arrows-->
+            <CheckButton name="$parentCheckChatArrows" inherits="OptionsCheckButtonTemplate" checked="true">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="20" y="145"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckChatArrowsText:SetText("Hide chat icons")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeHideChatArrows()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Portrait stop animation -->
+            <CheckButton name="$parentCheckButtonPortraitStop" inherits="OptionsCheckButtonTemplate" checked="false">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="365" y="83"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckButtonPortraitStopText:SetText("Stop portrait animation")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangePortraitAnimationStop()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Zone text position -->
+            <Button name="$parentButtonZoneText" inherits="OptionsButtonTemplate" text="Move/Hide Zone text">
+                <Size x="155" y="22" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="135" y="150"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeZoneTextButtonsPos()
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Hide Bag buttons-->
+            <CheckButton name="$parentCheckButtonBags" inherits="OptionsCheckButtonTemplate" checked="true">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="20" y="100"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckButtonBagsText:SetText("Hide bags")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeHideBags()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Chat input at top -->
+            <CheckButton name="$parentChatAtTop" inherits="OptionsCheckButtonTemplate" checked="false">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="220" y="100"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuChatAtTopText:SetText("Chat input above chat")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeChatTop()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- rested xp color Purple -->
+            <Button name="$parentButtonXPPurple" inherits="OptionsButtonTemplate" text="Purple">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="15" y="-270"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        UpdateRestedXPColor("purple")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- rested xp color Blue -->
+            <Button name="$parentButtonXPBlue" inherits="OptionsButtonTemplate" text="Blue">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="110" y="-270"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        UpdateRestedXPColor("blue")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- rested xp None -->
+            <Button name="$parentButtonXPNone" inherits="OptionsButtonTemplate" text="None">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="205" y="-270"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        UpdateRestedXPColor("none")
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- rested xp Custom -->
+            <Button name="$parentButtonXPCustom" inherits="OptionsButtonTemplate" text="Custom">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="295" y="-270"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        CustomColorPicker()
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top left icon Main -->
+            <Button name="$parentButtonTLMain" inherits="OptionsButtonTemplate" text="Main">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="15" y="-320"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("main", 1)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top left icon Offhand -->
+            <Button name="$parentButtonTLOffhand" inherits="OptionsButtonTemplate" text="Offhand">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="110" y="-320"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("offhand", 1)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top left icon Ranged -->
+            <Button name="$parentButtonTLRanged" inherits="OptionsButtonTemplate" text="Ranged">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="205" y="-320"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("ranged", 1)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top left icon Ammo -->
+            <Button name="$parentButtonTLAmmo" inherits="OptionsButtonTemplate" text="Ammo">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="15" y="-345"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("ammo", 1)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top left icon Spell power -->
+            <Button name="$parentButtonTLSpell" inherits="OptionsButtonTemplate" text="Spell power">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="110" y="-345"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("spell", 1)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top left icon Heal -->
+            <Button name="$parentButtonTLHeal" inherits="OptionsButtonTemplate" text="Heal">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="205" y="-345"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("heal", 1)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top left icon None -->
+            <Button name="$parentButtonTLNone" inherits="OptionsButtonTemplate" text="None">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="205" y="-370"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("none", 1)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top Right icon Buttons -->
+            <!-- Top Right icon Main -->
+            <Button name="$parentButtonTRMain" inherits="OptionsButtonTemplate" text="Main">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="315" y="-320"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("main", 2)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top right icon Offhand -->
+            <Button name="$parentButtonTROffhand" inherits="OptionsButtonTemplate" text="Offhand">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="410" y="-320"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("offhand", 2)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top right icon Ranged -->
+            <Button name="$parentButtonTRRanged" inherits="OptionsButtonTemplate" text="Ranged">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="505" y="-320"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("ranged", 2)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top right icon Ammo -->
+            <Button name="$parentButtonTRAmmo" inherits="OptionsButtonTemplate" text="Ammo">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="315" y="-345"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("ammo", 2)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top right icon Spell power -->
+            <Button name="$parentButtonTRSpell" inherits="OptionsButtonTemplate" text="Spell power">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="410" y="-345"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("spell", 2)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top right icon Heal -->
+            <Button name="$parentButtonTRHeal" inherits="OptionsButtonTemplate" text="Heal">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="505" y="-345"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("heal", 2)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Top right icon None -->
+            <Button name="$parentButtonTRNone" inherits="OptionsButtonTemplate" text="None">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="505" y="-370"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("none", 2)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Bottom Right icon Buttons -->
+            <!-- Bottom Right icon Main -->
+            <Button name="$parentButtonBRMain" inherits="OptionsButtonTemplate" text="Main">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="315" y="-410"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("main", 3)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Bottom right icon Offhand -->
+            <Button name="$parentButtonBROffhand" inherits="OptionsButtonTemplate" text="Offhand">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="410" y="-410"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("offhand", 3)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Bottom right icon Ranged -->
+            <Button name="$parentButtonBRRanged" inherits="OptionsButtonTemplate" text="Ranged">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="505" y="-410"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("ranged", 3)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Bottom right icon Ammo -->
+            <Button name="$parentButtonBRAmmo" inherits="OptionsButtonTemplate" text="Ammo">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="315" y="-435"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("ammo", 3)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Bottom right icon Spell power -->
+            <Button name="$parentButtonBRSpell" inherits="OptionsButtonTemplate" text="Spell power">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="410" y="-435"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("spell", 3)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Bottom right icon Heal -->
+            <Button name="$parentButtonBRHeal" inherits="OptionsButtonTemplate" text="Heal">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="505" y="-435"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("heal", 3)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Bottom right icon None -->
+            <Button name="$parentButtonBRNone" inherits="OptionsButtonTemplate" text="None">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="505" y="-460"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeWeaponIcon("none", 3)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Apply changes -->
+            <Button name="$parentButtonApply" inherits="OptionsButtonTemplate" text="Apply">
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                            <AbsDimension x="-20" y="21"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        UpdateUI(extendNumber)
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Reload UI -->
+            <Button name="$parentButtonReload" inherits="OptionsButtonTemplate" text="Reload UI">
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-20" y="-21"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ReloadUI();
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Shapeshift position -->
+            <Button name="$parentButtonAuraShapeshiftPos" inherits="OptionsButtonTemplate" text="Shapeshift/Aura Pos.">
+                <Size x="150" y="22" />
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="15" y="-225"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ChangeShapeshiftButtonsPos()
+                     </OnClick>
+                </Scripts>
+            </Button>
+            <!-- Hide grid checkbutton-->
+            <CheckButton name="$parentCheckButtonBuff" inherits="OptionsCheckButtonTemplate" checked="false">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="500" y="-265"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeBuffPos()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Multibar left horizontal checkbutton-->
+            <CheckButton name="$parentCheckMultibarLeftHorizontal" inherits="OptionsCheckButtonTemplate" checked="false">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="395" y="-140"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckMultibarLeftHorizontalText:SetText("Multibar Left")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeMultiBarAxis("left")
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Multibar right horizontal checkbutton-->
+            <CheckButton name="$parentCheckMultibarRightHorizontal" inherits="OptionsCheckButtonTemplate" checked="false">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="520" y="-140"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckMultibarRightHorizontalText:SetText("Multibar Right")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeMultiBarAxis("right")
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+        </Frames>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parentUIScaleText" inherits="GameFontNormal" text="UI scale (240-270)">
+                    <Size>
+                        <AbsDimension x="150" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="0" />
+                    </Anchors>
+                    
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentPortraitPos" inherits="GameFontNormal" text="Portrait position (Base 100, 100) X: and Y:">
+                    <Size>
+                        <AbsDimension x="105" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="0" />
+                    </Anchors>
+                    
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentPortraitScaleText" inherits="GameFontNormal" text="Portrait scale (0-35)">
+                    <Size>
+                        <AbsDimension x="80" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="0" />
+                    </Anchors>
+                    
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentExtendRightText" inherits="GameFontNormal" text="Extend bottom right upwards (0-150)">
+                    <Size>
+                        <AbsDimension x="150" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="-90" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentRestedXPText" inherits="GameFontNormal" text="Rested XP colors">
+                    <Size>
+                        <AbsDimension x="150" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentTopLeftIconText" inherits="GameFontNormal" text="Top left weapon icon">
+                    <Size>
+                        <AbsDimension x="150" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentTopRightIconText" inherits="GameFontNormal" text="Top right weapon icon">
+                    <Size>
+                        <AbsDimension x="150" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentBottomRightIconText" inherits="GameFontNormal" text="Bottom right weapon icon">
+                    <Size>
+                        <AbsDimension x="200" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentAlignCastbarText" inherits="GameFontNormal" text="Align Castbar">
+                    <Size>
+                        <AbsDimension x="200" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentHPThresholdText" inherits="GameFontNormal" text="HP Warning Threshold %">
+                    <Size>
+                        <AbsDimension x="200" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentBuffText" inherits="GameFontNormal" text="Buffs Top right (disable to move with MoveAnything), reload after disabling.">
+                    <Size>
+                        <AbsDimension x="200" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentMultibarText" inherits="GameFontNormal" text="!!! BETA !!! Enable Horizontal Multibar. Please use MoveAnything to align the Multibars">
+                    <Size>
+                        <AbsDimension x="230" y="50"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Scripts>
+            <OnLoad>
+                this:Hide()
+                this:SetBackdrop({
+                        bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+                        edgeFile="Interface/DialogFrame/UI-DialogBox-Border",
+                        edgeSize="24",
+                        insets = { left = 4, right = 4, top = 4, bottom = 4 }
+                    })
+                this:SetBackdropColor(0.45, 0.45, 0.45, 1)
+                WIIIUI_menuUIScaleText:SetPoint("TOPLEFT", WIIIUI_menuEditboxUIScale, "CENTER", -75, 45)
+                WIIIUI_menuPortraitScaleText:SetPoint("TOPLEFT", WIIIUI_menuEditboxPortraitScale, "CENTER", -40, 45)
+                WIIIUI_menuExtendRightText:SetPoint("TOPLEFT", WIIIUI_menuEditboxExtendBottomRight, "TOPLEFT", -20, 15)
+                WIIIUI_menuRestedXPText:SetPoint("TOP", WIIIUI_menu, "TOP", -115, -240)
+                WIIIUI_menuTopLeftIconText:SetPoint("BOTTOMLEFT", WIIIUI_menu, "BOTTOMLEFT", 85, 272)
+                WIIIUI_menuTopRightIconText:SetPoint("BOTTOMLEFT", WIIIUI_menu, "BOTTOMLEFT", 377, 272)
+                WIIIUI_menuBottomRightIconText:SetPoint("BOTTOMLEFT", WIIIUI_menu, "BOTTOMLEFT", 359, 180)
+                WIIIUI_menuAlignCastbarText:SetPoint("BOTTOMLEFT", WIIIUI_menuEditboxCastbarAlignment, "BOTTOMLEFT", -65, 35)
+                WIIIUI_menuHPThresholdText:SetPoint("BOTTOMLEFT", WIIIUI_menuEditboxHPThreshold, "BOTTOMLEFT", -60, 35)
+                WIIIUI_menuBuffText:SetPoint("BOTTOMLEFT", WIIIUI_menuCheckButtonBuff, "BOTTOMLEFT", -80, 35)
+                WIIIUI_menuPortraitPos:SetPoint("TOPLEFT", WIIIUI_menuEditboxUIScale, "CENTER", 315, 55)
+                WIIIUI_menuMultibarText:SetPoint("BOTTOMLEFT", WIIIUI_menu, "TOPRIGHT", -250, -145)
+                
+            </OnLoad>
+
+            <OnMouseDown>
+				this:StartMoving();
+			</OnMouseDown>
+			<OnMouseUp>
+				this:StopMovingOrSizing();
+			</OnMouseUp>
+
+            <OnKeyDown>
+                if(arg1 == "ESCAPE") then
+                    this:Hide()
+                    AlignUI()
+                else
+                    return
+                end
+            </OnKeyDown>
+        </Scripts>
+
+    </Frame>
+
+    <!-- Information box frame -->
+    <Frame name="WIIIUI_infoBox" inherit="UIParent" hidden="true" framestrata="TOOLTIP">
+        <Size x="200" y="298"/>
+		<Anchors>
+			<Anchor point="CENTER">	
+				<Offset x="200" y="0"/>
+			</Anchor>
+		</Anchors>
+        <Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" edgeSize="8">
+			<Color r="0" g="0" b="0" a="0.75" />
+			<BackgroundInsets>
+				<AbsInset left="10" right="10" top="10" bottom="10"/>
+			</BackgroundInsets>
+		</Backdrop>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString name="WIIIUI_infoBox_Text" inherits="ChatFontNormal" text="" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="12"/>
+                    </FontHeight>
+                    <Size x="180" y="0"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="0" y="0" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnShow>
+                WIIIUI_infoBox:SetWidth(300)
+                WIIIUI_infoBox_Text:SetPoint("TOPLEFT", WIIIUI_infoBox, 12, -12)
+                WIIIUI_infoBox_Text:SetJustifyH("LEFT") 
+                WIIIUI_infoBox_Text:SetJustifyV("TOP") 
+                WIIIUI_infoBox_Text:SetWidth(276)
+                WIIIUI_infoBox:SetHeight( (WIIIUI_infoBox_Text:GetHeight() + 12 + 10) )
+            </OnShow>
+        </Scripts>
+    </Frame>
+
+    <!-- aligner frame -->
+    <Frame name="WIIIUI_alignFrame"  parent="UIParent">
+        <Size x="1" y="1" />
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Scripts>
+             <OnLoad>
+            </OnLoad>
+        </Scripts>            
+    </Frame>
+
+    <!-- Actionbar aligner frame -->
+    <Frame name="WIIIUI_alignActionBarFrame"  parent="UIParent">
+        <Size x="1" y="1" />
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Scripts>
+            <OnEvent>
+                
+             </OnEvent>
+        </Scripts>            
+    </Frame>
+
+    <!-- Top minimap actionbar -->
+    <CheckButton name="ActionButton_Custom1" inherits="ActionBarButtonTemplate" parent="UIParent" id="100">
+        <Anchors>
+			<Anchor point="LEFT" relativeTo="UIParent" relativePoint="RIGHT">
+				<Offset>
+					<AbsDimension x="6" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+	</CheckButton>
+
+    <!-- Middle minimap actionbar -->
+    <CheckButton name="ActionButton_Custom2" inherits="ActionBarButtonTemplate" parent="UIParent" id="101">
+        <Anchors>
+			<Anchor point="LEFT" relativeTo="UIParent" relativePoint="RIGHT">
+				<Offset>
+					<AbsDimension x="6" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+	</CheckButton>
+
+    <!-- Bottom minimap actionbar -->
+    <CheckButton name="ActionButton_Custom3" inherits="ActionBarButtonTemplate" parent="UIParent" id="102">
+        <Anchors>
+			<Anchor point="LEFT" relativeTo="UIParent" relativePoint="RIGHT">
+				<Offset>
+					<AbsDimension x="6" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+	</CheckButton>
+
+    <!-- Portait background -->
+    <Frame name="WIIIUI_backgroundMain" inherit="WIIIUI_Frame" framestrata="LOW" >
+        <Size x="1" y="1" />
+        <Anchors>
+            <Anchor point="CENTER">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Layers>
+            <Layer level="ARTWORK">   
+                <Texture name ="Wc3_UI_portraitBackground" file="Interface\Addons\WIIIUI\art\other\black_background">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset>
+                                <AbsDimension x="0" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+
+            <Layer level="BACKGROUND">   
+                <Texture name ="Wc3_UI_extensionBackground" file="Interface\Addons\WIIIUI\art\other\black_background">
+                    <Size>
+                        <AbsDimension x="270" y="34"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="288" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+        </Layers>
+    </Frame>
+
+    <!-- bar texts -->
+    <Frame name="WIIIUI_texts">
+        <Size x="1" y="1" />
+        <Anchors>
+            <Anchor point="CENTER">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Layers>
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_HealthText" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="8"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+             <Layer level="OVERLAY">
+                <FontString name="WIIIUI_PowerText" inherits="ChatFontNormal" text="">
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer> 
+        </Layers>
+    </Frame>
+
+    <!-- Left part -->
+    <Frame name="WIIIUI_leftpart" inherits="WIIIUI_Frame" virtual="false">     
+         <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Layers>
+            
+            <!-- No mail icon  -->
+            <Layer level="OVERLAY">   
+                <Texture name ="Wc3_UI_minimapNoMail" file="Interface\Icons\INV_Letter_15">
+                    <Size>
+                        <AbsDimension x="23" y="23"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+
+            <Layer level="ARTWORK">   
+                <Texture name ="Wc3_UI_minimap" file="Interface\Addons\WIIIUI\art\orc\minimap_portrait\minimap">
+                    <Size>
+                        <AbsDimension x="288" y="288"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+            <Layer level="BORDER">   
+                <Texture name ="Wc3_UI_portrait" file="Interface\Addons\WIIIUI\art\orc\minimap_portrait\portrait">
+                    <Size>
+                        <AbsDimension x="288" y="288"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="288" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <!-- Extension layers -->
+            
+             <Layer level="OVERLAY">   
+                <Texture name ="Wc3_UI_extension2" file="Interface\Addons\WIIIUI\art\orc\actionbar\ext1">
+                    <Size>
+                        <AbsDimension x="270" y="34"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+
+            
+            <Layer level="ARTWORK">   
+                <Texture name ="Wc3_UI_extension1" file="Interface\Addons\WIIIUI\art\orc\actionbar\ext1">
+                    <Size>
+                        <AbsDimension x="270" y="34"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            
+            
+            <Layer level="BORDER">   
+                <Texture name ="Wc3_UI_extension3" file="Interface\Addons\WIIIUI\art\orc\actionbar\ext2">
+                    <Size>
+                        <AbsDimension x="270" y="34"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="288" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+
+            <Layer level="ARTWORK">   
+                <Texture name ="Wc3_UI_right_left" file="Interface\Addons\WIIIUI\art\orc\inventory\no_inventory">
+                    <Size>
+                        <AbsDimension x="144" y="288"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+        </Layers>
+    </Frame>
+
+    <!-- XP BAR AND TEXT -->
+    <Frame name="Warcaft3_UI_xpFrame" inherits="WIIIUI_Frame" framestrata="MEDIUM">
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture name ="Wc3_UI_xp1" file="Interface\Addons\WIIIUI\art\other\xp1">
+                    <Size>
+                        <AbsDimension x="16" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture name ="Wc3_UI_xp2" file="Interface\Addons\WIIIUI\art\other\xp2">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+            <Layer level="OVERLAY">
+                <Texture name ="Wc3_UI_xp3" file="Interface\Addons\WIIIUI\art\other\xp3">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+
+            <!-- Progression bar rested xp -->
+            <Layer level="BORDER">
+                <Texture name ="Wc3_UI_xpProgBarRested" file="Interface\Addons\WIIIUI\art\other\xpProgressBar">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+
+            <!-- Progression bar -->
+            <Layer level="ARTWORK">
+                <Texture name ="Wc3_UI_xpProgBar" file="Interface\Addons\WIIIUI\art\other\xpProgressBar">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+
+            <!-- Player Name -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_xpName" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="8"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+            <!-- Current level and class name -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_xpCurrLevel" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="8"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Frames>
+            <Frame name="WIIIUI_xpHoverFrame">
+                <Size>
+                    <AbsDimension x="0" y="0"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>    
+                <Scripts>
+                    <OnEnter>
+                        WIIIUI_xpCurrLevel:SetText("XP "..UnitXP("player").." / "..UnitXPMax("player"))
+                        xpPercentage =  string.format("%.2f %%", UnitXP('player') / UnitXPMax('player') * 100)
+                        xpPercentageLeft = string.format("%.2f %%", 100 - (UnitXP('player') / UnitXPMax('player') * 100))
+                        WIIIUI_infoBox_Text:SetText("|cffffd100Experience required to level up:|r "..UnitXPMax("player").."\n"
+                                                            .."|cffffd100Experience until next level:|r "..(UnitXPMax("player") - UnitXP("player")).." ("..xpPercentageLeft..")".."\n"
+                                                            .."|cffffd100Current Experience:|r "..UnitXP("player").." ("..xpPercentage..")".."\n"
+                                                            .."|cffffd100Rested Experience:|r "..(GetXPExhaustion() or 0) )
+                        WIIIUI_infoBox:SetPoint("CENTER", WIIIUI_xpHoverFrame, 0, WIIIUI_xpHoverFrame:GetHeight() + 30)
+                        WIIIUI_infoBox:Show()
+                    </OnEnter>
+                    <OnLeave>
+                		WIIIUI_xpCurrLevel:SetText("Level "..UnitLevel("player").." "..UnitClass("player"))
+                        WIIIUI_infoBox:Hide()
+                    </OnLeave>
+                </Scripts>
+            </Frame>
+        </Frames>
+    </Frame>
+
+    <!-- weapon damage icon 1 -->
+    <Frame name="WIIIUI_weaponIcon_1" inherits="WIIIUI_Frame" framestrata="LOW">
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="50"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        
+        <Layers>
+            <!-- Damage text -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_weaponDamage_1" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="10"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+            <!-- Weapon numbers -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_weaponNumbers_1" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="10"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+        </Layers>
+
+        <!-- Weapon frame -->
+        <Frames>
+            <Frame name="Wc3_UI_weaponIcon_tex_1">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="50"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+        		<Size x="200" y="298"/>
+
+                <Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background">
+                    <Color r="0" g="0" b="0" a="1" />
+                    <BackgroundInsets>
+                        <AbsInset left="10" right="10" top="10" bottom="10"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+            </Frame>
+
+             <Frame name="Wc3_UI_weaponIcon_frame_1">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+
+                <Backdrop bgFile="Interface\Addons\WIIIUI\art\other\golden_frame">
+                    <BackgroundInsets>
+                        <AbsInset left="0" right="0" top="0" bottom="0"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+                <Scripts>
+                    <OnEnter>
+                        lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
+                        attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+
+                        if(attackSpeedOffhand == nil)then 
+                            attackSpeedOffhand = 0
+                        end
+
+                        dps = ((floor(lowDmg) + ceil(highDmg))/2) / attackSpeed
+                        dps = string.format("%.2f", dps)
+
+                        text = "|cffffd100Main Hand Damage:|r "..floor(lowDmg).." - "..ceil(highDmg).."\n"
+                                                            .."|cffffd100Attack Speed:|r "..attackSpeed.."\n"
+                                                            .."|cffffd100Damage per second:|r "..dps.."\n"
+
+                        if(OffhandHasWeapon() ~= nil)then
+                            dps = ((floor(offLowDmg) + ceil(offHiDmg))/2) / attackSpeed
+                            dps = string.format("%.2f", dps)
+                            text = text.."\n|cffffd100Offhand damage:|r "..floor(offLowDmg).." - "..ceil(offHiDmg).."\n"
+                                    .."|cffffd100Attack Speed:|r "..attackSpeedOffhand.."\n"
+                                    .."|cffffd100Damage per second:|r "..dps.."\n"
+                        end
+
+                        itemLink = GetInventoryItemLink("player", 18) or nil
+                        if(itemLink ~=  nil) then
+                            itemString, stringEnd = string.find(itemLink, "item[%-?%d:]+")
+                            itemLink = string.sub(itemLink, itemString, stringEnd)
+                            __, __, __, __, __, itemType, __, __, __, __, __ = GetItemInfo(itemLink)
+                        else
+                            itemType="none"
+                        end
+
+                        if(itemType == "Bows" or itemType == "Guns" or itemType == "Crossbows" or itemType == "Thrown" or itemType == "Wands") then
+
+                            ammoSlot = CharacterAmmoSlot:GetID();
+                            local rangedCount = GetInventoryItemCount("player", CharacterRangedSlot:GetID());
+                            if (rangedCount > 1) then
+                                ammoSlot = CharacterRangedSlot:GetID();
+                            end
+                            ammoLeft = GetInventoryItemCount("player", ammoSlot);
+
+                            speed, lowDmg, hiDmg, posBuff, negBuff, percent = UnitRangedDamage("player")
+                            speed =  string.format("%.2f", speed)
+                            dps = ((floor(lowDmg) + ceil(hiDmg))/2) / speed
+                            dps = string.format("%.2f", dps)
+                            text = text.."\n|cffffd100Ranged damage:|r "..floor(lowDmg).." - "..ceil(hiDmg).."\n"
+                                    .."|cffffd100Attack Speed:|r "..speed.."\n"
+                                    .."|cffffd100Damage per second:|r "..dps.."\n"
+                                    .."|cffffd100Ammo left:|r "..ammoLeft.."\n"
+                        end
+
+                        if(wc3UI_Options.weaponIconSelected1 == 98) then
+                            sp = GetSpellpowerValue()
+                            hp = GetHealingpowerValue()
+                            text = tostring( sp + hp )
+
+                            text = "|cffffd100Total healing power:|r "..tostring(sp + hp).."\n"
+                                .."|cffffd100Raw healing power:|r "..tostring(hp).."\n"
+                                .."|cffffd100Healing from spell power:|r "..tostring(sp).."\n"
+
+                        elseif(wc3UI_Options.weaponIconSelected1 == 99) then
+                            sp, secondaryPowers = GetSpellpowerValue()
+                            text = tostring(secondaryPowers['frost'])
+
+                            text = "|cffffd100Spell power:|r "..tostring(sp).."\n"
+                                .."\n|cffffd100Extra power (add with Spell power to get sum)|r\n"
+                                .."|cffffd100Example: Fire (15) + Spell power (30) = 45 for fire spells.|r\n\n"
+                                .."|cffffd100Arcane:|r "..tostring(secondaryPowers['arcane']).."\n"
+                                .."|cffffd100Fire:|r "..tostring(secondaryPowers['fire']).."\n"
+                                .."|cffffd100Frost:|r "..tostring(secondaryPowers['frost']).."\n"
+                                .."|cffffd100Holy:|r "..tostring(secondaryPowers['holy']).."\n"
+                                .."|cffffd100Nature:|r "..tostring(secondaryPowers['nature']).."\n"
+                                .."|cffffd100Shadow:|r "..tostring(secondaryPowers['shadow']).."\n"
+                        end
+
+                        WIIIUI_infoBox_Text:SetText(text)
+                        WIIIUI_infoBox:SetPoint("CENTER", WIIIUI_xpHoverFrame, 0, 50)
+                        WIIIUI_infoBox:Show()
+                    </OnEnter>
+                    <OnLeave>
+                        WIIIUI_infoBox:Hide()
+                    </OnLeave>
+                </Scripts>
+
+            </Frame>
+
+        </Frames>
+    </Frame>
+
+    <!-- weapon damage icon 2 -->
+    <Frame name="WIIIUI_weaponIcon_2" inherits="WIIIUI_Frame" framestrata="LOW">
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="50"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        
+        <Layers>
+            <!-- Damage text -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_weaponDamage_2" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="10"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+            <!-- Weapon numbers -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_weaponNumbers_2" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="10"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+        </Layers>
+
+        <!-- Weapon frame -->
+        <Frames>
+            <Frame name="Wc3_UI_weaponIcon_tex_2">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="50"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+        		<Size x="200" y="298"/>
+
+                <Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background">
+                    <Color r="0" g="0" b="0" a="1" />
+                    <BackgroundInsets>
+                        <AbsInset left="10" right="10" top="10" bottom="10"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+            </Frame>
+
+             <Frame name="Wc3_UI_weaponIcon_frame_2">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+
+                <Backdrop bgFile="Interface\Addons\WIIIUI\art\other\golden_frame">
+                    <BackgroundInsets>
+                        <AbsInset left="0" right="0" top="0" bottom="0"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+                <Scripts>
+                    <OnEnter>
+                        lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
+                        attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+
+                        if(attackSpeedOffhand == nil)then 
+                            attackSpeedOffhand = 0
+                        end
+
+                        dps = ((floor(lowDmg) + ceil(highDmg))/2) / attackSpeed
+                        dps = string.format("%.2f", dps)
+
+                        text = "|cffffd100Main Hand Damage:|r "..floor(lowDmg).." - "..ceil(highDmg).."\n"
+                                                            .."|cffffd100Attack Speed:|r "..attackSpeed.."\n"
+                                                            .."|cffffd100Damage per second:|r "..dps.."\n"
+
+                        if(OffhandHasWeapon() ~= nil)then
+                            dps = ((floor(offLowDmg) + ceil(offHiDmg))/2) / attackSpeed
+                            dps = string.format("%.2f", dps)
+                            text = text.."\n|cffffd100Offhand damage:|r "..floor(offLowDmg).." - "..ceil(offHiDmg).."\n"
+                                    .."|cffffd100Attack Speed:|r "..attackSpeedOffhand.."\n"
+                                    .."|cffffd100Damage per second:|r "..dps.."\n"
+                        end
+
+                        itemLink = GetInventoryItemLink("player", 18) or nil
+                        if(itemLink ~=  nil) then
+                            itemString, stringEnd = string.find(itemLink, "item[%-?%d:]+")
+                            itemLink = string.sub(itemLink, itemString, stringEnd)
+                            __, __, __, __, __, itemType, __, __, __, __, __ = GetItemInfo(itemLink)
+                        else
+                            itemType="none"
+                        end
+
+                        if(itemType == "Bows" or itemType == "Guns" or itemType == "Crossbows" or itemType == "Thrown" or itemType == "Wands") then
+
+                            ammoSlot = CharacterAmmoSlot:GetID();
+                            local rangedCount = GetInventoryItemCount("player", CharacterRangedSlot:GetID());
+                            if (rangedCount > 1) then
+                                ammoSlot = CharacterRangedSlot:GetID();
+                            end
+                            ammoLeft = GetInventoryItemCount("player", ammoSlot);
+
+                            speed, lowDmg, hiDmg, posBuff, negBuff, percent = UnitRangedDamage("player")
+                            speed =  string.format("%.2f", speed)
+                            dps = ((floor(lowDmg) + ceil(hiDmg))/2) / speed
+                            dps = string.format("%.2f", dps)
+                            text = text.."\n|cffffd100Ranged damage:|r "..floor(lowDmg).." - "..ceil(hiDmg).."\n"
+                                    .."|cffffd100Attack Speed:|r "..speed.."\n"
+                                    .."|cffffd100Damage per second:|r "..dps.."\n"
+                                    .."|cffffd100Ammo left:|r "..ammoLeft.."\n"
+                        end
+
+                        if(wc3UI_Options.weaponIconSelected2 == 98) then
+                            sp = GetSpellpowerValue()
+                            hp = GetHealingpowerValue()
+                            text = tostring( sp + hp )
+
+                            text = "|cffffd100Total healing power:|r "..tostring(sp + hp).."\n"
+                                .."|cffffd100Raw healing power:|r "..tostring(hp).."\n"
+                                .."|cffffd100Healing from spell power:|r "..tostring(sp).."\n"
+
+                        elseif(wc3UI_Options.weaponIconSelected2 == 99) then
+                            sp, secondaryPowers = GetSpellpowerValue()
+                            text = tostring(secondaryPowers['frost'])
+
+                            text = "|cffffd100Spell power:|r "..tostring(sp).."\n"
+                                .."\n|cffffd100Extra power (add with Spell power to get sum)|r\n"
+                                .."|cffffd100Example: Fire (15) + Spell power (30) = 45 for fire spells.|r\n\n"
+                                .."|cffffd100Arcane:|r "..tostring(secondaryPowers['arcane']).."\n"
+                                .."|cffffd100Fire:|r "..tostring(secondaryPowers['fire']).."\n"
+                                .."|cffffd100Frost:|r "..tostring(secondaryPowers['frost']).."\n"
+                                .."|cffffd100Holy:|r "..tostring(secondaryPowers['holy']).."\n"
+                                .."|cffffd100Nature:|r "..tostring(secondaryPowers['nature']).."\n"
+                                .."|cffffd100Shadow:|r "..tostring(secondaryPowers['shadow']).."\n"
+                        end
+
+                        WIIIUI_infoBox_Text:SetText(text)
+                        WIIIUI_infoBox:SetPoint("CENTER", WIIIUI_xpHoverFrame, 0, 50)
+                        WIIIUI_infoBox:Show()
+                    </OnEnter>
+                    <OnLeave>
+                        WIIIUI_infoBox:Hide()
+                    </OnLeave>
+                </Scripts>
+
+            </Frame>
+
+        </Frames>
+    </Frame>
+
+    <!-- weapon damage icon 3 -->
+    <Frame name="WIIIUI_weaponIcon_3" inherits="WIIIUI_Frame" framestrata="LOW">
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="50"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        
+        <Layers>
+            <!-- Damage text -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_weaponDamage_3" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="10"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+            <!-- Weapon numbers -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_weaponNumbers_3" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="10"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+        </Layers>
+
+        <!-- Weapon frame -->
+        <Frames>
+            <Frame name="Wc3_UI_weaponIcon_tex_3">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="50"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+        		<Size x="200" y="298"/>
+
+                <Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background">
+                    <Color r="0" g="0" b="0" a="1" />
+                    <BackgroundInsets>
+                        <AbsInset left="10" right="10" top="10" bottom="10"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+            </Frame>
+
+             <Frame name="Wc3_UI_weaponIcon_frame_3">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+
+                <Backdrop bgFile="Interface\Addons\WIIIUI\art\other\golden_frame">
+                    <BackgroundInsets>
+                        <AbsInset left="0" right="0" top="0" bottom="0"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+                <Scripts>
+                    <OnEnter>
+                        lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
+                        attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+
+                        if(attackSpeedOffhand == nil)then 
+                            attackSpeedOffhand = 0
+                        end
+
+                        dps = ((floor(lowDmg) + ceil(highDmg))/2) / attackSpeed
+                        dps = string.format("%.2f", dps)
+
+                        text = "|cffffd100Main Hand Damage:|r "..floor(lowDmg).." - "..ceil(highDmg).."\n"
+                                                            .."|cffffd100Attack Speed:|r "..attackSpeed.."\n"
+                                                            .."|cffffd100Damage per second:|r "..dps.."\n"
+
+                        if(OffhandHasWeapon() ~= nil)then
+                            dps = ((floor(offLowDmg) + ceil(offHiDmg))/2) / attackSpeed
+                            dps = string.format("%.2f", dps)
+                            text = text.."\n|cffffd100Offhand damage:|r "..floor(offLowDmg).." - "..ceil(offHiDmg).."\n"
+                                    .."|cffffd100Attack Speed:|r "..attackSpeedOffhand.."\n"
+                                    .."|cffffd100Damage per second:|r "..dps.."\n"
+                        end
+
+                        itemLink = GetInventoryItemLink("player", 18) or nil
+                        if(itemLink ~=  nil) then
+                            itemString, stringEnd = string.find(itemLink, "item[%-?%d:]+")
+                            itemLink = string.sub(itemLink, itemString, stringEnd)
+                            __, __, __, __, __, itemType, __, __, __, __, __ = GetItemInfo(itemLink)
+                        else
+                            itemType="none"
+                        end
+
+                        if(itemType == "Bows" or itemType == "Guns" or itemType == "Crossbows" or itemType == "Thrown" or itemType == "Wands") then
+
+                            ammoSlot = CharacterAmmoSlot:GetID();
+                            local rangedCount = GetInventoryItemCount("player", CharacterRangedSlot:GetID());
+                            if (rangedCount > 1) then
+                                ammoSlot = CharacterRangedSlot:GetID();
+                            end
+                            ammoLeft = GetInventoryItemCount("player", ammoSlot);
+
+                            speed, lowDmg, hiDmg, posBuff, negBuff, percent = UnitRangedDamage("player")
+                            speed =  string.format("%.2f", speed)
+                            dps = ((floor(lowDmg) + ceil(hiDmg))/2) / speed
+                            dps = string.format("%.2f", dps)
+                            text = text.."\n|cffffd100Ranged damage:|r "..floor(lowDmg).." - "..ceil(hiDmg).."\n"
+                                    .."|cffffd100Attack Speed:|r "..speed.."\n"
+                                    .."|cffffd100Damage per second:|r "..dps.."\n"
+                                    .."|cffffd100Ammo left:|r "..ammoLeft.."\n"
+                        end
+
+                        if(wc3UI_Options.weaponIconSelected3 == 98) then
+                            sp = GetSpellpowerValue()
+                            hp = GetHealingpowerValue()
+                            text = tostring( sp + hp )
+
+                            text = "|cffffd100Total healing power:|r "..tostring(sp + hp).."\n"
+                                .."|cffffd100Raw healing power:|r "..tostring(hp).."\n"
+                                .."|cffffd100Healing from spell power:|r "..tostring(sp).."\n"
+
+                        elseif(wc3UI_Options.weaponIconSelected3 == 99) then
+                            sp, secondaryPowers = GetSpellpowerValue()
+                            text = tostring(secondaryPowers['frost'])
+
+                            text = "|cffffd100Spell power:|r "..tostring(sp).."\n"
+                                .."\n|cffffd100Extra power (add with Spell power to get sum)|r\n"
+                                .."|cffffd100Example: Fire (15) + Spell power (30) = 45 for fire spells.|r\n\n"
+                                .."|cffffd100Arcane:|r "..tostring(secondaryPowers['arcane']).."\n"
+                                .."|cffffd100Fire:|r "..tostring(secondaryPowers['fire']).."\n"
+                                .."|cffffd100Frost:|r "..tostring(secondaryPowers['frost']).."\n"
+                                .."|cffffd100Holy:|r "..tostring(secondaryPowers['holy']).."\n"
+                                .."|cffffd100Nature:|r "..tostring(secondaryPowers['nature']).."\n"
+                                .."|cffffd100Shadow:|r "..tostring(secondaryPowers['shadow']).."\n"
+                        end
+
+                        WIIIUI_infoBox_Text:SetText(text)
+                        WIIIUI_infoBox:SetPoint("CENTER", WIIIUI_xpHoverFrame, 0, 50)
+                        WIIIUI_infoBox:Show()
+                    </OnEnter>
+                    <OnLeave>
+                        WIIIUI_infoBox:Hide()
+                    </OnLeave>
+                </Scripts>
+
+            </Frame>
+
+        </Frames>
+    </Frame>
+
+    <!-- Armor Frame -->
+    <Frame name="WIIIUI_armorIcon" inherits="WIIIUI_Frame" framestrata="LOW">
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="50"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        
+        <Layers>
+            <!-- Armor text -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_armorText" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="10"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+            <!-- Armor % text -->
+            <Layer level="TOOLTIP">
+                <FontString name="WIIIUI_armorValues" inherits="ChatFontNormal" text="100" font="Interface\AddOns\WIIIUI\art\other\fonts\blq55.TTF">>
+                    <FontHeight>
+                        <AbsValue val="10"/>
+                    </FontHeight>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="6" y="100" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+
+        </Layers>
+
+        <!-- Weapon frame -->
+        <Frames>
+            <Frame name="Wc3_UI_armorIcon_tex">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="50"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+        		<Size x="200" y="298"/>
+
+                <Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background">
+                    <Color r="0" g="0" b="0" a="1" />
+                    <BackgroundInsets>
+                        <AbsInset left="10" right="10" top="10" bottom="10"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+            </Frame>
+
+             <Frame name="Wc3_UI_armorIcon_frame">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+
+                <Backdrop bgFile="Interface\Addons\WIIIUI\art\other\golden_frame">
+                    <BackgroundInsets>
+                        <AbsInset left="0" right="0" top="0" bottom="0"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+                <Scripts>
+                    <OnEnter>                        
+                    	base, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player")
+                        uLvl = UnitLevel("player")
+                        if( uLvl ~= 60 ) then
+                            dr = effectiveArmor / (effectiveArmor + 400 + 85 * uLvl)
+                        else
+                            dr = effectiveArmor / (effectiveArmor + 400 + 85 * (uLvl + 4.5 * (uLvl - 59)))
+                        end
+                    	dr = string.format("%.1f%%", dr * 100)
+
+                        __, totalArcane, __, __ = UnitResistance("player", 1)
+                        __, totalFire, __, __ = UnitResistance("player", 2)
+                        __, totalNature, __, __ = UnitResistance("player", 3)
+                        __, totalFrost, __, __ = UnitResistance("player", 4)
+                        __, totalShadow, __, __ = UnitResistance("player", 5)
+
+                        dodgeChance = string.format("%.2f%%", GetDodgeChance())
+                        parryChance = string.format("%.2f%%", GetParryChance())
+                        blockChance = string.format("%.2f%%", GetBlockChance())
+
+                        WIIIUI_infoBox_Text:SetText("|cffffd100Base Armor:|r "..base.."\n"
+                                                            .."|cffffd100Bonus Armor:|r "..(effectiveArmor - base).."\n"
+                                                            .."|cffffd100Total Armor:|r "..effectiveArmor.."\n"
+                                                            .."|cffffd100Damage reduced %:|r "..dr.."\n\n"
+                                                            .."|cffffd100Dodge chance:|r "..dodgeChance.."\n"
+                                                            .."|cffffd100Parry chance:|r "..parryChance.."\n"
+                                                            .."|cffffd100Block chance:|r "..blockChance.."\n\n"
+                                                            .."|cffffd100Arcane Resistance:|r "..totalArcane.."\n"
+                                                            .."|cffffd100Fire Resistance:|r "..totalFire.."\n"
+                                                            .."|cffffd100Nature Resistance:|r "..totalNature.."\n"
+                                                            .."|cffffd100Frost Resistance:|r "..totalFrost.."\n"
+                                                            .."|cffffd100Shadow Resistance:|r "..totalShadow.."\n")
+                        WIIIUI_infoBox:SetPoint("CENTER", WIIIUI_xpHoverFrame, 0, WIIIUI_xpHoverFrame:GetHeight() + 50)
+                        
+                        WIIIUI_infoBox:Show()
+                    </OnEnter>
+                    <OnLeave>
+                        WIIIUI_infoBox:Hide()
+                    </OnLeave>
+                </Scripts>
+
+            </Frame>
+
+        </Frames>
+    </Frame>
+
+    <!-- Actionslot grid -->
+    <Frame name="WIIIUI_actionslotGrid" inherits="WIIIUI_Frame" virtual="false" framestrata="MEDIUM">     
+         <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+
+        <Layers>
+            <Layer level="BACKGROUND">   
+                <Texture name ="WIIIUI_actionslotGrid_1" file="Interface\Addons\WIIIUI\art\orc\actionbar\actionslots_grid">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">   
+                <Texture name ="WIIIUI_actionslotGrid_2" file="Interface\Addons\WIIIUI\art\orc\actionbar\actionslots_grid">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">   
+                <Texture name ="WIIIUI_actionslotGrid_3" file="Interface\Addons\WIIIUI\art\orc\actionbar\actionslots_grid">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">   
+                <Texture name ="WIIIUI_actionslotGrid_4" file="Interface\Addons\WIIIUI\art\orc\actionbar\actionslots_grid">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+        </Layers>
+
+    </Frame>
+
+    <!-- Right part -->
+    <Frame name="WIIIUI_rightpart" inherits="WIIIUI_Frame" virtual="false" framestrata="HIGH">     
+         <Anchors>
+                <Anchor point="BOTTOM">
+                    <Offset>
+						<AbsDimension x="0" y="0"/>
+					</Offset>
+                </Anchor>
+            </Anchors>
+        <Layers>
+
+            <Layer level="BACKGROUND">   
+                <Texture name ="WIIIUI_rightpartBackground" file="Interface\Addons\WIIIUI\art\other\black_background">
+                    <Size>
+                        <AbsDimension x="0" y="0"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset>
+                                <AbsDimension x="0" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+
+            <!-- Inventory -->
+            <Layer level="OVERLAY">   
+                <Texture name ="Wc3_UI_right_middle" file="Interface\Addons\WIIIUI\art\orc\inventory\inventory">
+                    <Size>
+                        <AbsDimension x="340" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+
+            
+            
+            <Layer level="BORDER">   
+                <Texture name ="Wc3_UI_right_lid" file="Interface\Addons\WIIIUI\art\orc\bottom right\right_part_lid">
+                    <Size>
+                        <AbsDimension x="340" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>  
+            
+            <Layer level="BORDER">   
+                <Texture name ="Wc3_UI_bottom_right_top" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRight_Top">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">   
+                <Texture name ="Wc3_UI_bottom_right_middle" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRight_Middle">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">   
+                <Texture name ="Wc3_UI_bottom_right_bottom" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRight_Bottom">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+
+            <Layer level="BORDER">   
+                <Texture name ="Wc3_UI_right_right_extendedFillerTop_1" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRightFillerTop">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">   
+                <Texture name ="Wc3_UI_right_right_extendedFillerBottom_1" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRightFillerBottom">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+
+            <Layer level="ARTWORK">   
+                <Texture name ="Wc3_UI_right_right_extendedFillerTop_2" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRightFillerTop">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">   
+                <Texture name ="Wc3_UI_right_right_extendedFillerBottom_2" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRightFillerBottom">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+
+            <Layer level="ARTWORK">   
+                <Texture name ="Wc3_UI_right_right_extendedFillerTop_3" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRightFillerTop">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">   
+                <Texture name ="Wc3_UI_right_right_extendedFillerBottom_3" file="Interface\Addons\WIIIUI\art\orc\bottom right\BottomRightFillerBottom">
+                    <Size>
+                        <AbsDimension x="42" y="340"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOM">
+                            <Offset>
+						        <AbsDimension x="0" y="0"/>
+					        </Offset>
+                        </Anchor>
+                    </Anchors>    
+                </Texture>
+            </Layer>
+     
+        </Layers>
+
+    </Frame>
+
+    <!-- Inventory main slot frame -->
+    <Frame name="WIIIUI_inventorySlots" framestrata="HIGH">
+        <Size x="1" y="1" />
+        <Anchors>
+            <Anchor point="BOTTOM" relativeTo="UIParent" relativePoint="CENTER">
+                <Offset>
+                    <AbsDimension x="6" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+    </Frame>
+
+    <!-- Inventory slots 1 -->
+    <CheckButton name="ActionButton_CustomInventory_1" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="99">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
+                <Offset>
+                    <AbsDimension x="6" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+    </CheckButton>
+    <!-- Inventory slots 2 -->
+    <CheckButton name="ActionButton_CustomInventory_2" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="104">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
+                <Offset>
+                    <AbsDimension x="6" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+    </CheckButton>
+    <!-- Inventory slots 3 -->
+    <CheckButton name="ActionButton_CustomInventory_3" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="105">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
+                <Offset>
+                    <AbsDimension x="6" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+    </CheckButton>
+    <!-- Inventory slots 4 -->
+    <CheckButton name="ActionButton_CustomInventory_4" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="106">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
+                <Offset>
+                    <AbsDimension x="6" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+    </CheckButton>
+    <!-- Inventory slots 5 -->
+    <CheckButton name="ActionButton_CustomInventory_5" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="107">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
+                <Offset>
+                    <AbsDimension x="6" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+    </CheckButton>
+    <!-- Inventory slots 6 -->
+    <CheckButton name="ActionButton_CustomInventory_6" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="108">
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
+                <Offset>
+                    <AbsDimension x="6" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+    </CheckButton>
+    
+</Ui>

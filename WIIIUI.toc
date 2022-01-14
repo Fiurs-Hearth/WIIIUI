@@ -1,0 +1,10 @@
+## Interface: 11200
+## Title: Warcraft III - UI
+## Version: 1.0
+## Notes: WIIIUI
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariablesPerCharacter: wc3UI_Options
+WIIIUI.lua
+WIIIUI.xml
+

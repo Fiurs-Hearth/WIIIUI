@@ -1,0 +1,14 @@
+<Bindings>
+   <Binding name="Top Minimap Button" header="WC3HEADER">CustomKeyBindings(1)</Binding>
+   <Binding name="Middle Minimap Button" >CustomKeyBindings(2)</Binding>
+   <Binding name="Bottom Minimap Button" >CustomKeyBindings(3)</Binding>
+
+   <Binding name="Top Left Inventory" >CustomKeyBindings(9)</Binding>
+   <Binding name="Top Right Inventory" >CustomKeyBindings(8)</Binding>
+   <Binding name="Middle Left Inventory" >CustomKeyBindings(7)</Binding>
+   <Binding name="Middle Right Inventory" >CustomKeyBindings(6)</Binding>
+   <Binding name="Bottom Left Inventory" >CustomKeyBindings(4)</Binding>
+   <Binding name="Bottom Right Inventory" >CustomKeyBindings(5)</Binding>
+
+</Bindings>
+

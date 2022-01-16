@@ -367,7 +367,7 @@
                         CheckResizeInput()
                     </OnEnterPressed>
                     <OnMouseWheel>
-                        number = this:GetText()
+                        local number = this:GetText()
                         if(arg1 == 1)then
                             number = number + 1
                         else
@@ -425,7 +425,7 @@
 
                 <Scripts>
                     <OnLoad>
-                        extendNumber = this:GetText()
+                        local extendNumber = this:GetText()
                     </OnLoad>
                     <OnEscapePressed>
                         this:ClearFocus()
@@ -438,7 +438,7 @@
                         extendNumber = this:GetText()
                     </OnTextChanged>
                     <OnMouseWheel>
-                        number = this:GetText()
+                        local number = this:GetText()
                         if(arg1 == 1)then
                             number = number + 1
                         else
@@ -450,7 +450,7 @@
                 </Scripts>
                 <FontString inherits="ChatFontNormal"></FontString>
             </EditBox>
-            <!-- Editbox Portaring Aligner Horizontal -->
+            <!-- Editbox Portrait Aligner Horizontal -->
             <EditBox name="$parentEditboxPortraitHorizontal" numeric="true" letters="4">
                 <Size>
                     <AbsDimension x="55" y="62"></AbsDimension>
@@ -503,7 +503,7 @@
                         CheckResizeInput()
                     </OnEnterPressed>
                     <OnMouseWheel>                       
-                        number = this:GetText()
+                        local number = this:GetText()
                         if(arg1 == 1)then
                             number = number + 1
                         else
@@ -519,7 +519,7 @@
                 </Scripts>
                 <FontString inherits="ChatFontNormal"></FontString>
             </EditBox>
-            <!-- Editbox Portaring Aligner Vertical -->
+            <!-- Editbox Portrait Aligner Vertical -->
             <EditBox name="$parentEditboxPortraitVertical" numeric="true" letters="4">
                 <Size>
                     <AbsDimension x="55" y="62"></AbsDimension>
@@ -572,7 +572,7 @@
                         CheckResizeInput()
                     </OnEnterPressed>
                     <OnMouseWheel>                       
-                        number = this:GetText()
+                        local number = this:GetText()
                         if(arg1 == 1)then
                             number = number + 1
                         else
@@ -641,7 +641,7 @@
                         CheckPortraitScaleChange()
                     </OnEnterPressed>
                     <OnMouseWheel>                       
-                        number = this:GetText()
+                        local number = this:GetText()
                         if(arg1 == 1)then
                             number = number + 1
                         else
@@ -710,7 +710,7 @@
                         ChangeCastbarAlignment()
                     </OnEnterPressed>
                     <OnMouseWheel>                       
-                        number = this:GetText()
+                        local number = this:GetText()
                         if(arg1 == 1)then
                             number = number + 1
                         else
@@ -779,7 +779,7 @@
                         ChangeHPThreshold()
                     </OnEnterPressed>
                     <OnMouseWheel>                       
-                        number = this:GetText()
+                        local number = this:GetText()
                         if(arg1 == 1)then
                             number = number + 1
                         else
@@ -2048,8 +2048,8 @@
                 <Scripts>
                     <OnEnter>
                         WIIIUI_xpCurrLevel:SetText("XP "..UnitXP("player").." / "..UnitXPMax("player"))
-                        xpPercentage =  string.format("%.2f %%", UnitXP('player') / UnitXPMax('player') * 100)
-                        xpPercentageLeft = string.format("%.2f %%", 100 - (UnitXP('player') / UnitXPMax('player') * 100))
+                        local xpPercentage =  string.format("%.2f %%", UnitXP('player') / UnitXPMax('player') * 100)
+                        local xpPercentageLeft = string.format("%.2f %%", 100 - (UnitXP('player') / UnitXPMax('player') * 100))
                         WIIIUI_infoBox_Text:SetText("|cffffd100Experience required to level up:|r "..UnitXPMax("player").."\n"
                                                             .."|cffffd100Experience until next level:|r "..(UnitXPMax("player") - UnitXP("player")).." ("..xpPercentageLeft..")".."\n"
                                                             .."|cffffd100Current Experience:|r "..UnitXP("player").." ("..xpPercentage..")".."\n"
@@ -2149,8 +2149,18 @@
 
                 <Scripts>
                     <OnEnter>
-                        lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
-                        attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+                        local lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
+                        local attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+
+                        local speed, hiDmg, posBuff, percent
+                        local itemType
+                        local ammoSlot, ammoLeft
+                        local attackSpeedOffhand
+                        local dps
+                        local text
+                        local itemLink, itemString, stringEnd
+                        local sp, hp
+                        local secondaryPowers
 
                         if(attackSpeedOffhand == nil)then 
                             attackSpeedOffhand = 0
@@ -2320,8 +2330,18 @@
 
                 <Scripts>
                     <OnEnter>
-                        lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
-                        attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+                        local lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
+                        local attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+
+                        local speed, hiDmg, posBuff, percent
+                        local itemType
+                        local ammoSlot, ammoLeft
+                        local attackSpeedOffhand
+                        local dps
+                        local text
+                        local itemLink, itemString, stringEnd
+                        local sp, hp
+                        local secondaryPowers
 
                         if(attackSpeedOffhand == nil)then 
                             attackSpeedOffhand = 0
@@ -2491,8 +2511,18 @@
 
                 <Scripts>
                     <OnEnter>
-                        lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
-                        attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+                        local lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
+                        local attackSpeed, attackSpeedOffhand =  string.format("%.2f", UnitAttackSpeed('player'))
+
+                        local speed, hiDmg, posBuff, percent
+                        local itemType
+                        local ammoSlot, ammoLeft
+                        local attackSpeedOffhand
+                        local dps
+                        local text
+                        local itemLink, itemString, stringEnd
+                        local sp, hp
+                        local secondaryPowers
 
                         if(attackSpeedOffhand == nil)then 
                             attackSpeedOffhand = 0
@@ -2662,8 +2692,13 @@
 
                 <Scripts>
                     <OnEnter>                        
-                    	base, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player")
-                        uLvl = UnitLevel("player")
+                    	local base, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player")
+                        local uLvl = UnitLevel("player")
+
+                        local dr
+                        local totalArcane, totalFire, totalNature, totalFrost, totalShadow
+                        local dodgeChance, parryChance, blockChance
+
                         if( uLvl ~= 60 ) then
                             dr = effectiveArmor / (effectiveArmor + 400 + 85 * uLvl)
                         else

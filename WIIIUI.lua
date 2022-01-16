@@ -36,7 +36,7 @@ function ChangeTheme()
 	if(wc3UI_Options.theme == nil)then
 		wc3UI_Options.theme = "orc"
 	end
-	theme = wc3UI_Options.theme
+	local theme = wc3UI_Options.theme
 
 	Wc3_UI_extensionBackground:SetDrawLayer("BACKGROUND")
 	Wc3_UI_right_lid:SetDrawLayer("BORDER", 4)	
@@ -129,7 +129,6 @@ function ApplyOnDragFunction()
 		MiniMapBattlefieldFrame:StopMovingOrSizing()
 		MiniMapBattlefieldFrame:SetUserPlaced();
 		__, __, __, wc3UI_Options.MiniMapBattlefieldFrameX, wc3UI_Options.MiniMapBattlefieldFrameY = MiniMapBattlefieldFrame:GetPoint()
-		local x, y = wc3UI_Options.MiniMapBattlefieldFrameX, wc3UI_Options.MiniMapBattlefieldFrameY
 	end)
 end
 
@@ -147,6 +146,10 @@ function PutHearthstoneInActionBar()
 
 	if(HasAction(100) == nil)then
 
+		local hearthstoneFound
+		local numberOfSlots
+		local itemLink, itemString, itemName
+		
 		hearthstoneFound = false
 
 		for bag = 0, 4, 1 do
@@ -176,7 +179,7 @@ end
 
 function HideMinimapActionButtonFrame(number)
 
-	actionButtonFrameNormalTexture = _G['ActionButton_Custom'..number..'NormalTexture']
+	local actionButtonFrameNormalTexture = _G['ActionButton_Custom'..number..'NormalTexture']
 	actionButtonFrameNormalTexture:SetTexture("")
 	actionButtonFrameNormalTexture:SetWidth(-1)
 	actionButtonFrameNormalTexture:SetHeight(-1)
@@ -185,12 +188,18 @@ end
 
 function Minimap_ActionButtons(number)
 	
+	local hsCD_Center, hsMain_Center, offsetPixels
+	local customActionButton, ActionButton_CustomCooldown, actionButtonNormalTexture
+	local actionButtonIcon, zoomInPixels
+
+
+	local resizeIcon = 0 -- width and height
+	local addWidth = 0 -- add width alignment
+	local addHeight = 0	-- add heigh alignment
+
 	customActionButton = _G['ActionButton_Custom'..number]
 	ActionButton_CustomCooldown = _G['ActionButton_Custom'..number..'Cooldown']
 
-	resizeIcon = 0 -- width and height
-	addWidth = 0 -- add width alignment
-	addHeight = 0	-- add heigh alignment
 	if(wc3UI_Options.theme == "orc")then
 
 		resizeIcon = 3
@@ -252,8 +261,12 @@ end
 
 function CheckIfInForm()
 
-	
-	if(UnitClass("player") == "Druid") then
+	local icon, name, active, castable
+	local foundShapeshift
+	local iconWeapon, iconArmor, iconName
+
+	if(UnitClass("player") == "Druid") then		
+
 		for counter = 1, 10, 1 do
 			icon, name, active, castable = GetShapeshiftFormInfo(counter);
 			if(name == nil)then
@@ -331,16 +344,7 @@ end
 
 function SetWeaponIcon(custom)
 
-	if(frameNumber == 1)then
-		weaponIconSelected = wc3UI_Options.weaponIconSelected1
-	elseif(frameNumber == 2)then
-		weaponIconSelected = wc3UI_Options.weaponIconSelected2
-	elseif(frameNumber == 3)then
-		weaponIconSelected = wc3UI_Options.weaponIconSelected3
-	end
-
-
-
+	local icon
 
 	if(custom)then
 		icon = custom
@@ -383,6 +387,9 @@ function SetWeaponIcon(custom)
 end
 
 function SetArmorIcon(custom)
+
+	local icon
+
 	if(custom)then
 		icon = custom
 	else
@@ -402,6 +409,10 @@ function CreatePlayerPortrait()
 end
 
 function ModifyPlayerPortrait()
+
+	local time
+	local animId
+
 	PortraitCustom:SetFrameStrata("LOW")
 	PortraitCustom:SetFrameLevel(0)
 	
@@ -447,9 +458,11 @@ function ModifyPlayerPortrait()
 end
 
 function AlignMinimap()
+
+	local extraAlign, zoomInPixels
+
 	minimapFrame:SetWidth(wc3UI_Options.uiScale)
 	minimapFrame:SetHeight(wc3UI_Options.uiScale)
-
 
 	Minimap:ClearAllPoints()
 	Minimap:SetParent(UIParent)
@@ -516,6 +529,7 @@ function AlignMinimap()
 end
 
 function AlignZoneText()
+
 	MinimapZoneTextButton:Show()
 	
 	if(wc3UI_Options.ZoneTextPos == 1)then
@@ -528,6 +542,7 @@ function AlignZoneText()
 end
 
 function AlignBuffFrame()
+
 	if(wc3UI_Options.buffTopRight)then
 		
 		BuffButton0:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -10)
@@ -538,6 +553,7 @@ function AlignBuffFrame()
 end
 
 function ReAlignBuffFrame()
+
 	if(wc3UI_Options.buffTopRight)then
 		BuffButton0:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -10)
 		BuffButton16:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -100)
@@ -547,6 +563,7 @@ function ReAlignBuffFrame()
 end
 
 function AlignPortrait()
+
 	portraitFrame:SetWidth(wc3UI_Options.uiScale)
 	portraitFrame:SetHeight(wc3UI_Options.uiScale)
 	portraitFrame:SetPoint("BOTTOMLEFT", minimapFrame, "BOTTOMRIGHT", 0, 0)
@@ -564,6 +581,9 @@ function AlignPortrait()
 end
 
 function UIHideFix()
+
+	local elapsedTime
+
 	dummyFrame:SetScript("OnHide", function()
 		PortraitBackgroundMain:Hide()
 		barTextFrame:Hide()
@@ -584,6 +604,8 @@ function UIHideFix()
 end
 
 function AlignHealthMana()
+
+	local healthPercent, powerPercent
 
 	PlayerFrameHealthBar:SetParent(UIParent)
 	PlayerFrameManaBar:SetParent(UIParent)
@@ -660,6 +682,7 @@ function AlignHealthMana()
 end
 
 function CombatTextPortrait()
+
 	PlayerFrame:Show()
 	PlayerFrame:ClearAllPoints()
 
@@ -692,6 +715,10 @@ function CombatTextPortrait()
 end
 
 function AlignXPBar()
+
+	local xpScaling, xpTime
+	local restedXpCalc
+
 	xpScaling = 0.375
 	xpBarMainFrame:SetPoint("BOTTOMLEFT", portraitFrame, "BOTTOMLEFT", wc3UI_Options.uiScale*0.23, wc3UI_Options.uiScale*0.3)
 	xpBarLeft:SetWidth( (wc3UI_Options.uiScale*0.05924) * xpScaling)
@@ -815,6 +842,16 @@ end
 
 function AlignWeaponFrame(frameNumber)
 
+	local alignerX, alignerY
+	local weaponFrameScaling
+	local lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod, percent, speed
+	local text
+	local value, isShield, blockChance
+	local hp, sp
+	local ammoSlot, currentAmmo
+	local extraSpace
+	local time
+
 	weaponMainFrame = _G['WIIIUI_weaponIcon_'..frameNumber]
 	weaponIconFrame = _G['Wc3_UI_weaponIcon_frame_'..frameNumber]
 	weaponIcon = _G['Wc3_UI_weaponIcon_tex_'..frameNumber]
@@ -860,7 +897,6 @@ function AlignWeaponFrame(frameNumber)
 		lowDmg, highDmg, offLowDmg, offHiDmg, posBuff, negBuff, percentMod = UnitDamage("player")
 		text = floor(lowDmg).." - "..ceil(highDmg)
 	elseif(weaponIconSelected == 17) then
-
 
 		value, isShield = GetBlockValue()
 
@@ -977,6 +1013,12 @@ function AlignWeaponFrame(frameNumber)
 end
 
 function AlignArmorFrame()
+
+	local armorFrameScaling
+	local base, effectiveArmor, armor, posBuff, negBuff
+	local dr
+	local isInForm
+
 	armorFrameScaling = (xpBarLeft:GetWidth() + xpBarMiddle:GetWidth() + xpBarRight:GetWidth())*0.17
 	armorIconFrame:SetWidth( armorFrameScaling )
 	armorIconFrame:SetHeight(armorFrameScaling )
@@ -1046,6 +1088,7 @@ function AlignArmorFrame()
 end
 
 function HideMainMenuBarComponents()
+
 	MainMenuBarOverlayFrame:Hide()
 	MainMenuBarOverlayFrame:SetScript("OnLoad", nil)
 	
@@ -1088,10 +1131,14 @@ function HideMainMenuBarComponents()
 	BonusActionBarTexture1:Hide()
 end
 
-function AlignActionBars()
+local function AlignActionBars()
 	
 	function AlignActionSlot(buttonName, number, extraY)
 		
+		local previousAB
+		local actionButtonNormalTexture, ActionButton_Cooldown, actionButtonIcon
+		local hsCD_Center, hsMain_Center, offsetPixels, zoomInPixels
+
 		-- Pixel perfect spacing
 		
 		if(number == 2)then
@@ -1184,6 +1231,10 @@ function AlignActionBars()
 		end)
 	end
 
+	local parentFrame
+	local counter
+	local extraY
+
 	hideActionFrame = true
 	parentFrame = MainMenuBar
 	parentFrame:SetPoint("BOTTOMLEFT", actionSlotGridMain, "BOTTOMLEFT", wc3UI_Options.uiScale*0.037037, -1)
@@ -1230,12 +1281,17 @@ function AlignActionBars()
 end
 
 function AlignCastBar()
+	
+	local cBarPos
+
 	cBarPos = wc3UI_Options.castbarAlignmentOption / 270
 	cBarPos = wc3UI_Options.uiScale * cBarPos
 	CastingBarFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, cBarPos)
 end
 
 function AlignActionBarUIGrid()
+
+	local size
 
 	size = wc3UI_Options.uiScale * 0.91851
 	actionSlotGridMain:SetWidth(size)
@@ -1346,8 +1402,10 @@ end
 
 function InventorySlots()
 
-	column = 0
-	row = 0
+	local inventoryActionSlot, ActionButton_Cooldown, normalTexture, actionButtonIcon
+	local hsCD_Center, hsMain_Center, offsetPixels, zoomInPixels
+	local column = 0
+	local row = 0
 
 	for inventoryNumber = 1, 6, 1 do
 
@@ -1610,6 +1668,10 @@ end
 
 function AlignMicroButtons()
 
+	local moveY, moveX
+	local skip
+	local talentTime
+
 	microButtons = {	
 		'HelpMicroButton',
 		'MainMenuMicroButton',
@@ -1682,6 +1744,10 @@ end
 
 function AlignPetFrames()
 
+	local hasActionBar
+	local petActionSlot, petDebuffFrame	
+	local extraSpace
+
 	hasActionBar = PetHasActionBar()
 
 	if(hasActionBar == nil)then
@@ -1724,6 +1790,8 @@ end
 
 function EnableChatScroll()
 
+	local chatFrame
+
 	for i=1, 20, 1 do
 		chatFrame = _G['ChatFrame'..i]
 		if(chatFrame ~= nil)then
@@ -1742,6 +1810,13 @@ function EnableChatScroll()
 end
 
 function AlignShapeshiftButtons()
+
+	local alignX
+	local count
+	local button
+	local buttonBorder, buttonNormal
+	local shapeshiftPosOption
+	local themeAlignerX, themeAlignerY
 
 	ShapeshiftBarFrame:SetParent(UIParent)
 	ShapeshiftBarFrame:Show()
@@ -1873,6 +1948,9 @@ function AlignPlayerIcons()
 end
 
 function MultiBarAxis()
+
+	local multiButton
+
 	if(wc3UI_Options.MultiBarRightHorizontal)then
 		MultiBarRight:ClearAllPoints()
 		MultiBarRight:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
@@ -1896,6 +1974,13 @@ function MultiBarAxis()
 end
 
 function AlignRightPart()
+
+	local extraX, extraHeight
+	local shiftWidth
+	local offset, offset2
+	local alignExtraHorizontal, alignExtraHorizontal2
+	local offsetExtension1
+	local extension2Height
 
 	rightFrame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", 0, 0)
 
@@ -2262,6 +2347,8 @@ end
 -- Re-align things on edit
 function AlignUI()
 
+	local elapsedTime
+
 	elapsedTime = 0
 	dummyFrame:SetScript('OnUpdate', function(self)
 		elapsedTime = elapsedTime + arg1
@@ -2317,7 +2404,7 @@ end
 
 function ResetPowerBarColor()
 
-	powerType = UnitPowerType("player");
+	local powerType = UnitPowerType("player");
 
 	if(powerType == 0)then		-- Mana
 		PlayerFrameManaBar:SetStatusBarColor(0, 0, 1, 1)	
@@ -2329,11 +2416,17 @@ function ResetPowerBarColor()
 end
 
 function LowHPWarning()
+
+	local healthPercent
+	local evenStarted = false
+	local fullRedTime
+	local blackToRed
+	local number
+
 	if( not _G['WIIIUI_lowHPEvent'] ) then
 		lowHPEvent = CreateFrame("Frame", "WIIIUI_lowHPEvent", UIParent, nil)
 	end
 	
-	local evenStarted = false
 	lowHPEvent:RegisterEvent("UNIT_HEALTH");
 	lowHPEvent:RegisterEvent("UNIT_MAXHEALTH");
 	lowHPEvent:RegisterEvent("PLAYER_DEAD");
@@ -2403,8 +2496,11 @@ function VisibilityChatArrows()
 	end
 end
 
-
 function HPBarDamageGradiant()
+
+	local healthPercent
+	local r, g, b
+
 	if( not _G['WIIIUI_hpBarDamageGradiant'] ) then
 		hpBarGradiant = CreateFrame("Frame", "WIIIUI_hpBarDamageGradiant", UIParent, nil)
 	end
@@ -2428,6 +2524,9 @@ function HPBarDamageGradiant()
 end
 
 function SwitchMainActionBarEvent()
+
+	local actionButton
+	local size
 
 	if(BonusActionBarFrame:IsVisible())then
 
@@ -2466,6 +2565,8 @@ function SwitchMainActionBarEvent()
 end
 
 function MapActionBarFix()
+
+	local actionButton
 
 	if(BonusActionBarFrame:IsVisible())then
 
@@ -3025,6 +3126,8 @@ end
 
 function Wc3UI_OnLoad()
 
+	local time, time2
+
 	if( not _G['WIIIUI_dummyFrame'] ) then
 		dummyFrame = CreateFrame("Frame", "WIIIUI_dummyFrame", UIParent, nil)
 	end
@@ -3191,6 +3294,8 @@ end
 
 function CheckResizeInput()
 
+	local number
+
 	editbox = _G['WIIIUI_menuEditboxUIScale']
 	number = tonumber(editbox:GetText())
 
@@ -3219,8 +3324,12 @@ function CheckResizeInput()
 end
 
 function CheckExtendInput(number)
+	
+	local number
+
 	editbox = _G['WIIIUI_menuEditboxExtendBottomRight']
-	number = tonumber(number)
+	number = tonumber(editbox:GetText())
+
 	if(number == nil)then
 		return
 	end
@@ -3247,6 +3356,9 @@ function CheckHideGride()
 end
 
 function CheckPortraitScaleChange()
+
+	local number
+
 	editbox = _G['WIIIUI_menuEditboxPortraitScale']
 	number = tonumber(editbox:GetText())
 
@@ -3318,8 +3430,7 @@ function CustomColorPicker()
 	function ShowColorPicker(r, g, b, a, changedCallback)
 		ColorPickerFrame.hasOpacity, ColorPickerFrame.opacity = (a ~= nil), a;
 		ColorPickerFrame.previousValues = {r,g,b,a};
-		ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc = 
-		 changedCallback, changedCallback, changedCallback;
+		ColorPickerFrame.func, ColorPickerFrame.opacityFunc, ColorPickerFrame.cancelFunc = changedCallback, changedCallback, changedCallback;
 		ColorPickerFrame:SetColorRGB(r,g,b,a);
 		ColorPickerFrame:Hide(); -- Need to run the OnShow handler.
 		ColorPickerFrame:Show();
@@ -3351,6 +3462,8 @@ function CustomColorPicker()
 end
 
 function ChangeWeaponIcon(type, iconNumber)
+
+	local icon, weaponIconNumber
 
 	if(type == "main") then
 		icon = GetInventoryItemTexture("player", 16)
@@ -3432,6 +3545,9 @@ function ChangeShapeshiftButtonsPos()
 end
 
 function ChangeCastbarAlignment()
+
+	local number
+
 	editbox = _G['WIIIUI_menuEditboxCastbarAlignment']
 	number = tonumber(editbox:GetText())
 
@@ -3440,19 +3556,20 @@ function ChangeCastbarAlignment()
 end
 
 function CheckCastbarOption()
-	editbox = _G['WIIIUI_menuEditboxCastbarAlignment']
+
+	local editbox = _G['WIIIUI_menuEditboxCastbarAlignment']
 	editbox:SetText(wc3UI_Options.castbarAlignmentOption)
 end
 
 function ChangeHPThreshold()
-	editbox = _G['WIIIUI_menuEditboxHPThreshold']
-	number = tonumber(editbox:GetText())
+	local editbox = _G['WIIIUI_menuEditboxHPThreshold']
+	local number = tonumber(editbox:GetText())
 	wc3UI_Options.hpWarning= number
 	LowHPWarning()
 end
 
 function CheckHPThreshold()
-	editbox = _G['WIIIUI_menuEditboxHPThreshold']
+	local editbox = _G['WIIIUI_menuEditboxHPThreshold']
 	editbox:SetText(wc3UI_Options.hpWarning)
 end
 

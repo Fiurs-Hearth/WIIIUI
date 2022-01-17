@@ -76,10 +76,25 @@ function ChangeTheme()
 		Wc3_UI_extension1:SetDrawLayer("OVERLAY")
 		Wc3_UI_extension2:SetDrawLayer("ARTWORK")
 		Wc3_UI_extension3:SetDrawLayer("BORDER")
+		Wc3_UI_extension3:SetDrawLayer("OVERLAY")
 
 		Wc3_UI_extension1:SetParent("WIIIUI_actionslotGrid")
 		Wc3_UI_extension2:SetParent("WIIIUI_actionslotGrid")
 		Wc3_UI_extension3:SetParent("WIIIUI_actionslotGrid")
+
+		if(wc3UI_Options.hideGride)then
+
+			Wc3_UI_extension1:SetParent("WIIIUI_leftpart")
+			Wc3_UI_extension2:SetParent("WIIIUI_leftpart")
+			Wc3_UI_extension3:SetParent("WIIIUI_leftpart")
+
+			actionSlotGridMain:Hide()
+		else
+			actionSlotGridMain:Show()
+			Wc3_UI_extension1:SetParent("WIIIUI_actionslotGrid")
+			Wc3_UI_extension2:SetParent("WIIIUI_actionslotGrid")
+			Wc3_UI_extension3:SetParent("WIIIUI_actionslotGrid")
+		end
 	end
 
 	-- Left part
@@ -144,7 +159,9 @@ end
 
 function PutHearthstoneInActionBar()
 
-	if(HasAction(100) == nil)then
+	local actionBarID = 115
+
+	if(HasAction(actionBarID) == nil)then
 
 		local hearthstoneFound
 		local numberOfSlots
@@ -164,7 +181,7 @@ function PutHearthstoneInActionBar()
 					if(itemName == "Hearthstone")then
 						hearthstoneFound = true
 						PickupContainerItem(bag, inventorySlot)
-						PlaceAction(100)
+						PlaceAction(actionBarID)
 						break
 					end
 				end
@@ -652,22 +669,25 @@ function AlignHealthMana()
 	end
 	
 	leftFrame:SetScript("OnEvent", function()
-		if(wc3UI_Options.HealthPercent)then
-			healthPercent = (UnitHealth("player")/UnitHealthMax("player"));
-			healthPercent = healthPercent * 100
-			healthPercent = string.format("%.0f%%", healthPercent)
-			WIIIUI_HealthText:SetText(healthPercent);
-		else
-			WIIIUI_HealthText:SetText(UnitHealth("player").." / ".. UnitHealthMax("player"));
-		end
 
-		if(wc3UI_Options.PowerPercent)then
-			powerPercent = (UnitMana("player")/UnitManaMax("player"));
-			powerPercent = powerPercent * 100
-			powerPercent = string.format("%.0f%%", powerPercent)
-			WIIIUI_PowerText:SetText(powerPercent);
-		else
-			WIIIUI_PowerText:SetText(UnitMana("player").." / ".. UnitManaMax("player"));
+		if(arg1 == "player")then
+			if(wc3UI_Options.HealthPercent)then
+				healthPercent = (UnitHealth("player")/UnitHealthMax("player"));
+				healthPercent = healthPercent * 100
+				healthPercent = string.format("%.0f%%", healthPercent)
+				WIIIUI_HealthText:SetText(healthPercent);
+			else
+				WIIIUI_HealthText:SetText(UnitHealth("player").." / ".. UnitHealthMax("player"));
+			end
+
+			if(wc3UI_Options.PowerPercent)then
+				powerPercent = (UnitMana("player")/UnitManaMax("player"));
+				powerPercent = powerPercent * 100
+				powerPercent = string.format("%.0f%%", powerPercent)
+				WIIIUI_PowerText:SetText(powerPercent);
+			else
+				WIIIUI_PowerText:SetText(UnitMana("player").." / ".. UnitManaMax("player"));
+			end
 		end
 	end)
 	leftFrame:RegisterEvent("UNIT_HEALTH");
@@ -852,6 +872,31 @@ function AlignWeaponFrame(frameNumber)
 	local extraSpace
 	local time
 
+	local function UpdateAmmo()
+		-- Ammo part
+		ammoSlot = CharacterAmmoSlot:GetID();
+		local rangedCount = GetInventoryItemCount("player", CharacterRangedSlot:GetID());
+		if (rangedCount > 1) then
+			ammoSlot = CharacterRangedSlot:GetID();
+		end
+		currentAmmo = GetInventoryItemCount("player", ammoSlot);
+		-- End
+
+		weaponDamageText:SetText("|cffffd100Ammo:|r")
+		if(currentAmmo < 200)then
+			text = "|cffff0000"
+		elseif(currentAmmo < 400)then
+			text = "|cffffff00"
+		else
+			text = ""
+		end
+		if(GetInventoryItemTexture("player", ammoSlot) == nil) then
+			text = "|cffff0000".."No ammo"
+		else
+			text = text .. tostring(currentAmmo)
+		end
+	end
+
 	weaponMainFrame = _G['WIIIUI_weaponIcon_'..frameNumber]
 	weaponIconFrame = _G['Wc3_UI_weaponIcon_frame_'..frameNumber]
 	weaponIcon = _G['Wc3_UI_weaponIcon_tex_'..frameNumber]
@@ -935,28 +980,7 @@ function AlignWeaponFrame(frameNumber)
 
 	elseif(weaponIconSelected == 0)then
 
-		-- Ammo part
-		ammoSlot = CharacterAmmoSlot:GetID();
-		local rangedCount = GetInventoryItemCount("player", CharacterRangedSlot:GetID());
-		if (rangedCount > 1) then
-			ammoSlot = CharacterRangedSlot:GetID();
-		end
-		currentAmmo = GetInventoryItemCount("player", ammoSlot);
-		-- End
-
-		weaponDamageText:SetText("|cffffd100Ammo:|r")
-		if(currentAmmo < 200)then
-			text = "|cffff0000"
-		elseif(currentAmmo < 400)then
-			text = "|cffffff00"
-		else
-			text = ""
-		end
-		if(GetInventoryItemTexture("player", ammoSlot) == nil) then
-			text = "|cffff0000".."No ammo"
-		else
-			text = text .. tostring(currentAmmo)
-		end
+		UpdateAmmo()
 	end
 
 	-- If damage numbers are to high we split up the rows
@@ -984,22 +1008,32 @@ function AlignWeaponFrame(frameNumber)
 
 	weaponMainFrame:SetScript("OnEvent", function()
 
-		if(event == "UPDATE_SHAPESHIFT_FORM") then
-			
-		elseif(event == "UNIT_ATTACK_POWER" or event == "UNIT_INVENTORY_CHANGED" or event == "LEARNED_SPELL_IN_TAB" or event == "SPELLS_CHANGED" or event == "CHARACTER_POINTS_CHANGED" or event == "UNIT_AURA") then
+		if(event == "UPDATE_SHAPESHIFT_FORM" or event == "LEARNED_SPELL_IN_TAB" or event == "SPELLS_CHANGED" or event == "CHARACTER_POINTS_CHANGED" ) then -- I don't remember why I have this here to begin with :(
 			AlignWeaponFrame(frameNumber)
-			
-			time = 0
-			weaponMainFrame:SetScript("OnUpdate", function()
-				time = time + arg1
+		elseif(event == "UNIT_ATTACK_POWER" or event == "UNIT_RANGED_ATTACK_POWER" or event == "UNIT_INVENTORY_CHANGED"or event == "UNIT_AURA") then
+			if(arg1 == "player")then
 				AlignWeaponFrame(frameNumber)
-				if(time > 2)then
-					weaponMainFrame:SetScript("OnUpdate", nil)
-				end
-			end)
-		else
 
+				-- Update the ammo count
+				if(event == "UNIT_INVENTORY_CHANGED")then
+					
+					if(weaponIconSelected == 0)then
+
+						UpdateAmmo()
+						time = 0
+						weaponMainFrame:SetScript("OnUpdate", function()
+							time = time + arg1
+						
+							if(time > 2)then
+								UpdateAmmo()
+								weaponMainFrame:SetScript("OnUpdate", nil)
+							end
+						end)
+					end
+				end
+			end
 		end
+
 	end)
 	weaponMainFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	weaponMainFrame:RegisterEvent("UNIT_RANGED_ATTACK_POWER")
@@ -1059,28 +1093,32 @@ function AlignArmorFrame()
 	
 	armorMainFrame:SetScript("OnEvent", function()
 
-		if(event == "UNIT_RESISTANCES" or event == "UNIT_INVENTORY_CHANGED") then
+		if(arg1 == "player")then
 
-			base, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player");
-			if( UnitLevel("player") < 60 ) then
-				dr = effectiveArmor / (effectiveArmor + 400 + 85 * UnitLevel("player"))
-			else
-				-- Need to doublec check this with a lvl 60
-				dr = effectiveArmor / (effectiveArmor + 400 + 85 * (UnitLevel("player") + 4.5 * (UnitLevel("player") - 59)))
-			end
-			dr = string.format("%.1f%%", dr * 100)
-			armorValue:SetText( dr )
+			if(event == "UNIT_RESISTANCES" or event == "UNIT_INVENTORY_CHANGED") then
 
-			SetArmorIcon()
-
-		elseif( event == "UNIT_AURA") then
-			
-			isInForm = CheckIfInForm()
-			if(isInForm == false)then
-				SetWeaponIcon()
+				base, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player");
+				if( UnitLevel("player") < 60 ) then
+					dr = effectiveArmor / (effectiveArmor + 400 + 85 * UnitLevel("player"))
+				else
+					-- Need to doublec check this with a lvl 60
+					dr = effectiveArmor / (effectiveArmor + 400 + 85 * (UnitLevel("player") + 4.5 * (UnitLevel("player") - 59)))
+				end
+				dr = string.format("%.1f%%", dr * 100)
+				armorValue:SetText( dr )
+	
 				SetArmorIcon()
+	
+			elseif( event == "UNIT_AURA") then
+				
+				isInForm = CheckIfInForm()
+				if(isInForm == false)then
+					SetWeaponIcon()
+					SetArmorIcon()
+				end
 			end
 		end
+
 	end)
 	armorMainFrame:RegisterEvent("UNIT_RESISTANCES")
 	armorMainFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
@@ -1319,14 +1357,21 @@ function AlignActionBarUIGrid()
 	end)
 
 	if(wc3UI_Options.hideGride)then
-		actionSlotGridMain:Hide()
-	else
-		actionSlotGridMain:Show()
 
 		if(wc3UI_Options.theme == "nightelf")then
 			Wc3_UI_extension1:SetParent("WIIIUI_leftpart")
 			Wc3_UI_extension2:SetParent("WIIIUI_leftpart")
 			Wc3_UI_extension3:SetParent("WIIIUI_leftpart")
+		end
+
+		actionSlotGridMain:Hide()
+	else
+		actionSlotGridMain:Show()
+
+		if(wc3UI_Options.theme == "nightelf")then
+			Wc3_UI_extension1:SetParent("WIIIUI_actionslotGrid")
+			Wc3_UI_extension2:SetParent("WIIIUI_actionslotGrid")
+			Wc3_UI_extension3:SetParent("WIIIUI_actionslotGrid")
 		end
 	end
 end
@@ -1795,6 +1840,11 @@ function EnableChatScroll()
 	for i=1, 20, 1 do
 		chatFrame = _G['ChatFrame'..i]
 		if(chatFrame ~= nil)then
+
+			chatFrameTab = _G['ChatFrame'..i.."Tab"]
+			chatFrameTab:SetFrameStrata("DIALOG")
+			chatFrame:SetFrameStrata("DIALOG")
+
 			chatFrame:EnableMouseWheel(1)
 			chatFrame:SetScript("OnMouseWheel", function()
 				if(arg1 == 1)then
@@ -1803,6 +1853,7 @@ function EnableChatScroll()
 					this:ScrollDown()
 				end
 			end)
+
 		else
 			break;
 		end
@@ -2256,7 +2307,7 @@ function AlignRightPart()
 	if(wc3UI_Options.theme == "nightelf")then
 
 		extension1:ClearAllPoints()
-		extension1:SetParent("WIIIUI_actionslotGrid")
+		extension1:SetParent("WIIIUI_leftpart")
 		extension1:SetWidth(wc3UI_Options.uiScale)
 		extension1:SetHeight(wc3UI_Options.uiScale/4)
 		extension1:SetPoint("BOTTOMLEFT", portraitFrame, "BOTTOMRIGHT", wc3UI_Options.uiScale*-0.096296, wc3UI_Options.uiScale*0.43333)
@@ -2264,13 +2315,14 @@ function AlignRightPart()
 		extension2:SetWidth(wc3UI_Options.uiScale)
 		extension2:SetHeight(wc3UI_Options.uiScale/4)
 		extension2:SetPoint("BOTTOMLEFT", portraitFrame, "BOTTOMRIGHT", wc3UI_Options.uiScale*0.685185 - 5, wc3UI_Options.uiScale*0.43333)
-		extension2:SetParent("WIIIUI_actionslotGrid")
+		extension2:SetParent("WIIIUI_leftpart")
 	
 		extension3:ClearAllPoints()
 		extension3:SetWidth(wc3UI_Options.uiScale/2)
 		extension3:SetHeight(wc3UI_Options.uiScale/4)
 		extension3:SetPoint("BOTTOMLEFT", extension2, "BOTTOMRIGHT", wc3UI_Options.uiScale*-0.296296, 0)
-		extension3:SetParent("WIIIUI_actionslotGrid")
+		extension3:SetParent("WIIIUI_leftpart")
+		extension3:SetDrawLayer("OVERLAY")
 
 		if(wc3UI_Options.uiScale >= 267)then
 			Wc3_UI_right_lid:SetWidth(wc3UI_Options.uiScale*0.7890625)
@@ -2436,40 +2488,41 @@ function LowHPWarning()
 			lowHPEvent:SetScript("OnUpdate", nil)
 		end
 
-		healthPercent = UnitHealth("player") / UnitHealthMax("player");	
-		if(healthPercent <= (wc3UI_Options.hpWarning / 100))then
+		if(arg1 == "player")then
 
-			fullRedTime = 1
-			blackToRed = true
-			if(not evenStarted)then
-				PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\white_background")
-				evenStarted = true 
-				number = 0
+			healthPercent = UnitHealth("player") / UnitHealthMax("player");	
+			if(healthPercent <= (wc3UI_Options.hpWarning / 100))then
+
+				fullRedTime = 1
+				blackToRed = true
+				if(not evenStarted)then
+					PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\white_background")
+					evenStarted = true 
+					number = 0
 
 
-				lowHPEvent:SetScript("OnUpdate", function()
-					if(blackToRed)then
-						number = number + (arg1 / fullRedTime)
-						PortraitBackground:SetVertexColor(number,0,0,1)
-						if(number >= 1)then
-							blackToRed = false
+					lowHPEvent:SetScript("OnUpdate", function()
+						if(blackToRed)then
+							number = number + (arg1 / fullRedTime)
+							PortraitBackground:SetVertexColor(number,0,0,1)
+							if(number >= 1)then
+								blackToRed = false
+							end
+						else
+							number = number - (arg1 / fullRedTime)
+							PortraitBackground:SetVertexColor(number,0,0,1)
+							if(number <= 0)then
+								blackToRed = true
+							end
 						end
-					else
-						number = number - (arg1 / fullRedTime)
-						PortraitBackground:SetVertexColor(number,0,0,1)
-						if(number <= 0)then
-							blackToRed = true
-						end
-					end
-	
-				end)
+		
+					end)
+				end
+			else
+				evenStarted = false
+				lowHPEvent:SetScript("OnUpdate", nil)
+				PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
 			end
-			
-
-		else
-			evenStarted = false
-			lowHPEvent:SetScript("OnUpdate", nil)
-			PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
 		end
 
 	end)
@@ -2509,17 +2562,20 @@ function HPBarDamageGradiant()
 	hpBarGradiant:RegisterEvent("UNIT_MAXHEALTH");
 	hpBarGradiant:SetScript("OnEvent", function()
 
-		healthPercent = UnitHealth("player") / UnitHealthMax("player");	
-		if(healthPercent < 0.5)then
-			r = 1
-			g = 2*healthPercent
-			b = 0
-		else
-			r = 2*(1 - healthPercent)
-			g = 1
-			b = 0
+		if(arg1 == "player") then
+			healthPercent = UnitHealth("player") / UnitHealthMax("player");	
+			if(healthPercent < 0.5)then
+				r = 1
+				g = 2*healthPercent
+				b = 0
+			else
+				r = 2*(1 - healthPercent)
+				g = 1
+				b = 0
+			end
+			PlayerFrameHealthBar:SetStatusBarColor(r, g, b, 1)
 		end
-		PlayerFrameHealthBar:SetStatusBarColor(r, g, b, 1)
+
 	end)
 end
 
@@ -3269,7 +3325,9 @@ function Wc3UI_OnLoad()
 	dummyPetFrame:SetScript("OnEvent", function()
 
 		if(event == "UNIT_PET")then
-			AlignPetFrames()			-- Middle Top UI, aligns pet frame
+			if(arg1 == "player")then
+				AlignPetFrames()			-- Middle Top UI, aligns pet frame
+			end
 		end
 
 		if(event == "WORLD_MAP_UPDATE")then 	-- Minimap bug fix, show actionbar when map closes again.
@@ -3574,6 +3632,7 @@ function CheckHPThreshold()
 end
 
 function ChangeBuffPos()
+
 	if(WIIIUI_menuCheckButtonBuff:GetChecked())then
 		wc3UI_Options.buffTopRight = false
 	else

@@ -1680,7 +1680,7 @@
     </Frame>
 
     <!-- Top minimap actionbar -->
-    <CheckButton name="ActionButton_Custom1" inherits="ActionBarButtonTemplate" parent="UIParent" id="100">
+    <CheckButton name="ActionButton_Custom1" inherits="ActionBarButtonTemplate" parent="UIParent" id="115">
         <Anchors>
 			<Anchor point="LEFT" relativeTo="UIParent" relativePoint="RIGHT">
 				<Offset>
@@ -1691,7 +1691,7 @@
 	</CheckButton>
 
     <!-- Middle minimap actionbar -->
-    <CheckButton name="ActionButton_Custom2" inherits="ActionBarButtonTemplate" parent="UIParent" id="101">
+    <CheckButton name="ActionButton_Custom2" inherits="ActionBarButtonTemplate" parent="UIParent" id="116">
         <Anchors>
 			<Anchor point="LEFT" relativeTo="UIParent" relativePoint="RIGHT">
 				<Offset>
@@ -1702,7 +1702,7 @@
 	</CheckButton>
 
     <!-- Bottom minimap actionbar -->
-    <CheckButton name="ActionButton_Custom3" inherits="ActionBarButtonTemplate" parent="UIParent" id="102">
+    <CheckButton name="ActionButton_Custom3" inherits="ActionBarButtonTemplate" parent="UIParent" id="117">
         <Anchors>
 			<Anchor point="LEFT" relativeTo="UIParent" relativePoint="RIGHT">
 				<Offset>
@@ -3023,7 +3023,7 @@
     </Frame>
 
     <!-- Inventory slots 1 -->
-    <CheckButton name="ActionButton_CustomInventory_1" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="99">
+    <CheckButton name="ActionButton_CustomInventory_1" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="109">
         <Anchors>
             <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
                 <Offset>
@@ -3033,7 +3033,7 @@
         </Anchors>
     </CheckButton>
     <!-- Inventory slots 2 -->
-    <CheckButton name="ActionButton_CustomInventory_2" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="104">
+    <CheckButton name="ActionButton_CustomInventory_2" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="110">
         <Anchors>
             <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
                 <Offset>
@@ -3043,7 +3043,7 @@
         </Anchors>
     </CheckButton>
     <!-- Inventory slots 3 -->
-    <CheckButton name="ActionButton_CustomInventory_3" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="105">
+    <CheckButton name="ActionButton_CustomInventory_3" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="111">
         <Anchors>
             <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
                 <Offset>
@@ -3053,7 +3053,7 @@
         </Anchors>
     </CheckButton>
     <!-- Inventory slots 4 -->
-    <CheckButton name="ActionButton_CustomInventory_4" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="106">
+    <CheckButton name="ActionButton_CustomInventory_4" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="112">
         <Anchors>
             <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
                 <Offset>
@@ -3063,7 +3063,7 @@
         </Anchors>
     </CheckButton>
     <!-- Inventory slots 5 -->
-    <CheckButton name="ActionButton_CustomInventory_5" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="107">
+    <CheckButton name="ActionButton_CustomInventory_5" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="113">
         <Anchors>
             <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
                 <Offset>
@@ -3073,7 +3073,7 @@
         </Anchors>
     </CheckButton>
     <!-- Inventory slots 6 -->
-    <CheckButton name="ActionButton_CustomInventory_6" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="108">
+    <CheckButton name="ActionButton_CustomInventory_6" inherits="ActionBarButtonTemplate" parent="WIIIUI_inventorySlots" framestrata="DIALOG" id="114">
         <Anchors>
             <Anchor point="LEFT" relativeTo="UIParent" relativePoint="CENTER">
                 <Offset>

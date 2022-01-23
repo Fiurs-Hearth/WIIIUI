@@ -3058,6 +3058,11 @@ function GetHealingpowerValue()
 		end
 		
 	end
+
+	-- vanilla plus specific
+	if (serverIsVanillaPlus()) then
+		healPower = healPower + tonumber(math.floor(UnitStat("player",4)*0.33))
+	end
 	
 	-- buffs
 	local _, _, healPowerFromAura = GetPlayerAura("Healing done by magical spells is increased by up to (%d+).")

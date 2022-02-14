@@ -60,6 +60,19 @@ If you have other crypto you want to donate with, please contact me at Discord: 
 (Screenshots taken on server [Turtle WoW](https://turtle-wow.org/))
 
 ## Features
+* (NEW!) Customization tab, allows you to edit size, position, transparency, texture, stacking etc. Use mouse scroll to change page.
+  
+![image](https://user-images.githubusercontent.com/97316608/153955704-44634062-df14-4ce3-b992-82f4ad7fb400.png)  
+
+Example of an edit with human theme:  
+
+![image](https://user-images.githubusercontent.com/97316608/153957920-623ca862-9a94-4cbd-a770-2976fe6b324c.png)  
+  
+#### Settings:  
+Page 10, extensionBackground, width: 500 (change to fit)  
+Page 24, rightpart, Frame strata: BACKGROUND  
+inventorySlots, Hide: Checked  
+  
 * Zoom minimap in and out with the mousescroll while hovering over the minimap
 * Scroll chat up or down with mousescroll while hovering over the chat
 * 3 extra custom bindable actionslots next to the minimap, hearthstone is automatically put into the top one if it's empty

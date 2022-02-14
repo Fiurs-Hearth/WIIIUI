@@ -2959,6 +2959,11 @@ function GetSpellpowerValue()
 			
 		end
 	end
+
+	-- vanilla plus specific
+	if (serverIsVanillaPlus()) then
+		spellPower = spellPower + tonumber(math.floor(UnitStat("player",4)*0.33))
+	end
 	
 	-- buffs
 	local _, _, spellPowerFromAura = GetPlayerAura("Magical damage dealt is increased by up to (%d+).")
@@ -3052,6 +3057,11 @@ function GetHealingpowerValue()
 			end
 		end
 		
+	end
+
+	-- vanilla plus specific
+	if (serverIsVanillaPlus()) then
+		healPower = healPower + tonumber(math.floor(UnitStat("player",4)*0.33))
 	end
 	
 	-- buffs
@@ -3797,4 +3807,8 @@ function CheckMultiBarAxis()
 	else
 		WIIIUI_menuCheckMultibarRightHorizontal:SetChecked(false)
 	end
+end
+
+function serverIsVanillaPlus()
+	return GetRealmName() == "Hogger"
 end

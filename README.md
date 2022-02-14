@@ -24,7 +24,12 @@ Contact me on Discord: Fiur#8658
 * Recommended: [Set script memory to 0](https://imgur.com/a/V65UiKd), this helps against most game crashes caused by addons, click link for instructions.
 
 Download MoveAnything addon [here](https://legacy-wow.com/vanilla-addons/MoveAnything/).  
-*With this addon you can move basically move any UI part that was not added by addons (such as mine)*
+*With this addon you can move basically any UI part that was not added by addons (such as mine)*
+
+### Don't forgot to open the config menu for configuration options, accessable in the lower right corner!
+
+![cog_pos](https://user-images.githubusercontent.com/97316608/148687659-82e5ddfa-b4a4-412d-a739-0f3123ebffe6.png)
+
 
 ## Please support
 [Click here to donate via ko-fi](https://ko-fi.com/fiur_)  
@@ -82,7 +87,20 @@ If you have other crypto you want to donate with, please contact me at Discord: 
 A video demonstrating the different menu options available.  
 https://youtu.be/agffQHWyWh8
 
+## FAQ
+**Q:** How do I move or change size of the chat window?  
+  
+**A:** Check image below and follow these instructions:  
+  * To move the chat window, move mouse cursor to the location of the red square #1, after a second the 'General' tab will be displayed.
+  * Right click while mouse is on 'General' tab, move to the red square #2 and click 'Unlock Window'.
+  * Move mouse curosr to the red square #1, hold left click, drag and let go when you have found a position you like.
+  * To change the size of the chat window, make sure the chat window is unlocked, move mouse cursor to any edge (highlighted in blue in image below) of the chat window, hold left click, drag and release when you have found a size you enjoy.
+  
+![image](https://user-images.githubusercontent.com/97316608/153941630-09fc3f3f-13f9-4833-994c-865a76688421.png)
+  
 ## Known issues
+* The UI looks wrong? Try reloading the UI from the config menu, if that doesn't work, hit Escape to open the game's Main Menu, click 'Video Options' and either uncheck 'Use UI Scale' if it's checked or
+* Options not saving is likely because your files are set to 'Read only', please look up how to remove 'Read only' as it is different depending on your OS.
 * When adding something to an empty minimap actionslot the icon is enlarged, please reload UI from config menu.
 * When adding something to an empty extra inventory slot the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.
 * When adding something to an empty actionslot in the actiongrid the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.

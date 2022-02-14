@@ -109,6 +109,40 @@
         </Scripts>
     </Frame>
 
+    <!-- General tab -->
+    <Button name="WIIIUI_generalTab" inherits="OptionsButtonTemplate" text="General" framestrata="DIALOG">
+        <Size x="100" y="40"/>
+        <Anchors>
+            <Anchor point="TOPLEFT">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Scripts>
+            <OnClick>
+                GeneralTab_Clicked()
+            </OnClick>
+        </Scripts>
+    </Button>
+
+    <!-- Customize tab -->
+    <Button name="WIIIUI_customizeTab" inherits="OptionsButtonTemplate" text="Customize" framestrata="DIALOG">
+        <Size x="100" y="40"/>
+        <Anchors>
+            <Anchor point="TOPLEFT">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Scripts>
+            <OnClick>
+                CustomizeTab_Clicked()
+                </OnClick>
+        </Scripts>
+    </Button>
+
     <!-- Menu frame -->
     <Frame name="WIIIUI_menu"  movable="true" parent="UIParent" framestrata="DIALOG">
         <Size x="650" y="600"/>
@@ -1396,6 +1430,39 @@
                     </OnMouseUp>
                 </Scripts>
             </CheckButton>
+            <!-- Enable customize button-->
+            <CheckButton name="$parentCheckButtonEnableCustomize" inherits="OptionsCheckButtonTemplate" checked="true">
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-210" y="-55"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnMouseUp>
+                        ChangeEnableCustomize()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Enable V+ int scaling button-->
+            <CheckButton name="$parentCheckButtonVPlus" inherits="OptionsCheckButtonTemplate" checked="false">
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-170" y="-185"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_menuCheckButtonVPlusText:SetText("Server is V+")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeVPlus()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
             <!-- Multibar left horizontal checkbutton-->
             <CheckButton name="$parentCheckMultibarLeftHorizontal" inherits="OptionsCheckButtonTemplate" checked="false">
                 <Anchors>
@@ -1557,6 +1624,26 @@
                     </Anchors>
                 </FontString>
             </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentEnableCustomizeText" inherits="GameFontNormal" text="Enable customize settings">
+                    <Size>
+                        <AbsDimension x="230" y="10"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="$parentEnableCustomizeDisabledText" inherits="GameFontNormal" text="Disable customize settings and reload UI to change theme" hidden="true">
+                    <Size>
+                        <AbsDimension x="230" y="50"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
         </Layers>
 
         <Scripts>
@@ -1581,7 +1668,11 @@
                 WIIIUI_menuBuffText:SetPoint("BOTTOMLEFT", WIIIUI_menuCheckButtonBuff, "BOTTOMLEFT", -80, 35)
                 WIIIUI_menuPortraitPos:SetPoint("TOPLEFT", WIIIUI_menuEditboxUIScale, "CENTER", 315, 55)
                 WIIIUI_menuMultibarText:SetPoint("BOTTOMLEFT", WIIIUI_menu, "TOPRIGHT", -250, -145)
-                
+                WIIIUI_menuEnableCustomizeText:SetPoint("BOTTOMLEFT", WIIIUI_menuCheckButtonEnableCustomize, "CENTER", -20, -3)
+                WIIIUI_menuEnableCustomizeDisabledText:SetPoint("BOTTOMLEFT", WIIIUI_menu, "TOPLEFT", 100, -100)
+
+                WIIIUI_generalTab:Hide()
+                WIIIUI_customizeTab:Hide()
             </OnLoad>
 
             <OnMouseDown>
@@ -1599,8 +1690,73 @@
                     return
                 end
             </OnKeyDown>
+
+            <OnShow>
+                WIIIUI_generalTab:Show()
+                WIIIUI_customizeTab:Show()
+            </OnShow>
+
         </Scripts>
 
+    </Frame>
+
+    <!-- Customization frame -->
+    <Frame name="WIIIUI_customizedMainFrame"  movable="false" parent="UIParent" framestrata="DIALOG" hidden="true">
+        <Size x="660" y="675"/>
+		<Anchors>
+			<Anchor point="TOPLEFT">	
+				<Offset x="0" y="0"/>
+			</Anchor>
+		</Anchors>
+		<Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background">
+			<Color r="0.0" g="0" b="0" a="0.0" />
+		</Backdrop>
+        <Frames>
+            <Button name="$parentResetButton" inherits="OptionsButtonTemplate" text="COMPLETE RESET" framestrata="DIALOG">
+                <Size x="130" y="30"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-100" y="5"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        Reset_CustomSettings()
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Frame name="WIIIUI_CustomizeInfo">
+                <Size x="450" y="650"/>
+                <Anchors>
+                    <Anchor point="LEFT">	
+                        <Offset x="-450" y="0"/>
+                    </Anchor>
+                </Anchors>
+                
+                <Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background" edgeFile="Interface/DialogFrame/UI-DialogBox-Border">
+                    <Color r="0.0" g="0.0" b="0.0" a="0.85" />
+                    <BackgroundInsets>
+                        <AbsInset left="10" right="10" top="10" bottom="10"/>
+                    </BackgroundInsets>
+                </Backdrop>
+
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString name="$parentText" inherits="GameFontNormal">
+                            <Size>
+                                <AbsDimension x="420" y="630"/>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
     </Frame>
 
     <!-- Information box frame -->
@@ -1713,7 +1869,7 @@
 	</CheckButton>
 
     <!-- Portait background -->
-    <Frame name="WIIIUI_backgroundMain" inherit="WIIIUI_Frame" framestrata="LOW" >
+    <Frame name="WIIIUI_backgroundMain" parent="UIParent" inherit="WIIIUI_Frame" framestrata="BACKGROUND" >
         <Size x="1" y="1" />
         <Anchors>
             <Anchor point="CENTER">
@@ -1756,7 +1912,7 @@
     </Frame>
 
     <!-- bar texts -->
-    <Frame name="WIIIUI_texts">
+    <Frame name="WIIIUI_texts" parent="UIParent">
         <Size x="1" y="1" />
         <Anchors>
             <Anchor point="CENTER">
@@ -1795,7 +1951,7 @@
     </Frame>
 
     <!-- Left part -->
-    <Frame name="WIIIUI_leftpart" inherits="WIIIUI_Frame" virtual="false">     
+    <Frame name="WIIIUI_leftpart" parent="UIParent" inherits="WIIIUI_Frame" virtual="false">     
          <Anchors>
             <Anchor point="BOTTOM">
                 <Offset>

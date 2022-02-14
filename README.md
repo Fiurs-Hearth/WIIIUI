@@ -26,7 +26,7 @@ Contact me on Discord: Fiur#8658
 Download MoveAnything addon [here](https://legacy-wow.com/vanilla-addons/MoveAnything/).  
 *With this addon you can move basically any UI part that was not added by addons (such as mine)*
 
-### Don't forgot to open the config menu for configuration options, accessable in the lower right corner!
+### Don't forgot to open the config menu for configuration options, accessible in the lower right corner!
 
 ![cog_pos](https://user-images.githubusercontent.com/97316608/148687659-82e5ddfa-b4a4-412d-a739-0f3123ebffe6.png)
 

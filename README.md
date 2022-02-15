@@ -24,7 +24,12 @@ Contact me on Discord: Fiur#8658
 * Recommended: [Set script memory to 0](https://imgur.com/a/V65UiKd), this helps against most game crashes caused by addons, click link for instructions.
 
 Download MoveAnything addon [here](https://legacy-wow.com/vanilla-addons/MoveAnything/).  
-*With this addon you can move basically move any UI part that was not added by addons (such as mine)*
+*With this addon you can move basically any UI part that was not added by addons (such as mine)*
+
+### Don't forgot to open the config menu for configuration options, accessible in the lower right corner!
+
+![cog_pos](https://user-images.githubusercontent.com/97316608/148687659-82e5ddfa-b4a4-412d-a739-0f3123ebffe6.png)
+
 
 ## Please support
 [Click here to donate via ko-fi](https://ko-fi.com/fiur_)  
@@ -55,6 +60,19 @@ If you have other crypto you want to donate with, please contact me at Discord: 
 (Screenshots taken on server [Turtle WoW](https://turtle-wow.org/))
 
 ## Features
+* (NEW!) Customization tab, allows you to edit size, position, transparency, texture, stacking etc. Use mouse scroll to change page.
+  
+![image](https://user-images.githubusercontent.com/97316608/153955704-44634062-df14-4ce3-b992-82f4ad7fb400.png)  
+
+Example of an edit with human theme:  
+
+![image](https://user-images.githubusercontent.com/97316608/153957920-623ca862-9a94-4cbd-a770-2976fe6b324c.png)  
+  
+#### Settings:  
+Page 10, extensionBackground, width: 500 (change to fit)  
+Page 24, rightpart, Frame strata: BACKGROUND  
+inventorySlots, Hide: Checked  
+  
 * Zoom minimap in and out with the mousescroll while hovering over the minimap
 * Scroll chat up or down with mousescroll while hovering over the chat
 * 3 extra custom bindable actionslots next to the minimap, hearthstone is automatically put into the top one if it's empty
@@ -82,7 +100,52 @@ If you have other crypto you want to donate with, please contact me at Discord: 
 A video demonstrating the different menu options available.  
 https://youtu.be/agffQHWyWh8
 
+## Custom Themes
+
+### Custom themes
+Links will be added here in the future.
+
+### How to make a custom theme
+
+- Create a folder named `Custom#` 1-8, example `Custom4`.
+- Copy all files and folders in `WoW\Interface\AddOns\WIIIUI\art\orc` and paste it into your new folder. Orc is the template for custom themes, which is good if you do not intend to edit with the customization option.
+- Either use the images as a template and follow their form or go crazy and use the customization feature.
+- Do not save any image with higher resolution than 512x512 since it is not supported in vanilla WoW.
+- All images must be saved with width/height of a multiplier of 8. For example: 16,32,64,128,256,512.
+- You can edit and then save an image while ingame, you just need to reload the UI to see the changes ingame.
+
+### How to apply custom themes
+
+- Download a theme
+- Put the custom theme folder into `WoW\Interface\AddOns\WIIIUI\art`
+- (Optional) Go into `WoW\WTF\Account\[ACCOUNT NAME]\[SERVER NAME]\[CHARACTER NAME]\SavedVariables`
+- (Optional) Paste the WIIIUI.lua file and overwrite OR...
+- (Optional) If you don't want your old settings to be overriden, such as UI scale size etc, then you can go into the downloaded WIIIUI.lua file, copy the code block in `["base_settings"]={["THEME"]}`, paste it into your own WIIIUI.lua file. Now do the same with `["edit_theme_settings"]={["THEME"]}`.  
+  
+![image](https://user-images.githubusercontent.com/97316608/154137716-eaa9c73b-e2d3-44b6-b700-59041f45d84b.png)  
+Example of how it should look.
+
+#### How to share 
+
+- Upload your custom theme folder from `WoW\Interface\AddOns\WIIIUI\art`.
+- (Optional) Upload your `WoW\WTF\Account\[ACCOUNT NAME]\[SERVER NAME]\[CHARACTER NAME]\SavedVariables\WIIIUI.lua` file.
+- (Optional) Or share the code block in `["base_settings"]={["THEME"]}` and the same with `["edit_theme_settings"]={["THEME"]}`.  
+- Ask me to add your theme to the list of custom themes or share it as you please.
+
+## FAQ
+**Q:** How do I move or change size of the chat window?  
+  
+**A:** Check image below and follow these instructions:  
+  * To move the chat window, move mouse cursor to the location of the red square #1, after a second the 'General' tab will be displayed.
+  * Right click while mouse is on 'General' tab, move to the red square #2 and click 'Unlock Window'.
+  * Move mouse curosr to the red square #1, hold left click, drag and let go when you have found a position you like.
+  * To change the size of the chat window, make sure the chat window is unlocked, move mouse cursor to any edge (highlighted in blue in image below) of the chat window, hold left click, drag and release when you have found a size you enjoy.
+  
+![image](https://user-images.githubusercontent.com/97316608/153941630-09fc3f3f-13f9-4833-994c-865a76688421.png)
+  
 ## Known issues
+* The UI looks wrong? Try reloading the UI from the config menu, if that doesn't work, hit Escape to open the game's Main Menu, click 'Video Options' and either uncheck 'Use UI Scale' if it's checked or
+* Options not saving is likely because your files are set to 'Read only', please look up how to remove 'Read only' as it is different depending on your OS.
 * When adding something to an empty minimap actionslot the icon is enlarged, please reload UI from config menu.
 * When adding something to an empty extra inventory slot the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.
 * When adding something to an empty actionslot in the actiongrid the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.

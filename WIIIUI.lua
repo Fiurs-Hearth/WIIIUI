@@ -3,6 +3,55 @@ DiabloMod_Combat = false;
 
 BINDING_HEADER_WC3HEADER = "Warcraft III - UI"
 MAX_LEVEL = 60
+
+local currentCustomFrameNames = {}
+
+local UIFramesTable = {
+	"ActionButton_Custom1",
+	"ActionButton_Custom2",
+	"ActionButton_Custom3",
+	"WIIIUI_backgroundMain",
+	"WIIIUI_leftpart",
+	"Warcaft3_UI_xpFrame",
+	"WIIIUI_weaponIcon_1",
+	"WIIIUI_weaponIcon_2",
+	"WIIIUI_weaponIcon_3",
+	"WIIIUI_armorIcon",
+	"WIIIUI_actionslotGrid",
+	"WIIIUI_rightpart",
+
+	"ActionButton_CustomInventory_1",
+	"ActionButton_CustomInventory_2",
+	"ActionButton_CustomInventory_3",
+	"ActionButton_CustomInventory_4",
+	"ActionButton_CustomInventory_5",
+	"ActionButton_CustomInventory_6",
+
+	"WIIIUI_texts"
+}
+
+local editBoxFramesTable = {
+	"ParentOf",
+	"ParentPosOf",
+	"Point",
+	"PosX",
+	"PosY",
+	"RelativePoint",
+	"Width",
+	"Height",
+	"Transparency",
+	"FrameStrata",
+	"FrameLevel",
+	"Backdrop",
+	"Texture",
+	"SetDrawLayer",
+	"TexCoordLeft",
+	"TexCoordRight",
+	"TexCoordTop",
+	"TexCoordBottom",
+	"Hide"
+}
+
 function CustomKeyBindings(number)
 
 	if(number == 1)then
@@ -55,6 +104,7 @@ function ChangeTheme()
 		Wc3_UI_extension3:SetDrawLayer("BORDER")
 		Wc3_UI_right_left:SetDrawLayer("BACKGROUND")
 	elseif(theme == "orc")then
+		
 		Wc3_UI_right_lid:SetDrawLayer("BORDER", 4)	
 		Wc3_UI_bottom_right_top:SetDrawLayer("OVERLAY", 5)
 		Wc3_UI_right_left:SetDrawLayer("ARTWORK")
@@ -129,6 +179,1235 @@ function ChangeTheme()
 	Wc3_UI_right_right_extendedFillerBottom_1:SetTexture("Interface\\Addons\\WIIIUI\\art\\"..theme.."\\bottom right\\BottomRightFillerBottom")
 	Wc3_UI_right_right_extendedFillerBottom_2:SetTexture("Interface\\Addons\\WIIIUI\\art\\"..theme.."\\bottom right\\BottomRightFillerBottom")
 	Wc3_UI_right_right_extendedFillerBottom_3:SetTexture("Interface\\Addons\\WIIIUI\\art\\"..theme.."\\bottom right\\BottomRightFillerBottom")
+
+end
+
+function HideAllFramesEvent()
+	WIIIUI_menu:SetScript("OnHide", function()
+	
+		GeneralTab_Clicked()
+		WIIIUI_generalTab:Hide()
+		WIIIUI_customizeTab:Hide()
+		WIIIUI_customizedMainFrame:Hide()
+	end)
+end
+
+-- Aligns our menu tabs
+function AlignTabs()
+	WIIIUI_generalTab:SetPoint("TOPLEFT", WIIIUI_menu, "TOPLEFT", 0, 28)
+	WIIIUI_generalTab:SetFrameLevel(500)
+
+	WIIIUI_customizeTab:SetPoint("TOPLEFT", WIIIUI_menu, "TOPLEFT", 90, 28)
+	WIIIUI_customizeTab:SetFrameLevel(0)
+end
+
+-- Create Customized parent frame
+function InitiateParentFrame()
+	WIIIUI_customizedMainFrame:Hide()
+	WIIIUI_customizedMainFrame:SetPoint("TOPLEFT", WIIIUI_menu, "TOPLEFT", 10, -10)
+end
+
+function GeneralTab_Clicked()
+
+	WIIIUI_menu:SetWidth(650)
+	WIIIUI_menu:SetHeight(600)
+	WIIIUI_menuButtonApply:ClearAllPoints()
+	WIIIUI_menuButtonApply:SetPoint("BOTTOMRIGHT", WIIIUI_menu, "BOTTOMRIGHT", -20, 21)
+
+	WIIIUI_generalTab:SetFrameLevel(500)
+	WIIIUI_customizeTab:SetFrameLevel(0)
+	WIIIUI_customizedMainFrame:Hide()
+
+	-- Show frames from General tab
+	local children = { WIIIUI_menu:GetChildren() }
+	for i, child in ipairs(children) do
+		child:Show()
+	end
+
+	local children = { WIIIUI_menu:GetRegions() }
+	for i, child in ipairs(children) do
+		
+		if(not child:GetName())then
+			break
+		end
+		child:Show()
+	end
+
+	if(wc3UI_Options.EnableCustomize)then
+		HideThemeButtons()
+		WIIIUI_menuEnableCustomizeDisabledText:Show()
+	else
+		WIIIUI_menuEnableCustomizeDisabledText:Hide()
+	end
+end
+
+function CustomizeTab_Clicked()
+
+	WIIIUI_menu:SetWidth(680)
+	WIIIUI_menu:SetHeight(690)
+	WIIIUI_menuButtonApply:ClearAllPoints()
+	WIIIUI_menuButtonApply:SetPoint("TOPRIGHT", WIIIUI_menu, "TOPRIGHT", -20, -10)
+
+	WIIIUI_generalTab:SetFrameLevel(0)
+	WIIIUI_customizeTab:SetFrameLevel(500)
+
+	WIIIUI_customizedMainFrame:Show()
+	-- Hide frames from General tab
+	local children = { WIIIUI_menu:GetChildren() }
+	for i, child in ipairs(children) do
+		if string.find(child:GetName(), "CloseButton") or string.find(child:GetName(), "ButtonApply") then
+			child:Show()
+		else
+			child:Hide()
+		end
+	end
+
+	local children = { WIIIUI_menu:GetRegions() }
+	for i, child in ipairs(children) do
+		
+		if(not child:GetName())then
+			break
+		end
+		child:Hide()
+	end
+	CreateCustomizedFrames()
+end
+
+function CustomizationInfo()
+
+	local headingColor = "|cffFFFF00" -- yellow
+	local descriptionColor = "|cffffffff" -- White
+
+	local text = "Description:"
+	.."\n\n"..headingColor.."Parent of: "..descriptionColor.."The frames parent, if parent becomes hidden then this becomes hidden as well. "
+	.."\n\n"..headingColor.."Parent Position of: "..descriptionColor.."What frame the frame's position is based of."
+	.."\n\n"..headingColor.."Hide: "..descriptionColor.."Check to hide frame, uncheck to show frame"
+	.."\n\n"..headingColor.."Point: "..descriptionColor.."Anchor point. Point of the object to adjust based on the anchor.\nOptions: TOPLEFT, TOP, TOPRIGHT, LEFT, CENTER, RIGHT, BOTTOMLEFT, BOTTOM, BOTTOMRIGHT"
+	.."\n\n"..headingColor.."Pos X: "..descriptionColor.."Move frame based on parent position in horizontal line.\nExample: -5 or 20"
+	.."\n\n"..headingColor.."Pos Y: "..descriptionColor.."Move frame based on parent position in vertical line.\nExample: -5 or 20"
+	.."\n\n"..headingColor.."Relative to: "..descriptionColor.."Point of the relativeFrame to attach point of frame to.\nOptions: TOPLEFT, TOP, TOPRIGHT, LEFT, CENTER, RIGHT, BOTTOMLEFT, BOTTOM, BOTTOMRIGHT"
+	.."\n\n"..headingColor.."Width: "..descriptionColor.."Width, decimals can also be used"
+	.."\n\n"..headingColor.."Height: "..descriptionColor.."Height, decimals can also be used"
+	.."\n\n"..headingColor.."Transparency: "..descriptionColor.."From 0-1 where 0 is 100% transparency.\nExample: 0.53"
+	.."\n\n"..headingColor.."Frame strata: "..descriptionColor.."In what strata the frame is stacked.\nOptions in order low to high: BACKGROUND, LOW, MEDIUM, HIGH, DIALOG, FULLSCREEN, FULLSCREEN_DIALOG, TOOLTIP"
+	.."\n\n"..headingColor.."Frame level: "..descriptionColor.."Where the frame is stacked within the frame strata. Value 0 to 10000"
+	.."\n\n"..headingColor.."Backdrop: "..descriptionColor.."What backdrop image to use based on filepath.\nExample: Interface\\Addons\\WIIIUI\\art\\other\\golden_frame"
+	.."\n\n"..headingColor.."Texture path: "..descriptionColor.."What image to use for the texture frame based on filepath.\nExample: Interface\\Addons\\WIIIUI\\art\\other\\black_background"
+	.."\n\n"..headingColor.."Draw layer: "..descriptionColor.."What draw layer the image will be displayed in the current parent frame's frame strata and frame level.\nOptions: BACKGROUND, BORDER, ARTWORK, OVERLAY, HIGHLIGHT"
+	.."\n\n"..headingColor.."Tex coords: "..descriptionColor.."What part of the texture that should be shown. Value 0-1.\nExample: left: 0, right: 0.5, top: 0, bottom: 1, will show left half of the image"
+
+	WIIIUI_CustomizeInfoText:SetText(text)
+	WIIIUI_CustomizeInfoText:SetPoint("BOTTOMLEFT", WIIIUI_CustomizeInfo, "BOTTOMLEFT", 20, 0)
+	WIIIUI_CustomizeInfoText:SetJustifyV("TOP");
+	WIIIUI_CustomizeInfoText:SetJustifyH("LEFT");
+end
+
+function CreateCustomizedFrames()
+
+	local type
+	local point, relativeTo, relativePoint, xOfs, yOfs, relativeName
+	local widht, height, transparency
+	local strata, frameLevel
+	local backdrop, texture, draw
+	local texLeft, texRight, texTop, texBottom
+	local heightRow = 0
+	local moveX = -5
+	local UIObjectsTable = {}
+
+	function CreateOptionFrames(count)
+		
+		function CreateEditBoxFrames(name, number)
+
+			currentCustomFrameNames[number] = name
+
+			-- Parent of
+			if(not _G["EditBox_"..number.."_ParentOf"])then
+				currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_ParentOf", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+				currentEditBox.title = currentEditBox:CreateFontString("", "OVERLAY");
+				currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+
+				currentEditBox:SetScript("OnEnterPressed", function()
+					UpdateCustomThemeSettings()
+					ApplyCustomThemeOptions()
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_ParentOf"]
+			end
+			currentEditBox:SetHeight(40)
+			currentEditBox:SetWidth(250)
+			currentEditBox:SetPoint("TOPLEFT", 28 + moveX, -30 + (-heightRow) )
+			currentEditBox:SetScript("OnEscapePressed", function()
+				this:ClearFocus()
+				WIIIUI_menu:Hide()
+			end)
+			currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['ParentOf'])
+
+			-- Frame name we are editing
+			currentEditBox.title:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.title:SetPoint("TOPLEFT", -3 + moveX, 18)	
+			currentEditBox.title:SetText("|c00FFFF00"..name)
+
+			currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+			currentEditBox.text:SetText("Parent of")
+
+			currentEditBox:Show()
+			currentEditBox.title:Show()
+			currentEditBox.text:Show()
+
+			if(true)then
+				-- Parent pos of
+				if(not _G["EditBox_"..number.."_ParentPosOf"])then
+					currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_ParentPosOf", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+					currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+					currentEditBox:SetScript("OnEnterPressed", function()
+						UpdateCustomThemeSettings()
+						ApplyCustomThemeOptions()
+					end)
+				else
+					currentEditBox = _G["EditBox_"..number.."_ParentPosOf"]
+				end
+				currentEditBox:SetHeight(40)
+				currentEditBox:SetWidth(250)
+				currentEditBox:SetPoint("TOPLEFT", 298 + moveX, -30 + (-heightRow) )
+				currentEditBox:SetScript("OnEscapePressed", function()
+					this:ClearFocus()
+					WIIIUI_menu:Hide()
+				end)
+				currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+				currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+				currentEditBox.text:SetText("Parent Position of")
+
+				currentEditBox:Show()
+				currentEditBox.text:Show()
+
+				currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['ParentPosOf'])
+				
+			end
+
+			-- Hide
+			if(not _G["EditBox_"..number.."_Hide"])then
+				currentEditBox = CreateFrame("CheckButton", "EditBox_"..number.."_Hide", WIIIUI_customizedMainFrame, "OptionsCheckButtonTemplate")
+				_G["EditBox_"..number.."_HideText"]:SetText("Hide")
+				currentEditBox:SetScript("OnMouseUp", function()
+
+					currentEditBox:SetScript("OnUpdate", function()
+
+						currentEditBox:SetScript("OnUpdate", nil)
+						UpdateCustomThemeSettings()
+						ApplyCustomThemeOptions()
+
+					end)
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_Hide"]
+			end
+
+			if(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Hide'])then
+				currentEditBox:SetChecked(true)
+			else
+				currentEditBox:SetChecked(false)
+			end
+			currentEditBox:SetPoint("TOPLEFT", 560 + moveX, -34 + (-heightRow) )
+			currentEditBox:Show()
+
+			-- Relative to (Point)
+			if(not _G["EditBox_"..number.."_Point"])then
+				currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_Point", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+				currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+				currentEditBox:SetScript("OnEnterPressed", function()
+					UpdateCustomThemeSettings()
+					ApplyCustomThemeOptions()
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_Point"]
+			end
+			currentEditBox:SetHeight(40)
+			currentEditBox:SetWidth(110)
+			currentEditBox:SetPoint("TOPLEFT", 28 + moveX, -70 + (-heightRow) )
+			currentEditBox:SetScript("OnEscapePressed", function()
+				this:ClearFocus()
+				WIIIUI_menu:Hide()
+			end)
+			currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+			currentEditBox.text:SetText("Point")
+			currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Point'])
+
+			currentEditBox:Show()
+			currentEditBox.text:Show()
+
+			-- Pos X
+			if(not _G["EditBox_"..number.."_PosX"])then
+				currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_PosX", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+				currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+				currentEditBox:SetScript("OnEnterPressed", function()
+					UpdateCustomThemeSettings()
+					ApplyCustomThemeOptions()
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_PosX"]
+			end
+			currentEditBox:SetHeight(40)
+			currentEditBox:SetWidth(55)
+			currentEditBox:SetPoint("TOPLEFT", 150 + moveX, -70 + (-heightRow) )
+			currentEditBox:SetScript("OnEscapePressed", function()
+				this:ClearFocus()
+				WIIIUI_menu:Hide()
+			end)
+			currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+			currentEditBox.text:SetText("Pos X")
+			xOfs = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['PosX']
+			if(xOfs)then
+				xOfs = string.format("%.1f", xOfs)	
+				currentEditBox:SetText(xOfs)
+			end
+			currentEditBox:Show()
+			currentEditBox.text:Show()
+
+			-- Pos Y
+			if(not _G["EditBox_"..number.."_PosY"])then
+				currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_PosY", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+				currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+				currentEditBox:SetScript("OnEnterPressed", function()
+					UpdateCustomThemeSettings()
+					ApplyCustomThemeOptions()
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_PosY"]
+			end
+			currentEditBox:SetHeight(40)
+			currentEditBox:SetWidth(55)
+			currentEditBox:SetPoint("TOPLEFT", 220 + moveX, -70 + (-heightRow) )
+			currentEditBox:SetScript("OnEscapePressed", function()
+				this:ClearFocus()
+				WIIIUI_menu:Hide()
+			end)
+			currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+			currentEditBox.text:SetText("Pos Y")
+			yOfs = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['PosY']
+			if(yOfs)then
+				yOfs = string.format("%.1f", yOfs)	
+				currentEditBox:SetText(yOfs)
+			end
+			currentEditBox:Show()
+			currentEditBox.text:Show()
+
+			-- Relative point
+			if(not _G["EditBox_"..number.."_RelativePoint"])then
+				currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_RelativePoint", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+				currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+				currentEditBox:SetScript("OnEnterPressed", function()
+					UpdateCustomThemeSettings()
+					ApplyCustomThemeOptions()
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_RelativePoint"]
+			end
+			currentEditBox:SetHeight(40)
+			currentEditBox:SetWidth(110)
+			currentEditBox:SetPoint("TOPLEFT", 298 + moveX, -70 + (-heightRow) )
+			currentEditBox:SetScript("OnEscapePressed", function()
+				this:ClearFocus()
+				WIIIUI_menu:Hide()
+			end)
+			currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+			currentEditBox.text:SetText("Relative to")
+			currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['RelativePoint'])
+
+			currentEditBox:Show()
+			currentEditBox.text:Show()
+
+			-- Width
+			if(not _G["EditBox_"..number.."_Width"])then
+				currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_Width", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+				currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+				currentEditBox:SetScript("OnEnterPressed", function()
+					UpdateCustomThemeSettings()
+					ApplyCustomThemeOptions()
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_Width"]
+			end
+			currentEditBox:SetHeight(40)
+			currentEditBox:SetWidth(55)
+			currentEditBox:SetPoint("TOPLEFT", 28 + moveX, -110 + (-heightRow) )
+			currentEditBox:SetScript("OnEscapePressed", function()
+				this:ClearFocus()
+				WIIIUI_menu:Hide()
+			end)
+			currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+			currentEditBox.text:SetText("Width")
+			width = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Width']
+			if(width)then
+				width = string.format("%.1f", width)	
+				currentEditBox:SetText(width)
+			end
+			currentEditBox:Show()
+			currentEditBox.text:Show()
+
+			-- Height
+			if(not _G["EditBox_"..number.."_Height"])then
+				currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_Height", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+				currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+				currentEditBox:SetScript("OnEnterPressed", function()
+					UpdateCustomThemeSettings()
+					ApplyCustomThemeOptions()
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_Height"]
+			end
+			currentEditBox:SetHeight(40)
+			currentEditBox:SetWidth(55)
+			currentEditBox:SetPoint("TOPLEFT", 106 + moveX, -110 + (-heightRow) )
+			currentEditBox:SetScript("OnEscapePressed", function()
+				this:ClearFocus()
+				WIIIUI_menu:Hide()
+			end)
+			currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+			currentEditBox.text:SetText("Height")
+			height = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Height']
+			if(height)then
+				height = string.format("%.1f", height)	
+				currentEditBox:SetText(height)
+			end
+			currentEditBox:Show()
+			currentEditBox.text:Show()
+
+			-- Transparency
+			if(not _G["EditBox_"..number.."_Transparency"])then
+				currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_Transparency", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+				currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+				currentEditBox:SetScript("OnEnterPressed", function()
+					UpdateCustomThemeSettings()
+					ApplyCustomThemeOptions()
+				end)
+			else
+				currentEditBox = _G["EditBox_"..number.."_Transparency"]
+			end
+			currentEditBox:SetHeight(40)
+			currentEditBox:SetWidth(80)
+			currentEditBox:SetPoint("TOPLEFT", 184 + moveX, -110 + (-heightRow) )
+			currentEditBox:SetScript("OnEscapePressed", function()
+				this:ClearFocus()
+				WIIIUI_menu:Hide()
+			end)
+			currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+			currentEditBox.text:SetText("Transparency")
+			currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Transparency'])
+
+			currentEditBox:Show()
+			currentEditBox.text:Show()
+
+			type = _G[name]:GetObjectType()
+
+			if(type)then
+
+				-- Frame
+				if(_G["EditBox_"..number.."_FrameStrata"])then
+					_G["EditBox_"..number.."_FrameStrata"]:Hide()
+				end
+				if(_G["EditBox_"..number.."_FrameLevel"])then
+					_G["EditBox_"..number.."_FrameLevel"]:Hide()
+				end
+				if(_G["EditBox_"..number.."_Backdrop"])then
+					_G["EditBox_"..number.."_Backdrop"]:Hide()
+				end
+
+				-- Texture
+				if(_G["EditBox_"..number.."_Texture"])then
+					_G["EditBox_"..number.."_Texture"]:Hide()
+				end
+				if(_G["EditBox_"..number.."_SetDrawLayer"])then
+					_G["EditBox_"..number.."_SetDrawLayer"]:Hide()
+				end
+				if(_G["EditBox_"..number.."_TexCoordLeft"])then
+					_G["EditBox_"..number.."_TexCoordLeft"]:Hide()
+				end
+				if(_G["EditBox_"..number.."_TexCoordRight"])then
+					_G["EditBox_"..number.."_TexCoordRight"]:Hide()
+				end
+				if(_G["EditBox_"..number.."_TexCoordTop"])then
+					_G["EditBox_"..number.."_TexCoordTop"]:Hide()
+				end
+				if(_G["EditBox_"..number.."_TexCoordBottom"])then
+					_G["EditBox_"..number.."_TexCoordBottom"]:Hide()
+				end
+				
+				if(type == "Frame" or type == "Minimap")then
+					
+					-- Frame Strata
+					if(not _G["EditBox_"..number.."_FrameStrata"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_FrameStrata", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_FrameStrata"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(150)
+					currentEditBox:SetPoint("TOPLEFT", 300 + moveX, -110 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Frame strata")
+					currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['FrameStrata'])
+
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+
+					-- Frame level
+					if(not _G["EditBox_"..number.."_FrameLevel"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_FrameLevel", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_FrameLevel"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(80)
+					currentEditBox:SetPoint("TOPLEFT", 460 + moveX, -110 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Frame level")
+					currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['FrameLevel'])
+
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+
+					-- Backdrop
+					if(not _G["EditBox_"..number.."_Backdrop"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_Backdrop", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_Backdrop"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(500)
+					currentEditBox:SetPoint("TOPLEFT", 28 + moveX, -150 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Backdrop")
+					backdrop = nil
+					if(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Backdrop'])then
+						backdrop = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Backdrop']['bgFile']
+					end
+					if(backdrop)then
+						currentEditBox:SetText(backdrop)
+					end
+
+
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+					
+				elseif(type == "Texture")then
+
+					-- Texture
+					if(not _G["EditBox_"..number.."_Texture"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_Texture", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_Texture"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(500)
+					currentEditBox:SetPoint("TOPLEFT", 28 + moveX, -150 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Texture path")
+					texture = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Texture']
+					if(texture) then
+						currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['Texture'])
+					end
+
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+
+					-- SetDrawLayer
+					if(not _G["EditBox_"..number.."_SetDrawLayer"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_SetDrawLayer", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_SetDrawLayer"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(100)
+					currentEditBox:SetPoint("TOPLEFT", 28 + moveX, -190 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Draw layer")
+					currentEditBox:SetText(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['SetDrawLayer'])
+
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+
+					-- TexCoord left
+					if(not _G["EditBox_"..number.."_TexCoordLeft"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_TexCoordLeft", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_TexCoordLeft"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(123)
+					currentEditBox:SetPoint("TOPLEFT", 136 + moveX, -190 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Tex coord left")
+					texLeft = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['TexCoordLeft']
+					if(texLeft)then
+						texLeft = string.format("%.15f", texLeft)
+						currentEditBox:SetText(texLeft)
+					end
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+
+					-- TexCoord right
+					if(not _G["EditBox_"..number.."_TexCoordRight"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_TexCoordRight", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_TexCoordRight"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(123)
+					currentEditBox:SetPoint("TOPLEFT", 265 + moveX, -190 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Tex coord right")
+					texRight = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['TexCoordRight']
+					if(texRight)then
+						texRight = string.format("%.15f", texRight)
+						currentEditBox:SetText(texRight)
+					end
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+
+					-- TexCoord top
+					if(not _G["EditBox_"..number.."_TexCoordTop"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_TexCoordTop", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_TexCoordTop"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(123)
+					currentEditBox:SetPoint("TOPLEFT", 395 + moveX, -190 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Tex coord top")
+					texTop = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['TexCoordTop']
+					if(texTop)then
+						texTop = string.format("%.15f", texTop)
+						currentEditBox:SetText(texTop)
+					end
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+
+					-- TexCoord bottom
+					if(not _G["EditBox_"..number.."_TexCoordBottom"])then
+						currentEditBox = CreateFrame("EditBox", "EditBox_"..number.."_TexCoordBottom", WIIIUI_customizedMainFrame, "InputBoxTemplate")
+						currentEditBox.text = currentEditBox:CreateFontString("", "OVERLAY");
+						currentEditBox:SetScript("OnEnterPressed", function()
+							UpdateCustomThemeSettings()
+							ApplyCustomThemeOptions()
+						end)
+					else
+						currentEditBox = _G["EditBox_"..number.."_TexCoordBottom"]
+					end
+					currentEditBox:SetHeight(40)
+					currentEditBox:SetWidth(123)
+					currentEditBox:SetPoint("TOPLEFT", 525 + moveX, -190 + (-heightRow) )
+					currentEditBox:SetScript("OnEscapePressed", function()
+						this:ClearFocus()
+						WIIIUI_menu:Hide()
+					end)
+					currentEditBox.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+					currentEditBox.text:SetPoint("TOPLEFT", -3 + moveX, 4)
+					currentEditBox.text:SetText("Tex coord bottom")
+					texBottom = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][name]['TexCoordBottom']
+					if(texBottom)then
+						texBottom = string.format("%.15f", texBottom)
+						currentEditBox:SetText(texBottom)
+					end
+					currentEditBox:Show()
+					currentEditBox.text:Show()
+
+				end
+			end
+
+			if(type)then
+				if(type == "Frame" or type == "Minimap")then
+					heightRow = heightRow + 178
+				elseif(type == "CheckButton")then
+					heightRow = heightRow + 138
+				elseif(type == "Texture")then
+					heightRow = heightRow + 220
+				else
+					heightRow = heightRow + 138
+				end
+			end
+
+		end
+
+		count = 0
+		for i, frame in ipairs(UIObjectsTable) do
+
+			CreateEditBoxFrames(frame, count)
+			count = count + 1
+			if(count == 3)then
+				break
+			end
+		end
+
+	end
+	
+	if(true)then
+		
+		local count = 0
+		-- Count all frames
+		for i, frame in ipairs(UIFramesTable) do
+
+			count = count + 1
+			table.insert(UIObjectsTable, frame)
+
+			children = { _G[frame]:GetChildren() }
+			if(children)then
+				for i, child in ipairs(children) do
+					if(child:GetName())then
+
+						if( string.find(child:GetName(), "Wc3_UI_weaponIcon_tex_") or string.find(child:GetName(), "Wc3_UI_armorIcon_tex")) then
+
+						else
+							count = count + 1
+							table.insert(UIObjectsTable, child:GetName())
+						end
+						
+					end
+				end
+			end
+
+			children = { _G[frame]:GetRegions() }
+			if(children)then
+				for i, child in ipairs(children) do
+					if(child:GetName())then
+						count = count + 1
+						table.insert(UIObjectsTable, child:GetName())
+					end
+				end
+			end
+
+		end
+
+		count = count + 4
+		table.insert(UIObjectsTable, "Minimap")
+		table.insert(UIObjectsTable, "MinimapZoneTextButton")
+		table.insert(UIObjectsTable, "GameTimeFrame")
+		table.insert(UIObjectsTable, "ShapeshiftButton1")
+
+		if( not wc3UI_Options['base_settings'] )then
+			wc3UI_Options['base_settings'] = {}
+		end
+
+		if(not wc3UI_Options.base_scale)then
+			wc3UI_Options.base_scale = wc3UI_Options.uiScale
+		end
+		
+		if( not wc3UI_Options.edit_theme_settings )then
+			wc3UI_Options.edit_theme_settings = {}
+		end
+
+		if(not WIIIUI_customizedMainFrame.text)then
+			WIIIUI_customizedMainFrame.text = WIIIUI_customizedMainFrame:CreateFontString("", "OVERLAY");
+			WIIIUI_customizedMainFrame.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+			WIIIUI_customizedMainFrame.text:SetPoint("TOPRIGHT", -233, -5)
+			WIIIUI_customizedMainFrame.text:SetText("|c00FF9922Click 3 times fast to reset")
+		end
+		
+
+		-- generate tables with data, one with base values and one for editing
+		if( not wc3UI_Options['base_settings'][wc3UI_Options.theme] ) then -- only generate once
+
+			local parentName, relToName, frameStrata, frameLevel, backdrop
+			local tempTable = {}
+			local newTable = {}
+			local data
+
+			for i, frame in ipairs(UIObjectsTable) do
+				
+				local currentObject = _G[frame]
+				local point, relTo, relPoint, xOfs, yOfs = currentObject:GetPoint()
+				local isHidden
+
+				if(currentObject:GetParent())then
+					parentName = currentObject:GetParent():GetName()
+				else
+					parentName = ""
+				end
+
+				if(currentObject:IsVisible())then
+					isHidden = false
+				else
+					isHidden = true
+				end
+
+				data = {
+					['name'] = frame,
+					['ParentOf'] = parentName,
+					['ParentPosOf'] = relTo:GetName(),
+					['Point'] = point,
+					['PosX'] = xOfs,
+					['PosY'] = yOfs,
+					['RelativePoint'] = relPoint,
+					['Width'] = currentObject:GetWidth(),
+					['Height'] = currentObject:GetHeight(),
+					['Transparency'] = currentObject:GetAlpha(),
+					['Hide'] = isHidden
+				}
+				
+				if(currentObject:GetObjectType() == "Frame" or currentObject:GetObjectType() == "Minimap")then
+
+					data['FrameStrata'] = currentObject:GetFrameStrata()
+					data['FrameLevel'] = currentObject:GetFrameLevel()
+					data['Backdrop'] = currentObject:GetBackdrop()
+					if(not data['Backdrop'] or data['Backdrop'] == "")then
+						data['Backdrop'] = {
+							['bgFile'] = ""
+						}
+					end
+
+				elseif(currentObject:GetObjectType() == "Texture")then
+
+					data['Texture'] = currentObject:GetTexture()					
+					data['SetDrawLayer'] = currentObject:GetDrawLayer()
+										
+					local ULx,ULy,LLx,LLy,URx,URy,LRx,LRy = currentObject:GetTexCoord()
+					data['TexCoordLeft'] = ULx
+					data['TexCoordRight'] = URx
+					data['TexCoordTop'] = ULy
+					data['TexCoordBottom'] = LRy
+
+				end
+				
+				table.insert(tempTable, data)
+			end
+
+			for i, val in ipairs(tempTable) do
+				newTable[val['name']] = val
+			end
+
+			wc3UI_Options['base_settings'][tostring(wc3UI_Options.theme)] = newTable
+			wc3UI_Options.edit_theme_settings[tostring(wc3UI_Options.theme)] = newTable
+
+			WIIIUI_menu:Hide()
+			WIIIUI_ForceReload:Show()
+			WIIIUI_ForceReloadButton:SetText("MUST RELOAD TO SET UP THE CUSTOMIZATION FOR CURRENT THEME (ONLY HAPPENS ONCE PER THEME)")
+			WIIIUI_ForceReloadButton:SetWidth(700)
+		end
+
+		-- Start creating current page and max pages
+		WIIIUI_currentPage = 1
+		local maxPages = math.ceil(count/3)
+		if(not _G['WIIIUI_pagesFrame'])then
+			pagesFrame = CreateFrame("Frame", "WIIIUI_pagesFrame", WIIIUI_customizedMainFrame, nil)
+			pagesFrame.text = pagesFrame:CreateFontString("", "OVERLAY");
+		end
+		pagesFrame:SetWidth(60)
+		pagesFrame:SetHeight(30)
+		pagesFrame:SetPoint("BOTTOM", 0, -30 )
+		pagesFrame:SetBackdrop({
+			bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+		})
+		pagesFrame:SetBackdropColor(0, 0, 0, 1)
+
+		pagesFrame.text:SetFont("Fonts\\FRIZQT__.TTF", 12, "")
+		pagesFrame.text:SetPoint("CENTER", 0, 0)
+		pagesFrame.text:SetText("|c00FF9922"..WIIIUI_currentPage.." / "..maxPages)
+
+		WIIIUI_customizedMainFrame:SetFrameLevel(1)
+		WIIIUI_customizedMainFrame:EnableMouseWheel(true)
+		WIIIUI_customizedMainFrame:SetScript("OnMouseWheel", function()
+			
+			if(arg1 == 1)then
+				WIIIUI_currentPage = WIIIUI_currentPage + 1
+			elseif(arg1 == -1)then
+				WIIIUI_currentPage = WIIIUI_currentPage - 1
+			end
+			
+			if(WIIIUI_currentPage > maxPages)then
+				WIIIUI_currentPage = maxPages
+			elseif(WIIIUI_currentPage < 1)then
+				WIIIUI_currentPage = 1	
+			end
+			pagesFrame.text:SetText("|c00FF9922"..WIIIUI_currentPage.." / "..maxPages)
+
+			-- hide all inputs etc
+			local hideTable = {
+				"_ParentOf",
+				"_ParentPosOf",
+				"_Point",
+				"_PosX",
+				"_PosY",
+				"_RelativePoint",
+				"_Width",
+				"_Height",
+				"_Transparency",
+				"_FrameStrata",
+				"_FrameLevel",
+				"_Backdrop",
+				"_Texture",
+				"_SetDrawLayer",
+				"_TexCoordLeft",
+				"_TexCoordRight",
+				"_TexCoordTop",
+				"_TexCoordBottom",
+				"_Hide"
+			}
+
+			for i, input in ipairs(hideTable) do
+
+				for j=0, 2, 1 do
+					if(_G["EditBox_"..j..input])then
+
+						thisInput = _G["EditBox_"..j..input]
+						thisInput:Hide()
+						if(thisInput:GetObjectType() ~= "CheckButton")then
+							thisInput.text:Hide()
+							if(thisInput.title)then
+								thisInput.title:Hide()
+							end
+						end
+	
+					end
+				end
+			end
+
+			count = 0
+			heightRow = 0
+			local skipCount = 0
+			local skip = (WIIIUI_currentPage - 1)*3
+			-- now we re-apply boxes
+			for i, frame in ipairs(UIObjectsTable) do
+
+				if(skipCount == skip)then
+					
+					CreateEditBoxFrames(frame, count)
+					count = count + 1
+					if(count == 3)then
+						break
+					end
+				else
+					skipCount = skipCount + 1
+				end
+			end
+
+		end)
+
+		CreateOptionFrames(count)
+	end
+
+end
+
+function UpdateCustomThemeSettings()
+
+	local strataTable = {
+		"BACKGROUND",
+		"LOW",
+		"MEDIUM",
+		"HIGH",
+		"DIALOG",
+		"FULLSCREEN",
+		"FULLSCREEN_DIALOG",
+		"TOOLTIP"
+	}
+	local drawLayerTable = {
+		"BACKGROUND",
+		"BORDER",
+		"ARTWORK",
+		"OVERLAY",
+		"HIGHLIGHT"
+	}
+	local pointTable = {
+		"TOPLEFT",
+		"TOP",
+		"TOPRIGHT",
+		"LEFT",
+		"CENTER",
+		"RIGHT",
+		"BOTTOMLEFT",
+		"BOTTOM",
+		"BOTTOMRIGHT"
+	}
+
+	function CheckLayerValidity(type, input)
+
+		if(type == 1)then
+
+			local match = false
+			for k,v in pairs(strataTable) do
+				if(v == input) then
+					match = true
+				end
+			end
+			return match
+
+		elseif(type == 2)then
+
+			local match = false
+			for k,v in pairs(drawLayerTable) do
+				if(v == input) then
+					match = true
+				end
+			end
+			return match
+		end
+
+	end
+
+	function CheckPointValidity(input)
+
+		local match = false
+		for k,v in pairs(pointTable) do
+			if(v == input) then
+				match = true
+			end
+		end
+		return match
+	end
+
+	for number=0, 2, 1 do
+		
+		local frameName = currentCustomFrameNames[number]
+
+		for k, v in ipairs(editBoxFramesTable) do
+
+			local boxName = "EditBox_"..number.."_"..v
+			local currentEditBox = _G[boxName]
+
+			if(currentEditBox)then
+				if(currentEditBox:IsVisible())then
+					if(v == "Backdrop")then
+						wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = {['bgFile'] = currentEditBox:GetText()}
+					elseif(v == "Hide")then
+						local isHidden = currentEditBox:GetChecked()
+						if(isHidden)then
+							isHidden = true
+						else
+							isHidden = false
+						end
+						wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = isHidden
+					elseif(v == "ParentOf" or v == "ParentPosOf")then
+						if(_G[currentEditBox:GetText()] ~= nil)then
+							wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = currentEditBox:GetText()
+						else
+							wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = "UIParent"
+							currentEditBox:SetText("UIParent")
+							ChatFrame1:AddMessage("|c00FF0303WIIIUI WARNING - Could not find parent frame, setting parent to UIParent")
+						end
+					elseif(v == "FrameStrata" or v == "SetDrawLayer")then
+						local typeCheck
+						if(v == "FrameStrata")then
+							typeCheck = 1 --FrameStrata
+						else
+							typeCheck = 2 --SetDrawLayer
+						end
+
+						if( CheckLayerValidity(tonumber(typeCheck), currentEditBox:GetText()) == true )then
+							wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = currentEditBox:GetText()
+						else
+							wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = "BACKGROUND"
+							currentEditBox:SetText("BACKGROUND")
+							ChatFrame1:AddMessage("|c00FF0303WIIIUI WARNING - Could not find a valid option, setting value to BACKGROUND")
+						end
+					elseif(v == "Point" or v == "RelativePoint")then
+						if( CheckPointValidity(currentEditBox:GetText()) == true)then
+							wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = currentEditBox:GetText()
+						else
+							wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = "CENTER"
+							currentEditBox:SetText("CENTER")
+							ChatFrame1:AddMessage("|c00FF0303WIIIUI WARNING - Could not find a valid option, setting value to CENTER")
+						end
+					elseif(v == "PosX" or v == "PosY" or v == "Width" or v == "Height" or v == "Transparency" or v == "FrameLevel" or v == "TexCoordLeft" or v == "TexCoordRight" or v == "TexCoordTop" or v == "TexCoordBottom")then
+						if(currentEditBox:GetText() ~= "" and tonumber(currentEditBox:GetText()) ~= nil)then
+							wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = currentEditBox:GetText()
+						else
+							wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = 1
+							currentEditBox:SetText(1)
+							ChatFrame1:AddMessage("|c00FF0303WIIIUI WARNING - Could not find a valid number, setting number to 1")
+						end
+					elseif(v == "Texture")then
+						wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = currentEditBox:GetText()
+					else
+						wc3UI_Options.edit_theme_settings[wc3UI_Options.theme][frameName][v] = currentEditBox:GetText()
+					end
+				end
+			end
+			
+		end
+	end
+
+end
+
+function ApplyCustomThemeOptions()
+
+	if(wc3UI_Options.EnableCustomize)then
+	
+		if(wc3UI_Options.edit_theme_settings[wc3UI_Options.theme])then
+			
+			local themeSettings = wc3UI_Options.edit_theme_settings[wc3UI_Options.theme]
+
+			for k,v in pairs(themeSettings) do 
+
+				local currentFrame = _G[k]
+				local baseScale = wc3UI_Options.base_scale
+				local scale = wc3UI_Options.uiScale
+				local isHidden = v["Hide"]
+
+				currentFrame:SetParent(v['ParentOf'])
+				currentFrame:SetAlpha(v['Transparency'])
+				currentFrame:SetWidth( (v['Width']/baseScale) * scale )
+				currentFrame:SetHeight( (v['Height']/baseScale) * scale)
+
+				if(isHidden)then
+					currentFrame:Hide()
+				else
+					currentFrame:Show()
+				end
+
+				if(v['ParentPosOf'] and v['RelativePoint'])then
+					currentFrame:SetPoint( v['Point'], v['ParentPosOf'], v['RelativePoint'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
+				elseif(v['ParentPosOf'])then
+					currentFrame:SetPoint(v['Point'], v['ParentPosOf'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
+				else
+					currentFrame:SetPoint(v['Point'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
+				end
+
+				if(currentFrame:GetObjectType() == "Frame" or currentFrame:GetObjectType() == "Minimap")then
+
+					currentFrame:SetFrameStrata(v['FrameStrata'])
+					currentFrame:SetFrameLevel(v['FrameLevel'])
+					if(v['Backdrop'] ~= "")then
+						currentFrame:SetBackdrop({bgFile = v['Backdrop']['bgFile']})
+					end
+					
+				elseif(currentFrame:GetObjectType() == "Texture")then
+
+					currentFrame:SetTexture(v['Texture'])
+					currentFrame:SetDrawLayer(v['SetDrawLayer'])
+					currentFrame:SetTexCoord(v['TexCoordLeft'], v['TexCoordRight'], v['TexCoordTop'], v['TexCoordBottom'])
+
+				end
+			end
+		end
+
+		-- Minimap fix
+		Minimap:SetZoom(Minimap:GetZoom()+1)
+		Minimap:SetZoom(Minimap:GetZoom()-1)
+	end
+end
+
+local resetCount = 0
+function Reset_CustomSettings()
+
+	resetCount = resetCount + 1
+	local timer = 0
+	WIIIUI_customizedMainFrameResetButton:SetScript("OnUpdate", function()
+	
+		timer = timer + arg1
+		if(timer > 3)then
+			resetCount = 0
+			WIIIUI_customizedMainFrameResetButton:SetScript("OnUpdate", nil)
+		end
+
+	end)
+
+	if(resetCount > 2)then
+		resetCount = 0
+		
+		local tempTable = {}
+		for frame, elements in pairs(wc3UI_Options['base_settings'][wc3UI_Options.theme]) do
+			
+			tempTable[frame] = {frame}
+			
+			for element, value in pairs(elements) do
+				tempTable[frame][element] = value
+			end
+		end
+		wc3UI_Options.edit_theme_settings[wc3UI_Options.theme] = {}
+		wc3UI_Options.edit_theme_settings[wc3UI_Options.theme] = tempTable
+
+		CreateCustomizedFrames()
+		ApplyCustomThemeOptions()
+		
+		WIIIUI_customizedMainFrameResetButton:SetScript("OnUpdate", nil)
+	end
 
 end
 
@@ -464,7 +1743,7 @@ function ModifyPlayerPortrait()
 	PortraitCustom:RegisterEvent("PLAYER_LOGIN");
 	PortraitCustom:RegisterEvent("UNIT_MODEL_CHANGED")
 	-- background for player Portrait
-	PortraitBackground:SetPoint("CENTER", PortraitCustom, "CENTER", 0, 0)
+	PortraitBackground:SetPoint("CENTER", CustomPlayerModelPortrait, "CENTER", 0, 0)
 
 	PortraitCustom:SetPoint("BOTTOMLEFT", minimapFrame, "BOTTOMLEFT", wc3UI_Options.uiScale*0.86 - (100 - wc3UI_Options.PortraitAlignmentX), wc3UI_Options.uiScale*0.10 - (100 - wc3UI_Options.PortraitAlignmentY))
 	PortraitCustom:SetWidth(wc3UI_Options.uiScale*0.27 + wc3UI_Options.portraitScale)
@@ -560,22 +1839,49 @@ end
 
 function AlignBuffFrame()
 
-	if(wc3UI_Options.buffTopRight)then
-		
-		BuffButton0:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -10)
+	local function Aligner()
+
+		local tempEnchantCount = 0
+		local spacing = 35
+
+		if(TempEnchant1:IsVisible())then
+			tempEnchantCount = tempEnchantCount + 1
+			TempEnchant1:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -10)
+		end
+		if(TempEnchant2:IsVisible())then
+			tempEnchantCount = tempEnchantCount + 1
+			TempEnchant2:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10 - ((tempEnchantCount - 1) * spacing), -10)
+		end
+		BuffButton0:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10 - ((tempEnchantCount) * spacing), -10)
 		BuffButton16:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -100)
-	else
-		-- Do nothing.
+
+	end
+
+	TempEnchant1:SetScript("OnShow", function()
+		Aligner()
+	end)
+	TempEnchant1:SetScript("OnHide", function()
+		Aligner()
+	end)
+
+	TempEnchant2:SetScript("OnShow", function()
+		Aligner()
+	end)
+	TempEnchant2:SetScript("OnHide", function()
+		Aligner()
+	end)
+
+	if(wc3UI_Options.buffTopRight)then
+		Aligner()
 	end
 end
 
 function ReAlignBuffFrame()
 
 	if(wc3UI_Options.buffTopRight)then
-		BuffButton0:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -10)
-		BuffButton16:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -100)
+		AlignBuffFrame()
 	else
-		ChatFrame1:AddMessage("Wc3UI WARNING - PLEASE RELOAD UI TO APPLY BUFF POSITION CHANGE")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO APPLY BUFF POSITION CHANGE")
 	end
 end
 
@@ -1078,9 +2384,7 @@ function AlignArmorFrame()
 	if( UnitLevel("player") < 60 ) then
 		dr = effectiveArmor / (effectiveArmor + 400 + 85 * UnitLevel("player"))
 	else
-		dr = effectiveArmor / (effectiveArmor + 400 + 85 * UnitLevel("player"))
-		-- Need to doublec check this with a lvl 60
-		--dr = effectiveArmor / (effectiveArmor + 400 + 85 * (UnitLevel("player") + 4.5 * (UnitLevel("player") - 59)))
+		dr = effectiveArmor / (effectiveArmor + 400 + 85 * (UnitLevel("player") + 4.5 * (59 - 59)))
 	end
 	dr = string.format("%.1f%%", dr * 100)
 
@@ -1101,8 +2405,9 @@ function AlignArmorFrame()
 				if( UnitLevel("player") < 60 ) then
 					dr = effectiveArmor / (effectiveArmor + 400 + 85 * UnitLevel("player"))
 				else
-					-- Need to doublec check this with a lvl 60
-					dr = effectiveArmor / (effectiveArmor + 400 + 85 * (UnitLevel("player") + 4.5 * (UnitLevel("player") - 59)))
+					-- Saved for future references, doesn't calculate correctly but the one below this one does.
+					--dr = effectiveArmor / (effectiveArmor + 400 + 85 * (UnitLevel("player") + 4.5 * (UnitLevel("player") - 59)))
+					dr = effectiveArmor / (effectiveArmor + 400 + 85 * (UnitLevel("player") + 4.5 * (59 - 59)))
 				end
 				dr = string.format("%.1f%%", dr * 100)
 				armorValue:SetText( dr )
@@ -1334,7 +2639,7 @@ function AlignActionBarUIGrid()
 	size = wc3UI_Options.uiScale * 0.91851
 	actionSlotGridMain:SetWidth(size)
 	actionSlotGridMain:SetHeight(size)
-	actionSlotGridMain:SetPoint("BOTTOMLEFT", extensionBackground, "BOTTOMLEFT", wc3UI_Options.uiScale*0.2 + 1, 1)
+	actionSlotGridMain:SetPoint("BOTTOMLEFT", extensionBackground, "BOTTOMLEFT", wc3UI_Options.uiScale*0.2 - wc3UI_Options.uiScale*0.01666666667, 1)
 	
 	actionSlotGrid_1:SetWidth(actionSlotGridMain:GetWidth())
 	actionSlotGrid_1:SetHeight(actionSlotGridMain:GetHeight())
@@ -1436,8 +2741,9 @@ function AlignMiddleExtension()
 
 	extensionBackground:ClearAllPoints()
 	extensionBackground:SetWidth(wc3UI_Options.uiScale*2.6)
-	extensionBackground:SetHeight(wc3UI_Options.uiScale*0.5 - wc3UI_Options.uiScale*0.054074)
-	extensionBackground:SetPoint("BOTTOMLEFT", portraitFrame, "BOTTOMRIGHT", wc3UI_Options.uiScale*-0.18, 0)
+	extensionBackground:SetHeight(wc3UI_Options.uiScale*0.5)
+	extensionBackground:SetPoint("BOTTOMLEFT", "Wc3_UI_portrait", "BOTTOMRIGHT", wc3UI_Options.uiScale*-0.18, 0)
+
 end
 
 function AlignInventorySlots()
@@ -2420,6 +3726,7 @@ function AlignUI()
 			AlignInventorySlots()	-- Align main inventory frame
 
 			leftFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", minimapFrame:GetWidth()/2 - 1, 0) -- UI is aligned based off this (mostly).
+			leftFrame:SetParent(UIParent)
 
 			AlignHealthMana() 		-- Delay this to later stages, either the proper way or through an update nil?
 			AlignPetFrames()		-- Middle Top UI, aligns pet frame
@@ -3002,6 +4309,10 @@ function GetSpellpowerValue()
 		secondaryPowerName = SPELL_SCHOOL_SHADOW
 	end
 	
+	if(wc3UI_Options.VPlus)then
+		spellPower = spellPower + tonumber(math.floor(UnitStat("player",4)*0.33))
+	end
+
 	return spellPower, storedPowers, secondaryPowerName, damagePower
 end
 
@@ -3254,6 +4565,8 @@ function Wc3UI_OnLoad()
 			CheckHPPercent()
 			CheckPowerPercent()
 			CheckMultiBarAxis()
+			CheckEnableCustomize()
+			CheckVPlus()
 
 			InventorySlots()		-- Position our 2x3 inventory slots and edits the frames
 			ModifyPlayerPortrait()	-- Changes size and so we get the face camera
@@ -3279,7 +4592,6 @@ function Wc3UI_OnLoad()
 
 					AlignActionBars()			-- Align the actionbar grid
 					AlignShapeshiftButtons()	-- Aligns the Shapeshift/Aura/Stealth position
-					ChangeCastbarAlignment()	-- Align position of the cast bar, we have to nest the AlignCastBar() for some reason, otherwise the change does not get applied
 					PlaceMiniMapBattleFrame()
 					VisibilityChatArrows()
 					AlignXPBar()			-- Middle UI, XP bar
@@ -3298,6 +4610,15 @@ function Wc3UI_OnLoad()
 							AlignWeaponFrame(1)
 							AlignWeaponFrame(2)
 							AlignWeaponFrame(3)
+
+							ChangeCastbarAlignment()	-- Align position of the cast bar, we have to nest the AlignCastBar() for some reason, otherwise the change does not get applied
+							InitiateParentFrame()
+
+							AlignTabs()
+							HideAllFramesEvent()
+							MainMenuBarPerformanceBar:Hide()
+							ApplyCustomThemeOptions() -- We must use this last to apply customized positioning, size, transparency etc.
+							CustomizationInfo()
 
 							dummyFrame:SetScript("OnUpdate", nil)
 						end
@@ -3345,9 +4666,14 @@ function Wc3UI_OnLoad()
 end
 
 function UpdateUI(extendNumber)
+
 	CheckResizeInput()
 	CheckPortraitScaleChange()
 	CheckExtendInput(extendNumber)
+	if(WIIIUI_customizedMainFrame:IsVisible())then
+		UpdateCustomThemeSettings()
+		ApplyCustomThemeOptions()
+	end
 end
 
 function CheckResizeInput()
@@ -3362,9 +4688,9 @@ function CheckResizeInput()
 	end
 
 	if(number < 240)then
-		ChatFrame1:AddMessage("|cffff0000Warcraft 3 UI\nWARNING: Size not supported below 240")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - Size not supported below 240")
 	elseif(number > 270) then
-		ChatFrame1:AddMessage("|cffff0000Warcraft 3 UI\nWARNING: Size not supported above 270")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - Size not supported above 270")
 	end
 
 	wc3UI_Options.uiScale = number
@@ -3393,11 +4719,11 @@ function CheckExtendInput(number)
 	end
 	if(number < 0)then
 		editbox:SetText(0)
-		ChatFrame1:AddMessage("|cffff0000Warcraft 3 UI\nERROR: can not go below 0")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - ERROR: can not go below 0")
 		return
 	elseif(number > 150) then
 		editbox:SetText(150)
-		ChatFrame1:AddMessage("|cffff0000Warcraft 3 UI\nERROR: can not go above 150")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - ERROR: can not go above 150")
 		return
 	end
 	
@@ -3426,11 +4752,11 @@ function CheckPortraitScaleChange()
 
 	if(number < 0)then
 		editbox:SetText(0)
-		ChatFrame1:AddMessage("|cffff0000Warcraft 3 UI\nERROR: can not go below 0")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - ERROR: can not go below 0")
 		return
 	elseif(number > 35) then
 		editbox:SetText(35)
-		ChatFrame1:AddMessage("|cffff0000Warcraft 3 UI\nERROR: can not go above 35")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - ERROR: can not go above 35")
 		return
 	end
 
@@ -3639,9 +4965,11 @@ function ChangeBuffPos()
 		wc3UI_Options.buffTopRight = true
 	end
 	ReAlignBuffFrame()
+
 end
 
 function CheckBuffPos()	
+
 	if(wc3UI_Options.buffTopRight)then
 		WIIIUI_menuCheckButtonBuff:SetChecked(true)
 	else
@@ -3655,7 +4983,7 @@ function ChangeHideChatArrows()
 		wc3UI_Options.HideChatArrows = true
 	elseif(wc3UI_Options.HideChatArrows)then
 		wc3UI_Options.HideChatArrows = false
-		ChatFrame1:AddMessage("Wc3UI WARNING - PLEASE RELOAD UI TO DISPLAY CHAT ICONS")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO DISPLAY CHAT ICONS")
 	else
 		wc3UI_Options.HideChatArrows = true
 	end
@@ -3663,6 +4991,7 @@ function ChangeHideChatArrows()
 end
 
 function CheckChatArrows()	
+
 	if(wc3UI_Options.HideChatArrows)then
 		WIIIUI_menuCheckChatArrows:SetChecked(true)
 	else
@@ -3671,6 +5000,7 @@ function CheckChatArrows()
 end
 
 function ChangeZoneTextButtonsPos()
+
 	if(wc3UI_Options.ZoneTextPos == nil)then
 		wc3UI_Options.ZoneTextPos = 1
 	else
@@ -3685,6 +5015,7 @@ function ChangeZoneTextButtonsPos()
 end
 
 function ChangePortraitAnimationStop()
+
 	if(wc3UI_Options.StopAnimation == nil)then
 		wc3UI_Options.StopAnimation = false
 	else
@@ -3700,6 +5031,7 @@ function ChangePortraitAnimationStop()
 end
 
 function CheckPortraitAnimationStop()	
+
 	if(wc3UI_Options.StopAnimation)then
 		WIIIUI_menuCheckButtonPortraitStop:SetChecked(true)
 	else
@@ -3708,6 +5040,7 @@ function CheckPortraitAnimationStop()
 end
 
 function ChangeHPPercent()
+
 	if(wc3UI_Options.HealthPercent == nil)then
 		wc3UI_Options.HealthPercent = false
 	else
@@ -3723,6 +5056,7 @@ function ChangeHPPercent()
 end
 
 function CheckHPPercent()
+
 	if(wc3UI_Options.HealthPercent)then
 		WIIIUI_menuCheckHPPercent:SetChecked(true)
 	else
@@ -3731,6 +5065,7 @@ function CheckHPPercent()
 end
 
 function ChangePowerPercent()
+
 	if(wc3UI_Options.PowerPercent == nil)then
 		wc3UI_Options.PowerPercent = false
 	else
@@ -3746,10 +5081,65 @@ function ChangePowerPercent()
 end
 
 function CheckPowerPercent()
+
 	if(wc3UI_Options.PowerPercent)then
 		WIIIUI_menuCheckPowerPercent:SetChecked(true)
 	else
 		WIIIUI_menuCheckPowerPercent:SetChecked(false)
+	end
+end
+
+function HideThemeButtons()
+
+	local themeButtons = {
+		"WIIIUI_menuButtonThemeHuman",
+		"WIIIUI_menuButtonThemeOrc",
+		"WIIIUI_menuButtonThemeUndead",
+		"WIIIUI_menuButtonThemeNightElf",
+		"WIIIUI_menuButtonThemeCustom1",
+		"WIIIUI_menuButtonThemeCustom2",
+		"WIIIUI_menuButtonThemeCustom3",
+		"WIIIUI_menuButtonThemeCustom4",
+		"WIIIUI_menuButtonThemeCustom5",
+		"WIIIUI_menuButtonThemeCustom6",
+		"WIIIUI_menuButtonThemeCustom7",
+		"WIIIUI_menuButtonThemeCustom8"
+	}
+
+	for k,v in pairs(themeButtons) do
+		_G[v]:Hide()
+	end
+
+end
+
+function ChangeEnableCustomize()
+
+	if(wc3UI_Options.EnableCustomize)then
+		wc3UI_Options.EnableCustomize = false
+		WIIIUI_menuEnableCustomizeDisabledText:SetText("You have to reload UI to enable change of theme.")
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO COMPLETE THE CHANGES")
+	else
+		wc3UI_Options.EnableCustomize = true
+		WIIIUI_menuEnableCustomizeDisabledText:Show()
+		HideThemeButtons()
+		CreateCustomizedFrames()
+		ApplyCustomThemeOptions()
+	end
+end
+
+function CheckEnableCustomize()
+
+	if(wc3UI_Options.EnableCustomize == nil)then
+		wc3UI_Options.EnableCustomize = false
+	end
+
+	if(wc3UI_Options.EnableCustomize)then
+		WIIIUI_menuCheckButtonEnableCustomize:SetChecked(true)
+		WIIIUI_menuEnableCustomizeDisabledText:Show()
+		HideThemeButtons()
+	else
+		WIIIUI_menuCheckButtonEnableCustomize:SetChecked(false)
+		WIIIUI_menuEnableCustomizeDisabledText:Hide()
 	end
 end
 
@@ -3767,7 +5157,7 @@ function ChangeMultiBarAxis(multibar)
 
 		if(wc3UI_Options.MultiBarLeftHorizontal)then
 			wc3UI_Options.MultiBarLeftHorizontal = false
-			ChatFrame1:AddMessage("Wc3UI WARNING - PLEASE RELOAD UI TO APPLY CHANGE")
+			ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO APPLY CHANGE")
 		else
 			wc3UI_Options.MultiBarLeftHorizontal = true
 		end
@@ -3776,7 +5166,7 @@ function ChangeMultiBarAxis(multibar)
 		
 		if(wc3UI_Options.MultiBarRightHorizontal)then
 			wc3UI_Options.MultiBarRightHorizontal = false
-			ChatFrame1:AddMessage("Wc3UI WARNING - PLEASE RELOAD UI TO APPLY CHANGE")
+			ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO APPLY CHANGE")
 		else
 			wc3UI_Options.MultiBarRightHorizontal = true
 		end
@@ -3796,5 +5186,34 @@ function CheckMultiBarAxis()
 		WIIIUI_menuCheckMultibarRightHorizontal:SetChecked(true)
 	else
 		WIIIUI_menuCheckMultibarRightHorizontal:SetChecked(false)
+	end
+end
+
+function ChangeVPlus()
+
+	if(wc3UI_Options.VPlus == nil)then
+		wc3UI_Options.VPlus = false
+	else
+		
+		if(wc3UI_Options.VPlus)then
+			wc3UI_Options.VPlus = false
+		else
+			wc3UI_Options.VPlus = true
+			ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO UPDATE SPELLPOWER SCALING")
+		end
+
+	end
+end
+
+function CheckVPlus()	
+
+	if(wc3UI_Options.VPlus == nil)then
+		wc3UI_Options.VPlus = false
+	end
+
+	if(wc3UI_Options.VPlus)then
+		WIIIUI_menuCheckButtonVPlus:SetChecked(true)
+	else
+		WIIIUI_menuCheckButtonVPlus:SetChecked(false)
 	end
 end

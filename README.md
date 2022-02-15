@@ -100,6 +100,38 @@ inventorySlots, Hide: Checked
 A video demonstrating the different menu options available.  
 https://youtu.be/agffQHWyWh8
 
+## Custom Themes
+
+### Custom themes
+Links will be added here in the future.
+
+### How to make a custom theme
+
+- Create a folder named `Custom#` 1-8, example `Custom4`.
+- Copy all files and folders in `WoW\Interface\AddOns\WIIIUI\art\orc` and paste it into your new folder. Orc is the template for custom themes, which is good if you do not intend to edit with the customization option.
+- Either use the images as a template and follow their form or go crazy and use the customization feature.
+- Do not save any image with higher resolution than 512x512 since it is not supported in vanilla WoW.
+- All images must be saved with width/height of a multiplier of 8. For example: 16,32,64,128,256,512.
+- You can edit and then save an image while ingame, you just need to reload the UI to see the changes ingame.
+
+### How to apply custom themes
+
+- Download a theme
+- Put the custom theme folder into `WoW\Interface\AddOns\WIIIUI\art`
+- (Optional) Go into `WoW\WTF\Account\[ACCOUNT NAME]\[SERVER NAME]\[CHARACTER NAME]\SavedVariables`
+- (Optional) Paste the WIIIUI.lua file and overwrite OR...
+- (Optional) If you don't want your old settings to be overriden, such as UI scale size etc, then you can go into the downloaded WIIIUI.lua file, copy the code block in `["base_settings"]={["THEME"]}`, paste it into your own WIIIUI.lua file. Now do the same with `["edit_theme_settings"]={["THEME"]}`.  
+  
+![image](https://user-images.githubusercontent.com/97316608/154137716-eaa9c73b-e2d3-44b6-b700-59041f45d84b.png)  
+Example of how it should look.
+
+#### How to share 
+
+- Upload your custom theme folder from `WoW\Interface\AddOns\WIIIUI\art`.
+- (Optional) Upload your `WoW\WTF\Account\[ACCOUNT NAME]\[SERVER NAME]\[CHARACTER NAME]\SavedVariables\WIIIUI.lua` file.
+- (Optional) Or share the code block in `["base_settings"]={["THEME"]}` and the same with `["edit_theme_settings"]={["THEME"]}`.  
+- Ask me to add your theme to the list of custom themes or share it as you please.
+
 ## FAQ
 **Q:** How do I move or change size of the chat window?  
   

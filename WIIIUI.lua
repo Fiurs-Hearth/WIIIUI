@@ -3410,10 +3410,14 @@ function AlignRightPart()
 
 	bottomRight_Middle = _G['Wc3_UI_bottom_right_middle']
 	bottomRight_Middle:SetWidth(wc3UI_Options.uiScale/16)
-	bottomRight_Middle:SetHeight( (wc3UI_Options.uiScale - (wc3UI_Options.uiScale*0.5)) + wc3UI_Options.moveChatAreaUp + extraHeight) 
+	bottomRight_Middle:SetHeight( (wc3UI_Options.uiScale - (wc3UI_Options.uiScale*0.5)) + wc3UI_Options.moveChatAreaUp + extraHeight + (wc3UI_Options.uiScale*0.0208333)) 
 	bottomRight_Middle:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMRIGHT", wc3UI_Options.uiScale * -0.0625, 0)
 	bottomRight_Middle:SetTexCoord(0, 1, 0, 1)
 
+	if(wc3UI_Options.theme == "human")then
+		bottomRight_Middle:SetHeight( (wc3UI_Options.uiScale - (wc3UI_Options.uiScale*0.5)) + wc3UI_Options.moveChatAreaUp + extraHeight) 
+	end
+	
 	bottomRight_Bottom = _G['Wc3_UI_bottom_right_bottom']
 	bottomRight_Bottom:SetWidth(wc3UI_Options.uiScale)
 	bottomRight_Bottom:SetHeight(wc3UI_Options.uiScale/8)
@@ -3424,12 +3428,10 @@ function AlignRightPart()
 		shiftWidth = wc3UI_Options.uiScale * 0.0185185
 	end
 
-
 	Wc3_UI_right_lid:SetWidth(wc3UI_Options.uiScale)
 	Wc3_UI_right_lid:SetHeight(wc3UI_Options.uiScale)
 	Wc3_UI_right_lid:SetPoint("BOTTOMLEFT", rightPart_middle, "BOTTOMLEFT", wc3UI_Options.uiScale*0.2833333333 - shiftWidth, wc3UI_Options.uiScale * -0.3166 + wc3UI_Options.moveChatAreaUp)
 	Wc3_UI_right_lid:SetTexCoord(0,1,0,1)
-
 
 	WIIIUI_rightpartBackground:SetWidth(wc3UI_Options.uiScale * 2.2)
 	WIIIUI_rightpartBackground:SetHeight(wc3UI_Options.uiScale * 0.5578 + wc3UI_Options.moveChatAreaUp)

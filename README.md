@@ -107,7 +107,7 @@ Links will be added here in the future.
 
 ### How to make a custom theme
 
-- Create a folder named `Custom#` 1-8, example `Custom4`.
+- Create a folder named `custom#` 1-8, example `custom4`.
 - Copy all files and folders in `WoW\Interface\AddOns\WIIIUI\art\orc` and paste it into your new folder. Orc is the template for custom themes, which is good if you do not intend to edit with the customization option.
 - Either use the images as a template and follow their form or go crazy and use the customization feature.
 - Do not save any image with higher resolution than 512x512 since it is not supported in vanilla WoW.

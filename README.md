@@ -122,12 +122,13 @@ Since it takes current settings and uses that as a base, some frames are set as 
 ![image](https://user-images.githubusercontent.com/97316608/154354056-2f22bd87-45c0-4e0a-bbc3-24386153ee69.png)  
 Centered with space on sides (Useful for ultra wide screens)  
 For above solution you want to:
-1. Go to page 9,  `WIIIUI_leftpart`, Pos X, if you are running wide screen and not ultra wide then remember how much you increase this with so you can apply the same value to the parts on the right side of the UI.
-2. Go to page 22, `WIIIUI_rightpartBackground`, change Point to BOTTOMLEFT and change the Pos X value, reload UI after edit if nothing happens otherwise it wont display properly while editing. Now change it again and try changing width as well if needed, you might have to come back to this one.
-3. Go to page 23, `Wc3_UI_bottom_right_top`, change Pos X value
-4. Go to page 24, `Wc3_UI_bottom_right_middle`, change Pos X value
-5. Go to page 24, `Wc3_UI_bottom_right_bottom`, change Pos X value
-6. Go to page 24-25, `Wc3_UI_right_right_extendedFillerBottom_1` (and ...extendedFillerBottom_2 and ...extendedFillerBottom_3) , change Pos X value if needed
+1. (Optional) Edit the UI scale in the General tab.
+2. Go to page 9,  `WIIIUI_leftpart`, Pos X, if you are running wide screen and not ultra wide then remember how much you increase this with so you can apply the same value to the parts on the right side of the UI.
+3. Go to page 22, `WIIIUI_rightpartBackground`, change Point to BOTTOMLEFT and change the Pos X value, reload UI after edit if nothing happens otherwise it wont display properly while editing. Now change it again and try changing width as well if needed, you might have to come back to this one.
+4. Go to page 23, `Wc3_UI_bottom_right_top`, change Pos X value
+5. Go to page 24, `Wc3_UI_bottom_right_middle`, change Pos X value
+6. Go to page 24, `Wc3_UI_bottom_right_bottom`, change Pos X value
+7. Go to page 24-25, `Wc3_UI_right_right_extendedFillerBottom_1` (and ...extendedFillerBottom_2 and ...extendedFillerBottom_3) , change Pos X value if needed
 
 ![image](https://user-images.githubusercontent.com/97316608/154283280-134b61f1-69dd-4947-9343-60b7f7959dbd.png)  
 No chatframe area  

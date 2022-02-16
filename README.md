@@ -107,6 +107,7 @@ Since it takes current settings and uses that as a base, some frames are set as 
 
 ### Tips, Tricks and Solutions
 
+- **WARNING, this will remove your saved settings for your customized themes!!!** You can reset the base settings by deleting the WIIIUI.lua file in `WoW\WTF\Account\[ACCOUNT NAME]\[SERVER NAME]\[CHARACTER NAME]\SavedVariables` or by opening the file and remove the `base_settings` of the theme, do the same with the theme in `edit_theme_settings`.
 - Some frames are hidden or visible based on the UI scale and might be hidden based on your UI scale, just uncheck the Hide checkbox and it will appear.
 - Changes are not being applied? Enable customize settings from the config menu.
 - Inventory (custom action) slots are not visible, uncheck hide for each action slot you want to be visible.

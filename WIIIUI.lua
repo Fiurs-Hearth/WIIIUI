@@ -958,8 +958,22 @@ function CreateCustomizedFrames()
 			if(children)then
 				for i, child in ipairs(children) do
 					if(child:GetName())then
-						count = count + 1
-						table.insert(UIObjectsTable, child:GetName())
+
+						if( string.find(child:GetName(), "ActionButton_Custom1Icon") or string.find(child:GetName(), "ActionButton_Custom1NormalTexture")
+							or string.find(child:GetName(), "ActionButton_Custom2Icon") or string.find(child:GetName(), "ActionButton_Custom2NormalTexture") 
+							or string.find(child:GetName(), "ActionButton_Custom3Icon") or string.find(child:GetName(), "ActionButton_Custom3NormalTexture")
+							or string.find(child:GetName(), "ActionButton_CustomInventory_1Icon") or string.find(child:GetName(), "ActionButton_CustomInventory_1NormalTexture") 
+							or string.find(child:GetName(), "ActionButton_CustomInventory_2Icon") or string.find(child:GetName(), "ActionButton_CustomInventory_2NormalTexture") 
+							or string.find(child:GetName(), "ActionButton_CustomInventory_3Icon") or string.find(child:GetName(), "ActionButton_CustomInventory_3NormalTexture") 
+							or string.find(child:GetName(), "ActionButton_CustomInventory_4Icon") or string.find(child:GetName(), "ActionButton_CustomInventory_4NormalTexture") 
+							or string.find(child:GetName(), "ActionButton_CustomInventory_5Icon") or string.find(child:GetName(), "ActionButton_CustomInventory_5NormalTexture") 
+							or string.find(child:GetName(), "ActionButton_CustomInventory_6Icon") or string.find(child:GetName(), "ActionButton_CustomInventory_6NormalTexture") 
+						) then
+
+						else
+							count = count + 1
+							table.insert(UIObjectsTable, child:GetName())
+						end
 					end
 				end
 			end
@@ -1325,44 +1339,59 @@ function ApplyCustomThemeOptions()
 
 			for k,v in pairs(themeSettings) do 
 
-				local currentFrame = _G[k]
-				local baseScale = wc3UI_Options.base_scale
-				local scale = wc3UI_Options.uiScale
-				local isHidden = v["Hide"]
+				if( string.find(_G[k]:GetName(), "Wc3_UI_weaponIcon_tex_") or string.find(_G[k]:GetName(), "Wc3_UI_armorIcon_tex") 
+					or string.find(_G[k]:GetName(), "ActionButton_Custom1Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom1NormalTexture")
+					or string.find(_G[k]:GetName(), "ActionButton_Custom2Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom2NormalTexture") 
+					or string.find(_G[k]:GetName(), "ActionButton_Custom3Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom3NormalTexture")
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_1Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_1NormalTexture") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_2Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_2NormalTexture") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_3Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_3NormalTexture") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_4Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_4NormalTexture") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_5Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_5NormalTexture") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6NormalTexture")
+				) then
 
-				currentFrame:SetParent(v['ParentOf'])
-				currentFrame:SetAlpha(v['Transparency'])
-				currentFrame:SetWidth( (v['Width']/baseScale) * scale )
-				currentFrame:SetHeight( (v['Height']/baseScale) * scale)
-
-				if(isHidden)then
-					currentFrame:Hide()
 				else
-					currentFrame:Show()
-				end
 
-				if(v['ParentPosOf'] and v['RelativePoint'])then
-					currentFrame:SetPoint( v['Point'], v['ParentPosOf'], v['RelativePoint'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
-				elseif(v['ParentPosOf'])then
-					currentFrame:SetPoint(v['Point'], v['ParentPosOf'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
-				else
-					currentFrame:SetPoint(v['Point'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
-				end
+					local currentFrame = _G[k]
+					local baseScale = wc3UI_Options.base_scale
+					local scale = wc3UI_Options.uiScale
+					local isHidden = v["Hide"]
 
-				if(currentFrame:GetObjectType() == "Frame" or currentFrame:GetObjectType() == "Minimap")then
+					currentFrame:SetParent(v['ParentOf'])
+					currentFrame:SetAlpha(v['Transparency'])
+					currentFrame:SetWidth( (v['Width']/baseScale) * scale )
+					currentFrame:SetHeight( (v['Height']/baseScale) * scale)
 
-					currentFrame:SetFrameStrata(v['FrameStrata'])
-					currentFrame:SetFrameLevel(v['FrameLevel'])
-					if(v['Backdrop'] ~= "")then
-						currentFrame:SetBackdrop({bgFile = v['Backdrop']['bgFile']})
+					if(isHidden)then
+						currentFrame:Hide()
+					else
+						currentFrame:Show()
 					end
-					
-				elseif(currentFrame:GetObjectType() == "Texture")then
 
-					currentFrame:SetTexture(v['Texture'])
-					currentFrame:SetDrawLayer(v['SetDrawLayer'])
-					currentFrame:SetTexCoord(v['TexCoordLeft'], v['TexCoordRight'], v['TexCoordTop'], v['TexCoordBottom'])
+					if(v['ParentPosOf'] and v['RelativePoint'])then
+						currentFrame:SetPoint( v['Point'], v['ParentPosOf'], v['RelativePoint'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
+					elseif(v['ParentPosOf'])then
+						currentFrame:SetPoint(v['Point'], v['ParentPosOf'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
+					else
+						currentFrame:SetPoint(v['Point'], (v['PosX']/baseScale) * scale, (v['PosY']/baseScale) * scale)
+					end
 
+					if(currentFrame:GetObjectType() == "Frame" or currentFrame:GetObjectType() == "Minimap")then
+
+						currentFrame:SetFrameStrata(v['FrameStrata'])
+						currentFrame:SetFrameLevel(v['FrameLevel'])
+						if(v['Backdrop'] ~= "")then
+							currentFrame:SetBackdrop({bgFile = v['Backdrop']['bgFile']})
+						end
+						
+					elseif(currentFrame:GetObjectType() == "Texture")then
+
+						currentFrame:SetTexture(v['Texture'])
+						currentFrame:SetDrawLayer(v['SetDrawLayer'])
+						currentFrame:SetTexCoord(v['TexCoordLeft'], v['TexCoordRight'], v['TexCoordTop'], v['TexCoordBottom'])
+
+					end
 				end
 			end
 		end
@@ -4667,12 +4696,14 @@ end
 
 function UpdateUI(extendNumber)
 
-	CheckResizeInput()
-	CheckPortraitScaleChange()
-	CheckExtendInput(extendNumber)
+	
 	if(WIIIUI_customizedMainFrame:IsVisible())then
 		UpdateCustomThemeSettings()
 		ApplyCustomThemeOptions()
+	else
+		CheckResizeInput()
+		CheckPortraitScaleChange()
+		CheckExtendInput(extendNumber)
 	end
 end
 

@@ -114,6 +114,7 @@ Since it takes current settings and uses that as a base, some frames are set as 
 - Changing the UI scale from the General tab screws with my UI. Reload UI.
 - Name over the experience bar does not fit? Increase the width of `WIIIUI_xpName` on Page 14.
 - Level and class text does not fit?  Increase the width of `WIIIUI_xpName` on Page 14.
+- HP and/or Mana/Rage/Energy does not fit? Increase the width of `WIIIUI_HealthText` and `WIIIUI_PowerText` on Page 41.
 - Changing position of either Pos X or Pos Y does not work? If `Point` and `Relative to` are both or either is set to CENTER, try changing it to BOTTOMLEFT on `Point` and BOTTOMRIGHT on `Relative to`, requires you to reload UI. Other settings might work as well, if the frame disappears after this change it might be outside of the screen and you may have to put in negative value on Pos X or Pos Y.
   
 #### Here are some example edits.

@@ -69,8 +69,8 @@ Example of an edit with human theme:
 ![image](https://user-images.githubusercontent.com/97316608/153957920-623ca862-9a94-4cbd-a770-2976fe6b324c.png)  
   
 #### Settings:  
-Page 10, extensionBackground, width: 500 (change to fit)  
-Page 24, rightpart, Frame strata: BACKGROUND  
+Page 8, extensionBackground, width: 500 (change to fit)  
+Page 22, rightpart, Frame strata: BACKGROUND  
 inventorySlots, Hide: Checked  
   
 * Zoom minimap in and out with the mousescroll while hovering over the minimap

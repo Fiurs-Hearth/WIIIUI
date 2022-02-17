@@ -172,7 +172,27 @@ Example of how it should look.
 - Ask me to add your theme to the list of custom themes or share it as you please.
 
 ### Custom themes
-Links will be added here in the future.
+
+#### nobrains21's themes  
+
+Queensland UI  
+https://github.com/nobrains21/WIIIUI-QueenslandUI  
+
+![image](https://user-images.githubusercontent.com/97316608/154486374-89611645-4bf5-40ea-b49c-d44eb1afcdad.png)  
+
+---
+
+NerubUI    
+https://github.com/nobrains21/WIIIUI-NerubUI  
+
+![image](https://user-images.githubusercontent.com/97316608/154486852-b0994114-b04f-4609-bb94-8026f4d7153a.png)  
+
+---
+
+Void UI  
+https://github.com/nobrains21/WIIIUI-VoidUI  
+
+![image](https://user-images.githubusercontent.com/97316608/154486891-0eadd308-ad61-469c-9980-d47f9062efe8.png)  
 
 ## FAQ
 **Q:** How do I move or change size of the chat window?  

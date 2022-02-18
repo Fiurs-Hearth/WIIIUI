@@ -171,7 +171,7 @@ Example of how it should look.
 - (Optional) Or share the code block in `["base_settings"]={["THEME"]}` and the same with `["edit_theme_settings"]={["THEME"]}`.  
 - Ask me to add your theme to the list of custom themes or share it as you please.
 
-### Custom themes
+### Player made Custom themes
 
 #### nobrains21's themes  
 

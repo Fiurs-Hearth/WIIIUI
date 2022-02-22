@@ -1671,7 +1671,7 @@ function SetWeaponIcon(custom)
 
 	local icon
 
-	if(custom)then
+	if(custom and weaponIconSelected == 16)then
 		icon = custom
 	else
 		if(weaponIconSelected == nil)then

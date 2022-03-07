@@ -243,6 +243,12 @@ end
 
 function CustomizeTab_Clicked()
 
+	if(not wc3UI_Options.EnableCustomize)then
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE CHECK THE \"Enable customize settings\" OPTION TO ACCESS THIS TAB.")
+		GeneralTab_Clicked()
+		return
+	end
+
 	WIIIUI_menu:SetWidth(680)
 	WIIIUI_menu:SetHeight(690)
 	WIIIUI_menuButtonApply:ClearAllPoints()
@@ -3834,7 +3840,11 @@ function LowHPWarning()
 				fullRedTime = 1
 				blackToRed = true
 				if(not evenStarted)then
-					PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\white_background")
+			
+					if(not wc3UI_Options.EnableCustomize)then
+						PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\white_background")
+					end
+
 					evenStarted = true 
 					number = 0
 
@@ -3859,7 +3869,11 @@ function LowHPWarning()
 			else
 				evenStarted = false
 				lowHPEvent:SetScript("OnUpdate", nil)
-				PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
+				if(not wc3UI_Options.EnableCustomize)then
+					PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
+				else
+					PortraitBackground:SetVertexColor(1,1,1,1)
+				end
 			end
 		end
 

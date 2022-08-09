@@ -1345,16 +1345,27 @@ function ApplyCustomThemeOptions()
 
 			for k,v in pairs(themeSettings) do 
 
+				-- ignore these
 				if( string.find(_G[k]:GetName(), "Wc3_UI_weaponIcon_tex_") or string.find(_G[k]:GetName(), "Wc3_UI_armorIcon_tex") 
+					or string.find(_G[k]:GetName(), "Wc3_UI_weapon") or string.find(_G[k]:GetName(), "WIIIUI_weapon") 
 					or string.find(_G[k]:GetName(), "ActionButton_Custom1Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom1NormalTexture")
 					or string.find(_G[k]:GetName(), "ActionButton_Custom2Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom2NormalTexture") 
 					or string.find(_G[k]:GetName(), "ActionButton_Custom3Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom3NormalTexture")
+					or string.find(_G[k]:GetName(), "ActionButton_Custom1Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom1")
+					or string.find(_G[k]:GetName(), "ActionButton_Custom2Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom2") 
+					or string.find(_G[k]:GetName(), "ActionButton_Custom3Icon") or string.find(_G[k]:GetName(), "ActionButton_Custom3")
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_1Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_1NormalTexture") 
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_2Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_2NormalTexture") 
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_3Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_3NormalTexture") 
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_4Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_4NormalTexture") 
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_5Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_5NormalTexture") 
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6NormalTexture")
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_1Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_1") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_2Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_2") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_3Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_3") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_4Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_4") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_5Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_5") 
+					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6")
 				) then
 
 				else
@@ -5264,3 +5275,14 @@ function CheckVPlus()
 		WIIIUI_menuCheckButtonVPlus:SetChecked(false)
 	end
 end
+
+
+
+
+--ChatFrameMenuButton
+--[[
+local testFrame = CreateFrame("Button", "testFrame", ChatFrameMenuButton, "UIPanelButtonTemplate")
+testFrame:SetWidth(40)
+testFrame:SetHeight(40)
+testFrame:SetPoint("CENTER", 0, 40)
+]]

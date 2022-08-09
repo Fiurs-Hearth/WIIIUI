@@ -2855,6 +2855,10 @@
                         local totalArcane, totalFire, totalNature, totalFrost, totalShadow
                         local dodgeChance, parryChance, blockChance
 
+                        local latency
+
+                        __, __, latency = GetNetStats()
+
                         if( uLvl ~= 60 ) then
                             dr = effectiveArmor / (effectiveArmor + 400 + 85 * uLvl)
                         else
@@ -2883,7 +2887,9 @@
                                                             .."|cffffd100Fire Resistance:|r "..totalFire.."\n"
                                                             .."|cffffd100Nature Resistance:|r "..totalNature.."\n"
                                                             .."|cffffd100Frost Resistance:|r "..totalFrost.."\n"
-                                                            .."|cffffd100Shadow Resistance:|r "..totalShadow.."\n")
+                                                            .."|cffffd100Shadow Resistance:|r "..totalShadow.."\n\n"
+                                                            .."|cffffd100Latency (ms):|r "..latency
+                                                            )
                         WIIIUI_infoBox:SetPoint("CENTER", WIIIUI_xpHoverFrame, 0, WIIIUI_xpHoverFrame:GetHeight() + 50)
                         
                         WIIIUI_infoBox:Show()

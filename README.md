@@ -18,7 +18,7 @@ Don't forget to check out [Known issues](https://github.com/Fiurs-Hearth/Warcraf
 Contact me on Discord: Fiur#8658
 
 ## Installation
-* [Download the addon](https://github.com/Fiurs-Hearth/WIIIUI/archive/refs/heads/master.zip)
+* [Download the addon](https://github.com/Fiurs-Hearth/WIIIUI/archive/refs/heads/master-wotlk.zip)
 * Unpack the file
 * Open the unpacked file and rename the folder named `WIIIUI-master` to `WIIIUI`
 * Put the renamed folder into the AddOns folder: `World of Warcraft\Interface\AddOns`

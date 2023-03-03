@@ -1,3 +1,5 @@
+# BETA - I made quick edits to get most of it working, don't expect everything to work, report issues and tell me if it was for wotlk or vanilla.
+
 ![WIIIUI_cover_text_2](https://user-images.githubusercontent.com/97316608/149594045-c5f69b42-0634-4792-a9a6-820b3527971b.png)
 
 

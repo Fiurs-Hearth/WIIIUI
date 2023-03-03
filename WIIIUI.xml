@@ -1,5 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
-
     <Script file="WIIIUI.lua"/>
      <!-- Generic frame for inheritance  --> 
     <Frame name="WIIIUI_Frame" framestrata="LOW" parent="UIParent" virtual="true">
@@ -2379,8 +2378,6 @@
                             text = tostring(secondaryPowers['frost'])
 
                             text = "|cffffd100Spell power:|r "..tostring(sp).."\n"
-                                .."\n|cffffd100Extra power (add with Spell power to get sum)|r\n"
-                                .."|cffffd100Example: Fire (15) + Spell power (30) = 45 for fire spells.|r\n\n"
                                 .."|cffffd100Arcane:|r "..tostring(secondaryPowers['arcane']).."\n"
                                 .."|cffffd100Fire:|r "..tostring(secondaryPowers['fire']).."\n"
                                 .."|cffffd100Frost:|r "..tostring(secondaryPowers['frost']).."\n"
@@ -2560,8 +2557,6 @@
                             text = tostring(secondaryPowers['frost'])
 
                             text = "|cffffd100Spell power:|r "..tostring(sp).."\n"
-                                .."\n|cffffd100Extra power (add with Spell power to get sum)|r\n"
-                                .."|cffffd100Example: Fire (15) + Spell power (30) = 45 for fire spells.|r\n\n"
                                 .."|cffffd100Arcane:|r "..tostring(secondaryPowers['arcane']).."\n"
                                 .."|cffffd100Fire:|r "..tostring(secondaryPowers['fire']).."\n"
                                 .."|cffffd100Frost:|r "..tostring(secondaryPowers['frost']).."\n"
@@ -2741,8 +2736,6 @@
                             text = tostring(secondaryPowers['frost'])
 
                             text = "|cffffd100Spell power:|r "..tostring(sp).."\n"
-                                .."\n|cffffd100Extra power (add with Spell power to get sum)|r\n"
-                                .."|cffffd100Example: Fire (15) + Spell power (30) = 45 for fire spells.|r\n\n"
                                 .."|cffffd100Arcane:|r "..tostring(secondaryPowers['arcane']).."\n"
                                 .."|cffffd100Fire:|r "..tostring(secondaryPowers['fire']).."\n"
                                 .."|cffffd100Frost:|r "..tostring(secondaryPowers['frost']).."\n"

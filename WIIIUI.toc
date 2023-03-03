@@ -1,4 +1,4 @@
-## Interface: 11200
+## Interface: 33500
 ## Title: Warcraft III - UI
 ## Version: 1.0
 ## Notes: WIIIUI

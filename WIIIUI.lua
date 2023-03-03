@@ -1,10 +1,58 @@
 local _G, _ = _G or getfenv()
-DiabloMod_Combat = false;
 
 BINDING_HEADER_WC3HEADER = "Warcraft III - UI"
-MAX_LEVEL = 60
+MAX_LEVEL = 80
 
 local currentCustomFrameNames = {}
+
+local customActionButtons={
+	{
+		['id'] = 115,
+		["frame_name"] = "ActionButton_Custom1",
+		["bind_name"] = "Top Minimap Button"
+	},
+	{
+		['id'] = 116,
+		["frame_name"] = "ActionButton_Custom2",
+		["bind_name"] = "Middle Minimap Button"
+	},
+	{
+		['id'] = 117,
+		["frame_name"] = "ActionButton_Custom3",
+		["bind_name"] = "Bottom Minimap Button"
+	},
+	{
+		['id'] = 109,
+		["frame_name"] = "ActionButton_CustomInventory_1",
+		["bind_name"] = "Top Left Inventory"
+	},
+	{
+		['id'] = 110,
+		["frame_name"] = "ActionButton_CustomInventory_2",
+		["bind_name"] = "Top Right Inventory"
+	},
+	{
+		['id'] = 111,
+		["frame_name"] = "ActionButton_CustomInventory_3",
+		["bind_name"] = "Middle Left Inventory"
+	},
+	{
+		['id'] = 112,
+		["frame_name"] = "ActionButton_CustomInventory_4",
+		["bind_name"] = "Middle Right Inventory"
+	},
+	{
+		['id'] = 113,
+		["frame_name"] = "ActionButton_CustomInventory_5",
+		["bind_name"] = "Bottom Left Inventory"
+	},
+	{
+		['id'] = 114,
+		["frame_name"] = "ActionButton_CustomInventory_6",
+		["bind_name"] = "Bottom Right Inventory"
+	}
+}
+
 
 local UIFramesTable = {
 	"ActionButton_Custom1",
@@ -53,7 +101,6 @@ local editBoxFramesTable = {
 }
 
 function CustomKeyBindings(number)
-
 	if(number == 1)then
 		customActionButton1:Click()
 	elseif(number == 2)then
@@ -1567,7 +1614,7 @@ function Minimap_ActionButtons(number)
 	customActionButton:ClearAllPoints()
 	customActionButton:SetWidth(wc3UI_Options.uiScale*0.08518 - resizeIcon)
 	customActionButton:SetHeight(wc3UI_Options.uiScale*0.08518 - resizeIcon)
-	customActionButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMRIGHT", wc3UI_Options.uiScale*0.01851 + addWidth, wc3UI_Options.uiScale*0.455555 - ((number-1) * (wc3UI_Options.uiScale*0.08518)) - (floor(number*0.34)) + addHeight )
+	customActionButton:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", Minimap:GetRight() + wc3UI_Options.uiScale*0.025, Minimap:GetTop() - (wc3UI_Options.uiScale*0.0875)*(number))
 	customActionButton:SetBackdrop( { 
 		bgFile = "", 
 		edgeFile = ""
@@ -1580,7 +1627,8 @@ function Minimap_ActionButtons(number)
 	hsCD_Center = ActionButton_CustomCooldown:GetWidth()/2
 	hsMain_Center = customActionButton:GetWidth()/2
 	offsetPixels = (hsCD_Center - hsMain_Center) / GetScreenWidth()
-	ActionButton_CustomCooldown:SetPosition( -offsetPixels, -offsetPixels, 0 );
+	--#ActionButton_CustomCooldown:SetPosition( -offsetPixels, -offsetPixels, 0 );
+	ActionButton_CustomCooldown:SetPoint("CENTER",0,0);
 
 	-- Normal texture 
 	actionButtonNormalTexture = _G['ActionButton_Custom'..number..'NormalTexture']
@@ -1592,8 +1640,7 @@ function Minimap_ActionButtons(number)
 		--Zoom in
 		actionButtonIcon = _G['ActionButton_Custom'..number..'Icon']
 		zoomInPixels = wc3UI_Options.uiScale*0.01851
-		zoomInPixels = (zoomInPixels/actionButtonIcon:GetWidth())
-
+		zoomInPixels = (zoomInPixels/customActionButton:GetWidth() - wc3UI_Options.uiScale*0.00075)
 		actionButtonIcon:SetTexCoord(zoomInPixels, 1-zoomInPixels, zoomInPixels, 1-zoomInPixels);
 	end
 
@@ -1817,8 +1864,8 @@ function AlignMinimap()
 	Minimap:SetZoom(Minimap:GetZoom()+1)
 	Minimap:SetZoom(Minimap:GetZoom()-1)
 
-	MiniMapTrackingFrame:ClearAllPoints()
-	MiniMapTrackingFrame:SetPoint("CENTER", minimapFrame, "CENTER", wc3UI_Options.uiScale*0.14, wc3UI_Options.uiScale*-0.34)
+	--#MiniMapTrackingFrame:ClearAllPoints()
+	--#MiniMapTrackingFrame:SetPoint("CENTER", minimapFrame, "CENTER", wc3UI_Options.uiScale*0.14, wc3UI_Options.uiScale*-0.34)
 
 	MinimapZoneTextButton:ClearAllPoints()
 	MinimapZoneTextButton:SetParent(Minimap)
@@ -1859,11 +1906,13 @@ function AlignMinimap()
 	zoomInPixels = (zoomInPixels/MiniMapMailIcon:GetWidth())
 	MiniMapMailIcon:SetTexCoord(zoomInPixels, 1-zoomInPixels, zoomInPixels, 1-zoomInPixels);
 
-
 	noMail:SetWidth(wc3UI_Options.uiScale*0.085)
 	noMail:SetHeight(wc3UI_Options.uiScale*0.085)
 	noMail:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMRIGHT", wc3UI_Options.uiScale * 0.01851, wc3UI_Options.uiScale * 0.19259)
 	noMail:SetVertexColor(0.25, 0.25, 0.25, 1)
+
+	GameTimeFrame:ClearAllPoints()
+	GameTimeFrame:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", 0, wc3UI_Options.uiScale * 0.75)
 
 	Minimap_ActionButtons(1)
 	Minimap_ActionButtons(2)
@@ -1898,8 +1947,12 @@ function AlignBuffFrame()
 			tempEnchantCount = tempEnchantCount + 1
 			TempEnchant2:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10 - ((tempEnchantCount - 1) * spacing), -10)
 		end
-		BuffButton0:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10 - ((tempEnchantCount) * spacing), -10)
-		BuffButton16:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -100)
+		if(BuffButton0)then
+			BuffButton0:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10 - ((tempEnchantCount) * spacing), -10)
+		end
+		if(BuffButton16)then
+			BuffButton16:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -10, -100)
+		end
 
 	end
 
@@ -1942,7 +1995,6 @@ function AlignPortrait()
 
 		if(arg1 == "RightButton")then
 			ToggleDropDownMenu(1, nil, PlayerFrameDropDown, "PortraitCustom", 0, 27)
-
 		elseif(arg1 == "LeftButton")then
 			TargetUnit("player")
 		end
@@ -2083,6 +2135,8 @@ function CombatTextPortrait()
 	PlayerFrameManaBarText:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, -300)
 	PlayerFrameHealthBarText:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, -300)
 	PlayerName:Hide()
+	PlayerLevelText:ClearAllPoints()
+	PlayerLevelText:SetPoint("TOPRIGHT", UIParent, "BOTTOMLEFT", -1000, -1000)
 	PlayerLevelText:Hide()
 end
 
@@ -2337,7 +2391,7 @@ function AlignWeaponFrame(frameNumber)
 
 	-- If damage numbers are to high we split up the rows
 	if(text ~= nil)then
-		if(string.len(text) >= 10 and isShield ~= true and weaponIconSelected ~= 0)then
+		if(string.len(text) >= 10 and isShield == nil and weaponIconSelected ~= 0)then
 			if(weaponIconSelected == 16 or weaponIconSelected == 17 or weaponIconSelected == 18)then
 				text = floor(lowDmg).." -\n "..ceil(highDmg)
 				weaponNumbersText:SetText( text )
@@ -2481,7 +2535,7 @@ function HideMainMenuBarComponents()
 	MainMenuBarOverlayFrame:Hide()
 	MainMenuBarOverlayFrame:SetScript("OnLoad", nil)
 	
-	MainMenuBarPerformanceBarFrameButton:Hide()
+	--#MainMenuBarPerformanceBarFrameButton:Hide()
 
 	MainMenuBarTexture0:Hide()
 	MainMenuBarTexture1:Hide()
@@ -2596,7 +2650,8 @@ local function AlignActionBars()
 		hsCD_Center = ActionButton_Cooldown:GetWidth()/2
 		hsMain_Center = actionButton:GetWidth()/2
 		offsetPixels = (hsCD_Center - hsMain_Center) / GetScreenWidth()
-		ActionButton_Cooldown:SetPosition( -offsetPixels, -offsetPixels, 0 );
+		--#ActionButton_Cooldown:SetPosition( -offsetPixels, -offsetPixels, 0 );
+		ActionButton_Cooldown:SetPoint("CENTER",0,0)
 
 		-- Hide icon frames
 		if(hideActionFrame) then
@@ -2626,7 +2681,11 @@ local function AlignActionBars()
 
 	hideActionFrame = true
 	parentFrame = MainMenuBar
-	parentFrame:SetPoint("BOTTOMLEFT", actionSlotGridMain, "BOTTOMLEFT", wc3UI_Options.uiScale*0.037037, -1)
+	--#parentFrame:SetPoint("BOTTOMLEFT", actionSlotGridMain, "BOTTOMLEFT", wc3UI_Options.uiScale*0.037037, -1)
+	parentFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 
+		WIIIUI_xpHoverFrame:GetRight() + wc3UI_Options.uiScale*0.10833  ,--wc3UI_Options.uiScale*0.037037,
+		-1
+	)
 	
 	yPos = wc3UI_Options.uiScale * 0.07037
 	size = wc3UI_Options.uiScale*0.11111
@@ -2810,9 +2869,12 @@ function InventorySlots()
 		inventoryActionSlot:SetWidth(wc3UI_Options.uiScale*0.1185185)
 		inventoryActionSlot:SetHeight(wc3UI_Options.uiScale*0.1185185)
 		inventoryActionSlot:ClearAllPoints()
-		inventoryActionSlot:SetPoint( "BOTTOMLEFT", WIIIUI_inventorySlots, "CENTER", column* (wc3UI_Options.uiScale*0.156)- (1-column),  row*(wc3UI_Options.uiScale*0.148) )
+		inventoryActionSlot:SetPoint( "BOTTOMLEFT", UIParent, "BOTTOMLEFT", 
+			(Wc3_UI_right_middle:GetLeft() + wc3UI_Options.uiScale*0.022) + (column* (wc3UI_Options.uiScale*0.156)- (1-column)),
+			(wc3UI_Options.uiScale*0.3125) - row*(wc3UI_Options.uiScale*0.148) 
+		)
 		
-		if( math.mod(inventoryNumber, 2) == 1 )then
+		if( inventoryNumber % 2 == 1 )then
 			
 			column = 0
 			if(inventoryNumber == 1)then
@@ -2829,7 +2891,8 @@ function InventorySlots()
 		hsCD_Center = ActionButton_Cooldown:GetWidth()/2
 		hsMain_Center = inventoryActionSlot:GetWidth()/2
 		offsetPixels = (hsCD_Center - hsMain_Center) / GetScreenWidth()
-		ActionButton_Cooldown:SetPosition( -offsetPixels, -offsetPixels, 0 );
+		--#ActionButton_Cooldown:SetPosition( -offsetPixels, -offsetPixels, 0 );
+		ActionButton_Cooldown:SetPoint("CENTER", 0,0)
 
 		-- Hide frame etc
 		normalTexture = _G['ActionButton_CustomInventory_'..inventoryNumber.."NormalTexture"]
@@ -2861,9 +2924,11 @@ function AlignChatFrames()
 	ChatFrame2Tab:SetFrameStrata("DIALOG")
 	
 	if(wc3UI_Options.chatInputAbove) then
-		ChatFrameEditBox:SetPoint("TOPLEFT", ChatFrame1Tab, "TOPLEFT", -5, -2)
+		--#ChatFrameEditBox:SetPoint("TOPLEFT", ChatFrame1Tab, "TOPLEFT", -5, -2)
+		ChatFrame1EditBox:SetPoint("TOPLEFT", ChatFrame1Tab, "TOPLEFT", -5, -2)
 	else
-		ChatFrameEditBox:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT", -5, -2)
+		--#ChatFrameEditBox:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT", -5, -2)
+		ChatFrame1EditBox:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT", -5, -2)
 	end
 end
 
@@ -3019,10 +3084,10 @@ function AlignBags()
 			end
 			MainMenuBarBackpackButton:SetScript("OnUpdate", nil)
 		end)
-		CharacterBag0Slot:SetPoint("BOTTOMLEFT", MainMenuBarBackpackButton, "BOTTOMLEFT", -39, 0)
-		CharacterBag1Slot:SetPoint("BOTTOMLEFT", CharacterBag0Slot, "BOTTOMLEFT", -39, 0)
-		CharacterBag2Slot:SetPoint("BOTTOMLEFT", CharacterBag1Slot, "BOTTOMLEFT", -39, 0)
-		CharacterBag3Slot:SetPoint("BOTTOMLEFT", CharacterBag2Slot, "BOTTOMLEFT", -39, 0)
+		CharacterBag0Slot:SetPoint("BOTTOMLEFT", MainMenuBarBackpackButton, "BOTTOMLEFT", -31, 0)
+		CharacterBag1Slot:SetPoint("BOTTOMLEFT", CharacterBag0Slot, "BOTTOMLEFT", -31, 0)
+		CharacterBag2Slot:SetPoint("BOTTOMLEFT", CharacterBag1Slot, "BOTTOMLEFT", -31, 0)
+		CharacterBag3Slot:SetPoint("BOTTOMLEFT", CharacterBag2Slot, "BOTTOMLEFT", -31, 0)
 		KeyRingButton:SetPoint("BOTTOMLEFT", CharacterBag3Slot, "BOTTOMLEFT", -20, -1)
 		ContainerFrame1:SetPoint("BOTTOMLEFT", MainMenuBarBackpackButton, "BOTTOMRIGHT", 0, 38)
 
@@ -3040,6 +3105,9 @@ function AlignBags()
 		CharacterBag3Slot:Show()
 		KeyRingButton:Show()
 	end
+	KeyRingButton:ClearAllPoints()
+	KeyRingButton:SetPoint("BOTTOMRIGHT", CharacterBag3Slot, "BOTTOMLEFT", 0, 0)
+	KeyRingButton:SetSize(16, CharacterBag0Slot:GetHeight()-0.1)
 
 	ContainerFrame1Item1:SetScript("OnShow", function()
 		MainMenuBarBackpackButton:Show()
@@ -3072,9 +3140,11 @@ function AlignMicroButtons()
 	microButtons = {	
 		'HelpMicroButton',
 		'MainMenuMicroButton',
-		'WorldMapMicroButton',
+		'LFDMicroButton',
+		'PVPMicroButton',
 		'SocialsMicroButton',
 		'QuestLogMicroButton',
+		'AchievementMicroButton',
 		'TalentMicroButton',
 		'SpellbookMicroButton',
 		'CharacterMicroButton',
@@ -3104,7 +3174,7 @@ function AlignMicroButtons()
 	end
 
 	skip = 0
-	for i=0, 7, 1 do
+	for i=0, 9, 1 do
 		microButton = _G[microButtons[i+1]]
 		
 		if(UnitLevel("player") < 10 and microButton:GetName() == "TalentMicroButton" ) then
@@ -3802,6 +3872,15 @@ function AlignUI()
 			AlignActionBars()
 			CombatTextPortrait()
 
+			if(_G['TimeManagerClockButton'])then
+				TimeManagerClockButton:SetFrameLevel(50)
+				TimeManagerClockButton:SetFrameStrata("HIGH")
+				TimeManagerClockButton:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 
+					Wc3_UI_right_middle:GetLeft() + 6, 
+					wc3UI_Options.uiScale * 0.42916
+				)
+			end
+
 			dummyFrame:SetScript("OnUpdate", nil)
 		end
 	end)	
@@ -4002,104 +4081,7 @@ end
 
 -- Calculates total block value and returns it
 function GetBlockValue()
-
-	local BV_Prefix = "getExtendedData"
-	local BV_Tooltip = _G['getExtendedData'] or CreateFrame("GameTooltip", 'getExtendedData', nil, "GameTooltipTemplate")
-	BV_Tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
-
-	local __, totalStr, posStr, negStr = UnitStat("player", 1)
-	startStrengthRaces = {
-		['Human'] = 20,
-		['Dwarf'] = 22,
-		['NightElf'] = 17,
-		['Gnome'] = 15,
-		['High Elf'] = 20,
-		['Orc'] = 23,
-		['Undead'] = 19,
-		['Tauren'] = 25,
-		['Troll'] = 21,
-		['Goblin'] = 23	
-	}
-	local blockValue = floor((totalStr - startStrengthRaces[UnitRace("player")])/20); -- Calculates the block value we get from Strength. (Base strength does not add block value)
-	
-	-- loop through all character slots and add the block value to blockValue
-	local isShield = false
-	local MAX_INVENTORY_SLOTS = 19
-	for slot=0, MAX_INVENTORY_SLOTS do
-		local hasItem = BV_Tooltip:SetInventoryItem("player", slot)
-		
-		if hasItem then
-			for line=1, 30 do
-				local left = _G[BV_Prefix .. "TextLeft" .. line]
-				
-				if left:GetText() then
-					local _,_, value = strfind(left:GetText(), "Increases the block value of your shield by (%d+).")
-					if value then
-						blockValue = blockValue + tonumber(value)
-					end
-				end
-				if left:GetText() then
-					local _,_, value = strfind(left:GetText(), "(%d+) Block")
-					if value then
-						isShield = true
-						blockValue = blockValue + tonumber(value)
-					end
-				end
-			end
-		end
-		
-	end
-
-	-- Check for talents
-	local blockFromTalents = 0
-	local MAX_TABS = GetNumTalentTabs()
-	for tab=1, MAX_TABS do
-		local MAX_TALENTS = GetNumTalents(tab)
-		
-		for talent=1, MAX_TALENTS do
-			BV_Tooltip:SetTalent(tab, talent)
-			local MAX_LINES = BV_Tooltip:NumLines()
-			
-			for line=1, MAX_LINES do
-				local left = getglobal(BV_Prefix .. "TextLeft" .. line)
-				if left:GetText() then
-					-- Paladin
-					-- Shield Specialization
-					local _,_, value = strfind(left:GetText(), "Increases the amount of damage absorbed by your shield by (%d+)%%.")
-					local name, iconTexture, tier, column, rank, maxRank, isExceptional, meetsPrereq = GetTalentInfo(tab, talent)
-					if value and rank > 0 then
-						
-						blockFromTalents = (blockValue * value) 
-
-						-- nothing more is currenlty supported, break out of the loops
-						line = MAX_LINES
-						talent = MAX_TALENTS
-						tab = MAX_TABS
-					end
-
-					-- Shaman
-					-- Shield Specialization
-					local _,_, value = strfind(left:GetText(), "and increases the amount blocked by (%d+)%%.")
-					local name, iconTexture, tier, column, rank, maxRank, isExceptional, meetsPrereq = GetTalentInfo(tab, talent)
-					if value and rank > 0 then
-						
-						blockFromTalents = (blockValue * value) 
-						
-						-- nothing more is currenlty supported, break out of the loops
-						line = MAX_LINES
-						talent = MAX_TALENTS
-						tab = MAX_TABS
-					end
-
-				end	
-			end
-			
-		end
-	end
-
-	blockValue = blockValue + blockFromTalents
-	return blockValue, isShield
-
+	return GetShieldBlock("player"), IsEquippedItemType("Shields")
 end
 
 function GetPlayerAura(searchText, auraType)
@@ -4163,213 +4145,23 @@ end
 -- Calculates Spell power
 function GetSpellpowerValue()
 
-	local SP_Prefix = "getExtendedData"
-	local SP_Tooltip = _G['getExtendedData'] or CreateFrame("GameTooltip", 'getExtendedData', nil, "GameTooltipTemplate")
-	SP_Tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+	local spellPower = 0
 
-	local spellPower = 0;
-	local arcanePower = 0;
-	local firePower = 0;
-	local frostPower = 0;
-	local holyPower = 0;
-	local naturePower = 0;
-	local shadowPower = 0;
-	local damagePower = 0;
-	local MAX_INVENTORY_SLOTS = 19
-	
-	local SpellPower_Set_Bonus = {}
-	
-	-- scan gear
-	for slot=0, MAX_INVENTORY_SLOTS do
-		local hasItem = SP_Tooltip:SetInventoryItem("player", slot)
-		
-		if hasItem then
-			local SET_NAME
-			
-			for line=1, SP_Tooltip:NumLines() do
-				local left = getglobal(SP_Prefix .. "TextLeft" .. line)
-				
-				if left:GetText() then
-					local _,_, value = strfind(left:GetText(), "Equip: Increases damage and healing done by magical spells and effects by up to (%d+).")
-					if value then
-						spellPower = spellPower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "Spell Damage %+(%d+)")
-					if value then
-						spellPower = spellPower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "^%+(%d+) Spell Damage and Healing")
-					if value then
-						spellPower = spellPower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "^%+(%d+) Damage and Healing Spells")
-					if value then
-						spellPower = spellPower + tonumber(value)
-					end
-					
-					_,_, value = strfind(left:GetText(), "Equip: Increases damage done by Arcane spells and effects by up to (%d+).")
-					if value then
-						arcanePower = arcanePower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "^%+(%d+) Arcane Spell Damage")
-					if value then
-						arcanePower = arcanePower + tonumber(value)
-					end
-					
-					_,_, value = strfind(left:GetText(), "Equip: Increases damage done by Fire spells and effects by up to (%d+).")
-					if value then
-						firePower = firePower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "Fire Damage %+(%d+)")
-					if value then
-						firePower = firePower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "^%+(%d+) Fire Spell Damage")
-					if value then
-						firePower = firePower + tonumber(value)
-					end
-					
-					_,_, value = strfind(left:GetText(), "Equip: Increases damage done by Frost spells and effects by up to (%d+).")
-					if value then
-						frostPower = frostPower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "Frost Damage %+(%d+)")
-					if value then
-						frostPower = frostPower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "^%+(%d+) Frost Spell Damage")
-					if value then
-						frostPower = frostPower + tonumber(value)
-					end
-					
-					_,_, value = strfind(left:GetText(), "Equip: Increases damage done by Holy spells and effects by up to (%d+).")
-					if value then
-						holyPower = holyPower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "^%+(%d+) Holy Spell Damage")
-					if value then
-						holyPower = holyPower + tonumber(value)
-					end
-					
-					_,_, value = strfind(left:GetText(), "Equip: Increases damage done by Nature spells and effects by up to (%d+).")
-					if value then
-						naturePower = naturePower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "^%+(%d+) Nature Spell Damage")
-					if value then
-						naturePower = naturePower + tonumber(value)
-					end
-					
-					_,_, value = strfind(left:GetText(), "Equip: Increases damage done by Shadow spells and effects by up to (%d+).")
-					if value then
-						shadowPower = shadowPower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "Shadow Damage %+(%d+)")
-					if value then
-						shadowPower = shadowPower + tonumber(value)
-					end
-					_,_, value = strfind(left:GetText(), "^%+(%d+) Shadow Spell Damage")
-					if value then
-						shadowPower = shadowPower + tonumber(value)
-					end
-					
-					_,_, value = strfind(left:GetText(), "(.+) %(%d/%d%)")
-					if value then
-						SET_NAME = value
-					end
-
-					
-					_, _, value = strfind(left:GetText(), "^Set: Increases damage and healing done by magical spells and effects by up to (%d+)%.")
-					if value and SET_NAME and not tContains(SpellPower_Set_Bonus, SET_NAME) then
-						tinsert(SpellPower_Set_Bonus, SET_NAME)
-						spellPower = spellPower + tonumber(value)
-					end
-					
-				end
-			end
-		end
-		
-	end
-	
-	-- scan talents
-	local MAX_TABS = GetNumTalentTabs()
-	
-	for tab=1, MAX_TABS do
-		local MAX_TALENTS = GetNumTalents(tab)
-		
-		for talent=1, MAX_TALENTS do
-			SP_Tooltip:SetTalent(tab, talent)
-			local MAX_LINES = SP_Tooltip:NumLines()
-			
-			for line=1, MAX_LINES do
-				local left = getglobal(SP_Prefix .. "TextLeft" .. line)
-				if left:GetText() then
-					-- Priest
-					-- Spiritual Guidance
-					local _,_, value = strfind(left:GetText(), "Increases spell damage and healing by up to (%d+)%% of your total Spirit.")
-					local name, iconTexture, tier, column, rank, maxRank, isExceptional, meetsPrereq = GetTalentInfo(tab, talent)
-					if value and rank > 0 then
-						local stat, effectiveStat = UnitStat("player", 5)
-						spellPower = spellPower + floor(((tonumber(value) / 100) * effectiveStat))
-						
-						-- nothing more is currenlty supported, break out of the loops
-						line = MAX_LINES
-						talent = MAX_TALENTS
-						tab = MAX_TABS
-					end
-				end	
-			end
-			
-		end
-	end
-	
-	-- buffs
-	local _, _, spellPowerFromAura = GetPlayerAura("Magical damage dealt is increased by up to (%d+).")
-	if spellPowerFromAura then
-		spellPower = spellPower + tonumber(spellPowerFromAura)
-		damagePower = damagePower + tonumber(spellPowerFromAura)
-	end
-	
-	local secondaryPower = 0
-	local secondaryPowerName = ""
 	local storedPowers = {}
-	storedPowers['arcane']  = 0
-	storedPowers['fire']  = 0
-	storedPowers['frost'] = 0
-	storedPowers['holy']  = 0
-	storedPowers['nature']  = 0
-	storedPowers['shadow'] = 0
+	storedPowers['arcane']  = GetSpellBonusDamage(2)
+	storedPowers['fire']  = GetSpellBonusDamage(3)
+	storedPowers['frost'] = GetSpellBonusDamage(4)
+	storedPowers['holy']  = GetSpellBonusDamage(5)
+	storedPowers['nature']  = GetSpellBonusDamage(6)
+	storedPowers['shadow'] = GetSpellBonusDamage(7)
 
-	if arcanePower > secondaryPower then
-		storedPowers['arcane']  = arcanePower
-		secondaryPowerName = SPELL_SCHOOL_ARCANE
-	end
-	if firePower > secondaryPower then
-		storedPowers['fire']  = firePower
-		secondaryPowerName = SPELL_SCHOOL_FIRE
-	end
-	if frostPower > secondaryPower then
-		storedPowers['frost'] = frostPower
-		secondaryPowerName = SPELL_SCHOOL_FROST
-	end
-	if holyPower > secondaryPower then
-		storedPowers['holy']  = holyPower
-		secondaryPowerName = SPELL_SCHOOL_HOLY
-	end
-	if naturePower > secondaryPower then
-		storedPowers['nature']  = naturePower
-		secondaryPowerName = SPELL_SCHOOL_NATURE
-	end
-	if shadowPower > secondaryPower then
-		storedPowers['shadow'] = shadowPower
-		secondaryPowerName = SPELL_SCHOOL_SHADOW
-	end
-	
-	if(wc3UI_Options.VPlus)then
-		spellPower = spellPower + tonumber(math.floor(UnitStat("player",4)*0.33))
+	for k,v in pairs(storedPowers) do
+		if(v < spellPower or spellPower == 0 and v > 0)then
+			spellPower = v
+		end
 	end
 
-	return spellPower, storedPowers, secondaryPowerName, damagePower
+	return spellPower, storedPowers
 end
 
 -- Calculates Healing power
@@ -4428,6 +4220,58 @@ function GetHealingpowerValue()
 	end
 	
 	return healPower
+end
+
+local isSetDone = false
+local function SetKeybindings()
+
+	for k,v in pairs(customActionButtons) do
+		local actionButton = _G[v.frame_name]
+
+		if(isSetDone == false)then
+			actionButton:SetScript("OnLeave", function()
+				GameTooltip:Hide()
+				SetKeybindings()
+			end)
+		end
+
+		local slotId, slotName, slotRank
+		local slotType = {GetActionInfo(v.id)}
+
+		if(slotType[1])then
+			if(slotType and slotType[4])then
+				slotType = slotType[4]   
+			end
+			if(type(slotType) == "table")then
+				slotId = slotType[2]
+
+				if(slotType[1] == "item") then
+					slotName = GetItemInfo(slotType[2])
+				else
+					slotName = slotType[2]
+				end
+				slotType = slotType[1]
+
+			else -- if is spell
+				slotId = slotType
+				slotType = "spell"
+				slotName, slotRank = GetSpellInfo(slotId)
+			end
+
+			actionButton:SetAttribute("type", slotType)
+			actionButton:SetAttribute(slotType, slotName)
+
+			local binding = GetBindingKey(v.bind_name)
+			if(binding)then
+				SetBinding(binding, "CLICK "..v.frame_name..":LeftButton")
+			end
+		else
+			actionButton:SetAttribute("type", nil)
+			actionButton:SetAttribute("spell", nil)
+			SetBinding("", "CLICK "..v.frame_name..":LeftButton")
+		end
+	end
+	isSetDone = true
 end
 
 function InitiateSavedVariables()
@@ -4599,7 +4443,6 @@ function Wc3UI_OnLoad()
 
 			UIHideFix()				-- We make a fix to hide some frames that do not want to be hidden by default when pressing alt + z
 			ResetPowerBarColor() 	-- We set the power bar color since it bugs and becomes gray before a ui reload.
-			AlignHealthMana() 		-- Delay this to later stages, either the proper way or through an update nil?
 			AlignBags()
 			AlignChatFrames()		-- We change where the input field is and increases the framestrata so it is displayed over our UI
 			AlignXPBar()			-- Middle UI, XP bar
@@ -4624,7 +4467,6 @@ function Wc3UI_OnLoad()
 			CheckEnableCustomize()
 			CheckVPlus()
 
-			InventorySlots()		-- Position our 2x3 inventory slots and edits the frames
 			ModifyPlayerPortrait()	-- Changes size and so we get the face camera
 			PutHearthstoneInActionBar()	-- Puts the hearthstone into the top actionbar besides the minimap if it is empty
 			LowHPWarning()				-- Activates the low hp warning
@@ -4651,6 +4493,16 @@ function Wc3UI_OnLoad()
 					PlaceMiniMapBattleFrame()
 					VisibilityChatArrows()
 					AlignXPBar()			-- Middle UI, XP bar
+					InventorySlots()		-- Position our 2x3 inventory slots and edits the frames
+
+					if(_G['TimeManagerClockButton'])then
+						TimeManagerClockButton:SetFrameLevel(50)
+						TimeManagerClockButton:SetFrameStrata("HIGH")
+						TimeManagerClockButton:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 
+							Wc3_UI_right_middle:GetLeft() + 6, 
+							wc3UI_Options.uiScale * 0.42916
+						)
+					end
 
 					dummyFrame:SetScript("OnUpdate", nil)
 					dummyFrame:SetScript("OnEvent", nil)
@@ -4659,6 +4511,8 @@ function Wc3UI_OnLoad()
 					dummyFrame:SetScript("OnUpdate", function()
 						time2 = time2 + arg1
 						if(time2 > 0)then
+							
+							AlignHealthMana() 		-- Delay this to later stages, either the proper way or through an update nil?
 							
 							AlignMicroButtons()
 							AlignShapeshiftButtons()	
@@ -4675,6 +4529,18 @@ function Wc3UI_OnLoad()
 							MainMenuBarPerformanceBar:Hide()
 							ApplyCustomThemeOptions() -- We must use this last to apply customized positioning, size, transparency etc.
 							CustomizationInfo()
+
+							SetKeybindings()
+
+							ChatFrame1:SetClampRectInsets(0, 0, 0, 0);
+							ChatFrame1:EnableMouse(true)
+							ChatFrame1Tab:SetScript("OnDragStop", function(s)
+								wc3UI_Options.chatPos = {ChatFrame1:GetPoint()}
+							end)
+							if(wc3UI_Options.chatPos)then
+								ChatFrame1:ClearAllPoints()
+								ChatFrame1:SetPoint(unpack(wc3UI_Options.chatPos))
+							end
 
 							dummyFrame:SetScript("OnUpdate", nil)
 						end
@@ -5277,12 +5143,14 @@ function CheckVPlus()
 end
 
 
-
-
---ChatFrameMenuButton
---[[
-local testFrame = CreateFrame("Button", "testFrame", ChatFrameMenuButton, "UIPanelButtonTemplate")
-testFrame:SetWidth(40)
-testFrame:SetHeight(40)
-testFrame:SetPoint("CENTER", 0, 40)
-]]
+-- Overwrite Blizzard functions
+function PlayerFrame_Update ()
+	if ( UnitExists("player") ) then
+		PlayerLevelText:SetText("");
+		PlayerFrame_UpdatePartyLeader();
+		PlayerFrame_UpdatePvPStatus();
+		PlayerFrame_UpdateStatus();
+		PlayerFrame_UpdatePlaytime();
+		PlayerFrame_UpdateLayout();
+	end
+end

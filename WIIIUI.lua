@@ -4011,7 +4011,7 @@ function GetBlockValue()
 	startStrengthRaces = {
 		['Human'] = 20,
 		['Dwarf'] = 22,
-		['NightElf'] = 17,
+		['Night Elf'] = 17,
 		['Gnome'] = 15,
 		['High Elf'] = 20,
 		['Orc'] = 23,

@@ -4329,6 +4329,13 @@ function GetSpellpowerValue()
 		spellPower = spellPower + tonumber(spellPowerFromAura)
 		damagePower = damagePower + tonumber(spellPowerFromAura)
 	end
+
+	-- buffs, lazy fix for inner fire on turtle wow (no attack power on it though...)
+	local _, _, spellPowerFromAura = GetPlayerAura("Increased damage done by magical spells and effects by (%d+).")
+	if spellPowerFromAura then
+		spellPower = spellPower + tonumber(spellPowerFromAura)
+		damagePower = damagePower + tonumber(spellPowerFromAura)
+	end
 	
 	local secondaryPower = 0
 	local secondaryPowerName = ""

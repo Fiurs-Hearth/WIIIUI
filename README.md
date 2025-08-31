@@ -1,14 +1,14 @@
-## NEW - Align Center Option, Chat area width option.
-
+## $\color{#f00}{\textsf{NEW - Align Center Option, Chat area width option.}}$
 - Option to center entire UI
 - **Disabled** (default) → The UI uses the classic Warcraft III–style anchoring based on the screen edges.  
 - Three modes, With chat area, no chat area with inventory, no chat area
 - Option to change the width of the chat area.  
 
 ### How to use
-1. Open the WIIIUI options panel (`/wiiiui config` or via the AddOns menu).  
-2. Check **Align Center** to shift the layout to screen center.  
-3. Uncheck to restore classic edge-anchored layout.
+1. Open the WIIIUI config menu from the cogwheel at bottom right corner.  
+2. Check any of the **Center UI** to shift the layout to screen center.  
+3. Uncheck and reload to restore classic edge-anchored layout.
+   
 
 ![WIIIUI_cover_text_2](https://user-images.githubusercontent.com/97316608/149594045-c5f69b42-0634-4792-a9a6-820b3527971b.png)
 
@@ -246,5 +246,6 @@ https://www.mediafire.com/file/x8bv3xbspxc6u2l/TaurenUI.rar/file
 * When adding something to an empty actionslot in the actiongrid the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.
 * Undead male's animated portrait looks bugged, a fault caused by Blizzard and not the addon, this is the reason why I added the menu option to disable portrait animation.
 * If other issues arrive, try to note down what you did to create this issue and please contact me at Fiur#8648, in the meantime please reload UI. 
+
 
 

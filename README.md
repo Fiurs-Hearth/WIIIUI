@@ -130,24 +130,6 @@ Since it takes current settings and uses that as a base, some frames are set as 
 - Changing position of either Pos X or Pos Y does not work? If `Point` and `Relative to` are both or either is set to CENTER, try changing it to BOTTOMLEFT on `Point` and BOTTOMRIGHT on `Relative to`, requires you to reload UI. Other settings might work as well, if the frame disappears after this change it might be outside of the screen and you may have to put in negative value on Pos X or Pos Y.
   
 #### Here are some example edits.
-   
-![image](https://user-images.githubusercontent.com/97316608/154354056-2f22bd87-45c0-4e0a-bbc3-24386153ee69.png)  
-Centered with space on sides (Useful for ultra wide screens)  
-For above solution you want to:
-1. (Optional) Edit the UI scale in the General tab.
-2. Go to page 9,  `WIIIUI_leftpart`, Pos X, if you are running wide screen and not ultra wide then remember how much you increase this with so you can apply the same value to the parts on the right side of the UI.
-3. Go to page 22, `WIIIUI_rightpartBackground`, change Point to BOTTOMLEFT and change the Pos X value, reload UI after edit if nothing happens otherwise it wont display properly while editing. Now change it again and try changing width as well if needed, you might have to come back to this one.
-4. Go to page 23, `Wc3_UI_bottom_right_top`, change Pos X value
-5. Go to page 24, `Wc3_UI_bottom_right_middle`, change Pos X value
-6. Go to page 24, `Wc3_UI_bottom_right_bottom`, change Pos X value
-7. Go to page 24-25, `Wc3_UI_right_right_extendedFillerBottom_1` (and ...extendedFillerBottom_2 and ...extendedFillerBottom_3) , change Pos X value if needed
-
-![image](https://user-images.githubusercontent.com/97316608/154283280-134b61f1-69dd-4947-9343-60b7f7959dbd.png)  
-No chatframe area  
-For above solution you want to:
-1. Go to page 22, check Hide for `WIIIUI_rightpart`.
-2. Go to page 8 and change `Wc3_UI_extensionsBackground`'s width.
-3. Go to page 9 and change `WIIIUI_leftpart`'s Pos X.
 
 ![image](https://user-images.githubusercontent.com/97316608/154311175-3a032b69-6757-40a8-aa4c-97cf303bfb4b.png)  
 No inventory slots    
@@ -264,4 +246,5 @@ https://www.mediafire.com/file/x8bv3xbspxc6u2l/TaurenUI.rar/file
 * When adding something to an empty actionslot in the actiongrid the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.
 * Undead male's animated portrait looks bugged, a fault caused by Blizzard and not the addon, this is the reason why I added the menu option to disable portrait animation.
 * If other issues arrive, try to note down what you did to create this issue and please contact me at Fiur#8648, in the meantime please reload UI. 
+
 

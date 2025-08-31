@@ -4666,13 +4666,21 @@ function AlignUltraWide()
 	if(Wc3_UI_bottom_right_middle:IsVisible())then
 
 		Wc3_UI_bottom_right_top:ClearAllPoints()
-		Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", wc3UI_Options.uiScale* -0.725833, wc3UI_Options.uiScale*0.5625)
+		if(wc3UI_Options.theme == "nightelf")then
+			Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", -wc3UI_Options.uiScale*0.9, wc3UI_Options.uiScale*0.5625)
+		else
+			Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", wc3UI_Options.uiScale* -0.725833, wc3UI_Options.uiScale*0.5625)
+		end
 		
 		Wc3_UI_bottom_right_bottom:ClearAllPoints()
 		Wc3_UI_bottom_right_bottom:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", wc3UI_Options.uiScale* -0.725833, 0)
 	
 		Wc3_UI_bottom_right_middle:ClearAllPoints()
-		Wc3_UI_bottom_right_middle:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", wc3UI_Options.uiScale* -0.0625, 0)
+		if(wc3UI_Options.theme == "nightelf")then
+			Wc3_UI_bottom_right_middle:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", -37, 0)
+		else
+			Wc3_UI_bottom_right_middle:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", wc3UI_Options.uiScale* -0.0625, 0)
+		end
 
 		right_point = WIIIUI_rightpartBackground:GetRight()
 	

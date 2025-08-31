@@ -2,7 +2,8 @@
 - Option to center entire UI
 - **Disabled** (default) → The UI uses the classic Warcraft III–style anchoring based on the screen edges.  
 - Three modes, With chat area, no chat area with inventory, no chat area
-- Option to change the width of the chat area.  
+- Option to change the width of the chat area.
+- Fixed issues where the UI would look wrong when UI Scale was enabled from the 'Video Options → Use UI Scale'
 
 ### How to use
 1. Open the WIIIUI config menu from the cogwheel at bottom right corner.  
@@ -246,6 +247,7 @@ https://www.mediafire.com/file/x8bv3xbspxc6u2l/TaurenUI.rar/file
 * When adding something to an empty actionslot in the actiongrid the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.
 * Undead male's animated portrait looks bugged, a fault caused by Blizzard and not the addon, this is the reason why I added the menu option to disable portrait animation.
 * If other issues arrive, try to note down what you did to create this issue and please contact me at Fiur#8648, in the meantime please reload UI. 
+
 
 
 

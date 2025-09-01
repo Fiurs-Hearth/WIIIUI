@@ -29,7 +29,7 @@ Don't forget to check out [Known issues](https://github.com/Fiurs-Hearth/Warcraf
 Contact me on Discord: Fiur#8658
 
 ## Installation
-* [Download the addon](https://github.com/Fiurs-Hearth/WIIIUI/archive/refs/heads/master.zip)
+* [Download the addon](https://github.com/Fiurs-Hearth/WIIIUI/archive/refs/heads/center-support.zip)
 * Unpack the file
 * Open the unpacked file and rename the folder named `WIIIUI-master` to `WIIIUI`
 * Put the renamed folder into the AddOns folder: `World of Warcraft\Interface\AddOns`
@@ -247,6 +247,7 @@ https://www.mediafire.com/file/x8bv3xbspxc6u2l/TaurenUI.rar/file
 * When adding something to an empty actionslot in the actiongrid the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.
 * Undead male's animated portrait looks bugged, a fault caused by Blizzard and not the addon, this is the reason why I added the menu option to disable portrait animation.
 * If other issues arrive, try to note down what you did to create this issue and please contact me at Fiur#8648, in the meantime please reload UI. 
+
 
 
 

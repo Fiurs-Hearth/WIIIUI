@@ -3896,9 +3896,9 @@ function LowHPWarning()
 				blackToRed = true
 				if(not evenStarted)then
 			
-					if(not wc3UI_Options.EnableCustomize)then
-						PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\white_background")
-					end
+					--if(not wc3UI_Options.EnableCustomize)then
+					PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\white_background")
+					--end
 
 					evenStarted = true 
 					number = 0
@@ -3924,11 +3924,12 @@ function LowHPWarning()
 			else
 				evenStarted = false
 				lowHPEvent:SetScript("OnUpdate", nil)
-				if(not wc3UI_Options.EnableCustomize)then
-					PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
-				else
-					PortraitBackground:SetVertexColor(1,1,1,1)
-				end
+				PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
+				--if(not wc3UI_Options.EnableCustomize)then
+					--PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
+				--else
+				--	PortraitBackground:SetVertexColor(1,1,1,1)
+				--end
 			end
 		end
 

@@ -4653,8 +4653,6 @@ function AlignUltraWide()
 			WIIIUI_leftpart.night_elf_tree:SetTexture("Interface\\Addons\\WIIIUI\\art\\"..wc3UI_Options.theme.."\\inventory\\inventory")
 			WIIIUI_leftpart.night_elf_tree:SetPoint("BOTTOMLEFT", Wc3_UI_right_left, "BOTTOMLEFT", wc3UI_Options.uiScale*0.1615384, -wc3UI_Options.uiScale*0.02692307)
 			WIIIUI_leftpart.night_elf_tree:SetDrawLayer("BACKGROUND")
-			-- TODO: Cut pixels from the bottom
-			-- TODO use wc3uiscale*
 		end
 
 	end
@@ -4667,9 +4665,13 @@ function AlignUltraWide()
 
 		Wc3_UI_bottom_right_top:ClearAllPoints()
 		if(wc3UI_Options.theme == "nightelf")then
-			Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", -wc3UI_Options.uiScale*0.9, wc3UI_Options.uiScale*0.5625)
+			Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "TOPRIGHT", -wc3UI_Options.uiScale*0.9, -wc3UI_Options.uiScale*0.03846153)
 		else
-			Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", wc3UI_Options.uiScale* -0.725833, wc3UI_Options.uiScale*0.5625)
+			if(wc3UI_Options.theme == "undead")then
+				Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "TOPRIGHT", -wc3UI_Options.uiScale*0.734615, -wc3UI_Options.uiScale*0.03846153)
+			else
+				Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "TOPRIGHT", wc3UI_Options.uiScale* -0.725833, -wc3UI_Options.uiScale*0.03846153)
+			end
 		end
 		
 		Wc3_UI_bottom_right_bottom:ClearAllPoints()

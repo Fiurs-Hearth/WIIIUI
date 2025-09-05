@@ -9,7 +9,19 @@
 1. Open the WIIIUI config menu from the cogwheel at bottom right corner.  
 2. Check any of the **Center UI** to shift the layout to screen center.  
 3. Uncheck and reload to restore classic edge-anchored layout.
-   
+4. Reload UI when changing 'Center UI'-modes
+
+Center UI  
+<img width="1920" height="250" alt="image" src="https://github.com/user-attachments/assets/35bf1ca5-cb06-44be-884c-b53277fa420a" />  
+
+Center UI, no chat area
+<img width="1920" height="233" alt="image" src="https://github.com/user-attachments/assets/105f6a67-de2a-4979-8da6-fea4dbf3bbfe" />
+
+Center UI, no chat area and no inventory  
+<img width="1920" height="227" alt="image" src="https://github.com/user-attachments/assets/07fa06e6-b87f-4def-a9e1-76e50236dc0f" />
+
+***
+
 
 ![WIIIUI_cover_text_2](https://user-images.githubusercontent.com/97316608/149594045-c5f69b42-0634-4792-a9a6-820b3527971b.png)
 
@@ -247,6 +259,7 @@ https://www.mediafire.com/file/x8bv3xbspxc6u2l/TaurenUI.rar/file
 * When adding something to an empty actionslot in the actiongrid the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.
 * Undead male's animated portrait looks bugged, a fault caused by Blizzard and not the addon, this is the reason why I added the menu option to disable portrait animation.
 * If other issues arrive, try to note down what you did to create this issue and please contact me at Fiur#8648, in the meantime please reload UI. 
+
 
 
 

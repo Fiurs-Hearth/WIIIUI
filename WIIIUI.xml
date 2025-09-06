@@ -691,6 +691,75 @@
                 </Scripts>
                 <FontString inherits="ChatFontNormal"></FontString>
             </EditBox>
+            <!-- Editbox Right black part -->
+            <EditBox name="WIIIUI_Config_RightPartWidth" numeric="true" letters="4">
+                <Size>
+                    <AbsDimension x="65" y="62"></AbsDimension>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="40" y="-175"></AbsDimension>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="-10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0" right="0.2" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                        <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+                            <Size>
+                                <AbsDimension x="65" y="32"></AbsDimension>
+                            </Size>
+                            <Anchors>
+                                <Anchor point="RIGHT">
+                                    <Offset>
+                                        <AbsDimension x="10" y="0"></AbsDimension>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <TexCoords left="0.7" right="1.0" top="0" bottom="1.0"></TexCoords>
+                        </Texture>
+                    </Layer>
+                </Layers>
+
+                <Scripts>
+                    <OnEscapePressed>
+                        this:ClearFocus()
+                        WIIIUI_menu:Hide()
+                    </OnEscapePressed>
+                    <OnEnterPressed>
+                        ChangeRightBlackChatPart()
+                    </OnEnterPressed>
+                    <OnMouseWheel>                       
+                        local number = this:GetText()
+                        if(arg1 == 1)then
+                            number = number + 1
+                        else
+                            if(number == "0")then
+                                number = 0    
+                            else
+                                number = number - 1
+                            end
+                        end
+                        this:SetText(number)
+                        ChangeRightBlackChatPart()
+                    </OnMouseWheel>
+                </Scripts>
+                <FontString inherits="ChatFontNormal"></FontString>
+            </EditBox>
             <!-- Editbox Castbar alignment -->
             <EditBox name="$parentEditboxCastbarAlignment" numeric="true" letters="4">
                 <Size>
@@ -1499,6 +1568,63 @@
                     </OnMouseUp>
                 </Scripts>
             </CheckButton>
+            <!-- Ultrawide checkbutton -->
+            <CheckButton name="WIIIUI_Config_UltraWide" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                     <Offset>
+                        <AbsDimension x="20" y="-140"></AbsDimension>
+                    </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_Config_UltraWideText:SetText("Center UI")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeUltrawide()
+                        AlignUI()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Center with no chat area checkbutton -->
+            <CheckButton name="WIIIUI_Config_CenterSlim" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                     <Offset>
+                        <AbsDimension x="150" y="-140"></AbsDimension>
+                    </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_Config_CenterSlimText:SetText("Center UI, no chat area")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeCenterSlim()
+                        AlignUI()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
+            <!-- Center with no chat area and no inventory checkbutton -->
+            <CheckButton name="WIIIUI_Config_CenterSlimNoInv" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                     <Offset>
+                        <AbsDimension x="150" y="-170"></AbsDimension>
+                    </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        WIIIUI_Config_CenterSlimNoInvText:SetText("Center UI, no chat area and no extra inventory")
+                    </OnLoad>
+                    <OnMouseUp>
+                        ChangeCenterSlimNoInv()
+                        AlignUI()
+                    </OnMouseUp>
+                </Scripts>
+            </CheckButton>
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
@@ -1595,6 +1721,16 @@
                 </FontString>
             </Layer>
             <Layer level="ARTWORK">
+                <FontString name="$parentRightBlackChatPart" inherits="GameFontNormal" text="Black bg chat width">
+                    <Size>
+                        <AbsDimension x="200" y="40"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK">
                 <FontString name="$parentHPThresholdText" inherits="GameFontNormal" text="HP Warning Threshold %">
                     <Size>
                         <AbsDimension x="200" y="40"/>
@@ -1664,6 +1800,7 @@
                 WIIIUI_menuTopRightIconText:SetPoint("BOTTOMLEFT", WIIIUI_menu, "BOTTOMLEFT", 377, 272)
                 WIIIUI_menuBottomRightIconText:SetPoint("BOTTOMLEFT", WIIIUI_menu, "BOTTOMLEFT", 359, 180)
                 WIIIUI_menuAlignCastbarText:SetPoint("BOTTOMLEFT", WIIIUI_menuEditboxCastbarAlignment, "BOTTOMLEFT", -65, 35)
+                WIIIUI_menuRightBlackChatPart:SetPoint("BOTTOMLEFT", WIIIUI_Config_RightPartWidth, "BOTTOMLEFT", -65, 35)
                 WIIIUI_menuHPThresholdText:SetPoint("BOTTOMLEFT", WIIIUI_menuEditboxHPThreshold, "BOTTOMLEFT", -60, 35)
                 WIIIUI_menuBuffText:SetPoint("BOTTOMLEFT", WIIIUI_menuCheckButtonBuff, "BOTTOMLEFT", -80, 35)
                 WIIIUI_menuPortraitPos:SetPoint("TOPLEFT", WIIIUI_menuEditboxUIScale, "CENTER", 315, 55)

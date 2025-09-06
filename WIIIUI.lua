@@ -1,5 +1,4 @@
 local _G, _ = _G or getfenv()
-DiabloMod_Combat = false;
 
 BINDING_HEADER_WC3HEADER = "Warcraft III - UI"
 MAX_LEVEL = 60
@@ -1366,6 +1365,12 @@ function ApplyCustomThemeOptions()
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_4Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_4") 
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_5Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_5") 
 					or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6Icon") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6")
+					or string.find(_G[k]:GetName(), "Wc3_UI_xpProgBarRested") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6")
+					or string.find(_G[k]:GetName(), "Wc3_UI_xpProgBar") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6")
+					or string.find(_G[k]:GetName(), "WIIIUI_armorValues") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6")
+					or string.find(_G[k]:GetName(), "WIIIUI_weaponIcon_1") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6")
+					or string.find(_G[k]:GetName(), "WIIIUI_weaponIcon_2") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6")
+					or string.find(_G[k]:GetName(), "WIIIUI_weaponIcon_3") or string.find(_G[k]:GetName(), "ActionButton_CustomInventory_6")
 				) then
 
 				else
@@ -2203,6 +2208,7 @@ function AlignXPBar()
 	xpCharName:ClearAllPoints()
 	xpCharName:SetPoint("CENTER", xpBarMiddle, "CENTER", 0, wc3UI_Options.uiScale*0.080)
 	xpCharName:SetText(GetUnitName("player"))
+	xpCharName:SetHeight(100)
 
 	xpCurrLevel:SetFont("Interface\\AddOns\\WIIIUI\\art\\other\\fonts\\blq55.TTF", 12, "")
 	xpCurrLevel:ClearAllPoints()
@@ -2356,7 +2362,7 @@ function AlignWeaponFrame(frameNumber)
 	else
 		extraSpace = 0
 	end
-	weaponNumbersText:SetPoint("BOTTOMLEFT", weaponIconFrame, "TOPLEFT", wc3UI_Options.uiScale * 0.1294, (wc3UI_Options.uiScale * -0.1667) - extraSpace)
+	weaponNumbersText:SetPoint("BOTTOMLEFT", weaponIconFrame, "TOPLEFT", wc3UI_Options.uiScale * 0.1294, (wc3UI_Options.uiScale * -0.1667) - extraSpace + (wc3UI_Options.uiScale <= 210 and -3 or 0))
 
 	weaponMainFrame:SetScript("OnEvent", function()
 
@@ -2439,7 +2445,9 @@ function AlignArmorFrame()
 	armorValue:SetHeight(15)
 	armorValue:SetJustifyH("LEFT")
 	armorValue:SetJustifyV("TOP")
-	armorValue:SetPoint("BOTTOMLEFT", armorIconFrame, "TOPLEFT", wc3UI_Options.uiScale*0.14, wc3UI_Options.uiScale * -0.1111111111111)
+	--armorValue:SetPoint("BOTTOMLEFT", armorIconFrame, "TOPLEFT", wc3UI_Options.uiScale*0.14, wc3UI_Options.uiScale * -0.1111111111111) 
+	armorValue:SetPoint("BOTTOMLEFT", armorIconFrame, "TOPLEFT", wc3UI_Options.uiScale*0.14, wc3UI_Options.uiScale * -0.1111111111111 + (wc3UI_Options.uiScale <= 210 and -3 or 0)) 
+	--armorValue:SetFont("Interface\\AddOns\\WIIIUI\\art\\other\\fonts\\blq55.TTF", 10, "")
 	
 	armorMainFrame:SetScript("OnEvent", function()
 
@@ -2676,6 +2684,12 @@ function AlignCastBar()
 	cBarPos = wc3UI_Options.castbarAlignmentOption / 270
 	cBarPos = wc3UI_Options.uiScale * cBarPos
 	CastingBarFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, cBarPos)
+	CastingBarFrame:SetScript("OnShow", function(self)
+		
+		-- force position, possible fix against blizzard's own setpoint
+		this:ClearAllPoints()
+		this:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, cBarPos)
+	end)
 end
 
 function AlignActionBarUIGrid()
@@ -2786,7 +2800,7 @@ function AlignMiddleExtension()
 	end
 
 	extensionBackground:ClearAllPoints()
-	extensionBackground:SetWidth(wc3UI_Options.uiScale*2.6)
+	extensionBackground:SetWidth(wc3UI_Options.uiScale*2.1)
 	extensionBackground:SetHeight(wc3UI_Options.uiScale*0.5)
 	extensionBackground:SetPoint("BOTTOMLEFT", "Wc3_UI_portrait", "BOTTOMRIGHT", wc3UI_Options.uiScale*-0.18, 0)
 
@@ -2807,10 +2821,16 @@ function InventorySlots()
 	for inventoryNumber = 1, 6, 1 do
 
 		inventoryActionSlot = _G['ActionButton_CustomInventory_'..inventoryNumber]
-		inventoryActionSlot:SetWidth(wc3UI_Options.uiScale*0.1185185)
+		inventoryActionSlot:SetWidth(wc3UI_Options.uiScale*0.1185185) -- 30,81481
 		inventoryActionSlot:SetHeight(wc3UI_Options.uiScale*0.1185185)
 		inventoryActionSlot:ClearAllPoints()
-		inventoryActionSlot:SetPoint( "BOTTOMLEFT", WIIIUI_inventorySlots, "CENTER", column* (wc3UI_Options.uiScale*0.156)- (1-column),  row*(wc3UI_Options.uiScale*0.148) )
+		inventoryActionSlot:SetPoint( 
+			"BOTTOMLEFT",
+			WIIIUI_inventorySlots, 
+			"CENTER", 
+			column* (wc3UI_Options.uiScale*0.156)- (1-column),  
+			row*(wc3UI_Options.uiScale*0.148) 
+		)
 		
 		if( math.mod(inventoryNumber, 2) == 1 )then
 			
@@ -3131,10 +3151,13 @@ function AlignMicroButtons()
 		microButton:SetPoint("BOTTOMLEFT", actionSlotGrid_4, "TOPRIGHT", -27*(i - skip) + (moveX), wc3UI_Options.uiScale*-0.3916 + moveY)
 		if(wc3UI_Options.hideMicroButtons)then
 			microButton:Hide()
+			microButton.Show = function() end
 		else
+			if(microButton:IsVisible() == nil and i == 1)then
+				ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO DISPLAY MICROBUTTONS AGAIN")
+			end
 			microButton:Show()
 		end
-		
 	end
 
 end
@@ -3260,30 +3283,49 @@ function AlignShapeshiftButtons()
 
 	shapeshiftPosOption = wc3UI_Options.shapeshiftAuraPos
 	if(shapeshiftPosOption == 1) then
-		ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", wc3UI_Options.uiScale*-0.02592, wc3UI_Options.uiScale*0.65555)
+		
+		if(Minimap:IsVisible())then
+			ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", Minimap, "TOPLEFT", wc3UI_Options.uiScale*-0.057692, wc3UI_Options.uiScale*0.080769)
+		else
+			ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", wc3UI_Options.uiScale*-0.02592, wc3UI_Options.uiScale*0.65555)
+		end
 
 	elseif(shapeshiftPosOption == 2) then
 
 		themeAlignerX = 0
 		themeAlignerY = 0
 		if(wc3UI_Options.theme == "human")then
-			themeAlignerX = 11
+			themeAlignerX = wc3UI_Options.uiScale*0.046153846
+			themeAlignerY = -wc3UI_Options.uiScale*0.003846153
 		elseif(wc3UI_Options.theme == "undead")then
-			themeAlignerX = -5
-			themeAlignerY = -3
+			themeAlignerX = -wc3UI_Options.uiScale*0.0192307 
+			themeAlignerY = -wc3UI_Options.uiScale*0.0115384
 		elseif(wc3UI_Options.theme == "nightelf")then
-			themeAlignerX = -5
+			themeAlignerX = -wc3UI_Options.uiScale*0.0192307
 		end
-		ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", wc3UI_Options.uiScale*0.8037 - themeAlignerX, wc3UI_Options.uiScale*0.5377 - themeAlignerY)
+		if(CustomPlayerModelPortrait:IsVisible())then
+			ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", CustomPlayerModelPortrait, "TOPLEFT", -wc3UI_Options.uiScale*0.05 - themeAlignerX, wc3UI_Options.uiScale*0.16730769 - themeAlignerY)
+		else
+			ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", wc3UI_Options.uiScale*0.8037 - themeAlignerX, wc3UI_Options.uiScale*0.5377 - themeAlignerY)
+		end
 
 	elseif(shapeshiftPosOption == 3) then
-		ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", wc3UI_Options.uiScale*1.474 - (alignX/2), wc3UI_Options.uiScale*0.5257)
+		
+		local width = _G['ShapeshiftButton'..count]:GetRight() - _G['ShapeshiftButton1']:GetLeft()
+		ShapeshiftBarFrame:ClearAllPoints()
+		ShapeshiftBarFrame:SetPoint("BOTTOM", WIIIUI_xpHoverFrame, "TOP", -width/2, wc3UI_Options.uiScale*0.1461538)
 
 	elseif(shapeshiftPosOption == 4) then
+		
+		local shapeshift_size = _G['ShapeshiftButton'..count]:GetRight() - _G['ShapeshiftButton1']:GetLeft()
+
+		ShapeshiftBarFrame:SetWidth(shapeshift_size)
+		ShapeshiftBarFrame:ClearAllPoints()
 		if(count == 1)then
-			ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", -(count *button:GetWidth()), wc3UI_Options.uiScale*0.5407)
+			ShapeshiftBarFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", -10, wc3UI_Options.uiScale*0.5407)
 		else
-			ShapeshiftBarFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", -((count *button:GetWidth())/1.5) + 2, wc3UI_Options.uiScale*0.5407)
+			-- its -10 because the parent frame (ShapeshiftBarFrame) is 10 pixels to the left of the first shapeshift button
+			ShapeshiftBarFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", -10, wc3UI_Options.uiScale*0.5407)
 		end
 
 	elseif(shapeshiftPosOption == 5)then
@@ -3450,7 +3492,7 @@ function AlignRightPart()
 	Wc3_UI_right_lid:SetPoint("BOTTOMLEFT", rightPart_middle, "BOTTOMLEFT", wc3UI_Options.uiScale*0.2833333333 - shiftWidth, wc3UI_Options.uiScale * -0.3166 + wc3UI_Options.moveChatAreaUp)
 	Wc3_UI_right_lid:SetTexCoord(0,1,0,1)
 
-	WIIIUI_rightpartBackground:SetWidth(wc3UI_Options.uiScale * 2.2)
+	WIIIUI_rightpartBackground:SetWidth(wc3UI_Options.rightPartWidth)
 	WIIIUI_rightpartBackground:SetHeight(wc3UI_Options.uiScale * 0.5578 + wc3UI_Options.moveChatAreaUp)
 	WIIIUI_rightpartBackground:SetPoint("BOTTOMLEFT", rightPart_left,"BOTTOMRIGHT", 3, 0)
 
@@ -3802,6 +3844,14 @@ function AlignUI()
 			AlignActionBars()
 			CombatTextPortrait()
 
+			if(wc3UI_Options.ultraWide or wc3UI_Options.centerSlim or wc3UI_Options.centerSlimNoInv)then
+				if(wc3UI_Options.theme == "nightelf" and WIIIUI_leftpart.night_elf_tree)then
+					WIIIUI_leftpart.night_elf_tree:SetWidth(wc3UI_Options.uiScale*0.9846153)
+					WIIIUI_leftpart.night_elf_tree:SetHeight(wc3UI_Options.uiScale*1.03461538)
+				end
+				AlignUltraWide()
+			end
+		
 			dummyFrame:SetScript("OnUpdate", nil)
 		end
 	end)	
@@ -3852,9 +3902,9 @@ function LowHPWarning()
 				blackToRed = true
 				if(not evenStarted)then
 			
-					if(not wc3UI_Options.EnableCustomize)then
-						PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\white_background")
-					end
+					--if(not wc3UI_Options.EnableCustomize)then
+					PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\white_background")
+					--end
 
 					evenStarted = true 
 					number = 0
@@ -3880,11 +3930,12 @@ function LowHPWarning()
 			else
 				evenStarted = false
 				lowHPEvent:SetScript("OnUpdate", nil)
-				if(not wc3UI_Options.EnableCustomize)then
-					PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
-				else
-					PortraitBackground:SetVertexColor(1,1,1,1)
-				end
+				PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
+				--if(not wc3UI_Options.EnableCustomize)then
+					--PortraitBackground:SetTexture("Interface\\AddOns\\WIIIUI\\art\\other\\black_background")
+				--else
+				--	PortraitBackground:SetVertexColor(1,1,1,1)
+				--end
 			end
 		end
 
@@ -3897,14 +3948,23 @@ function VisibilityChatArrows()
 	ChatFrameMenuButton:SetFrameLevel(505)
 
 	if(wc3UI_Options.HideChatArrows)then
-		for i=1, 20, 1 do
-			chatFrameDown = _G['ChatFrame'..i..'DownButton']
-			chatFrameUp = _G['ChatFrame'..i..'UpButton']
-			chatFrameBottom = _G['ChatFrame'..i..'BottomButton']
-			if(chatFrameDown ~= nil)then
+		ChatFrameMenuButton:Hide()
+		ChatFrameMenuButton.Show = function() end
 
-				chatFrameBottom:ClearAllPoints()
-				chatFrameBottom:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, -1200)
+		for i=1, 20, 1 do
+
+			local chatFrameDown = _G['ChatFrame'..i..'DownButton']
+			local chatFrameUp = _G['ChatFrame'..i..'UpButton']
+			local chatFrameBottom = _G['ChatFrame'..i..'BottomButton']
+
+			if(chatFrameDown ~= nil)then
+				chatFrameDown:Hide()
+				chatFrameUp:Hide()
+				chatFrameBottom:Hide()
+				
+				chatFrameDown.Show = function() end
+				chatFrameUp.Show = function() end
+				chatFrameBottom.Show = function() end
 			else
 				break;
 			end
@@ -4330,7 +4390,7 @@ function GetSpellpowerValue()
 		damagePower = damagePower + tonumber(spellPowerFromAura)
 	end
 
-	-- buffs, lazy fix for inner fire on turtle wow (no attack power on it though...)
+	-- buffs
 	local _, _, spellPowerFromAura = GetPlayerAura("Increased damage done by magical spells and effects by (%d+).")
 	if spellPowerFromAura then
 		spellPower = spellPower + tonumber(spellPowerFromAura)
@@ -4478,6 +4538,23 @@ function InitiateSavedVariables()
 	
 	xpProgBarMax = wc3UI_Options.uiScale*0.6814
 
+	if wc3UI_Options.ultraWide == nil then
+		wc3UI_Options.ultraWide = false
+	end
+
+	if wc3UI_Options.rightPartWidth == nil then
+		wc3UI_Options.rightPartWidth = wc3UI_Options.uiScale * 2.2 
+	end
+
+	if wc3UI_Options.centerSlim == nil then
+		wc3UI_Options.centerSlim = false
+	end
+
+	if wc3UI_Options.centerSlimNoInv == nil then
+		wc3UI_Options.centerSlimNoInv = false
+	end
+
+
 end
 
 function InitiateFrameNames()
@@ -4554,6 +4631,193 @@ function InitiateMiniMap()
 	MinimapBackdrop:Hide()
 end
 
+function AlignUltraWide()
+
+	if(rightPart_middle.centerSlimDone or rightPart_middle.centerSlimNoInvDone)then
+		return
+	end
+
+	if(wc3UI_Options.centerSlim)then
+		WIIIUI_rightpartBackground:Hide()
+		Wc3_UI_right_lid:Hide()
+		Wc3_UI_bottom_right_top:Hide()
+		Wc3_UI_bottom_right_middle:Hide()
+		Wc3_UI_bottom_right_bottom:Hide()
+		Wc3_UI_right_right_extendedFillerTop_1:Hide()
+		Wc3_UI_right_right_extendedFillerTop_2:Hide()
+		Wc3_UI_right_right_extendedFillerTop_3:Hide()
+		Wc3_UI_right_right_extendedFillerBottom_1:Hide()
+		Wc3_UI_right_right_extendedFillerBottom_2:Hide()
+		Wc3_UI_right_right_extendedFillerBottom_3:Hide()
+
+	elseif(wc3UI_Options.centerSlimNoInv)then
+
+		WIIIUI_rightpart:Hide()
+		if(wc3UI_Options.theme == "nightelf")then
+			WIIIUI_leftpart.night_elf_tree = WIIIUI_leftpart:CreateTexture()
+			WIIIUI_leftpart.night_elf_tree:SetWidth(wc3UI_Options.uiScale*0.9846153)
+			WIIIUI_leftpart.night_elf_tree:SetHeight(wc3UI_Options.uiScale*1.03461538)
+			WIIIUI_leftpart.night_elf_tree:SetTexture("Interface\\Addons\\WIIIUI\\art\\"..wc3UI_Options.theme.."\\inventory\\inventory")
+			WIIIUI_leftpart.night_elf_tree:SetPoint("BOTTOMLEFT", Wc3_UI_right_left, "BOTTOMLEFT", wc3UI_Options.uiScale*0.1615384, -wc3UI_Options.uiScale*0.02692307)
+			WIIIUI_leftpart.night_elf_tree:SetDrawLayer("BACKGROUND")
+		end
+
+	end
+
+	local UIParent_right = UIParent:GetRight()
+	local right_point =""
+
+	-- We check by frame so it can work with customized UI tool
+	if(Wc3_UI_bottom_right_middle:IsVisible())then
+
+		Wc3_UI_bottom_right_top:ClearAllPoints()
+		if(wc3UI_Options.theme == "nightelf")then
+			Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "TOPRIGHT", -wc3UI_Options.uiScale*0.9, -wc3UI_Options.uiScale*0.03846153)
+		else
+			if(wc3UI_Options.theme == "undead")then
+				Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "TOPRIGHT", -wc3UI_Options.uiScale*0.734615, -wc3UI_Options.uiScale*0.03846153)
+			else
+				Wc3_UI_bottom_right_top:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "TOPRIGHT", wc3UI_Options.uiScale* -0.725833, -wc3UI_Options.uiScale*0.03846153)
+			end
+		end
+		
+		Wc3_UI_bottom_right_bottom:ClearAllPoints()
+		Wc3_UI_bottom_right_bottom:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", wc3UI_Options.uiScale* -0.725833, 0)
+	
+		Wc3_UI_bottom_right_middle:ClearAllPoints()
+		if(wc3UI_Options.theme == "nightelf")then
+			Wc3_UI_bottom_right_middle:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", -37, 0)
+		else
+			Wc3_UI_bottom_right_middle:SetPoint("BOTTOMLEFT", WIIIUI_rightpartBackground, "BOTTOMRIGHT", wc3UI_Options.uiScale* -0.0625, 0)
+		end
+
+		right_point = WIIIUI_rightpartBackground:GetRight()
+	
+	-- If Inventory part is hidden
+	elseif(WIIIUI_rightpart:IsVisible() == nil)then
+		
+		--Wc3_UI_right_left
+		local bg_right_point = Wc3_UI_extensionBackground:GetRight()
+		local ui_right = Wc3_UI_right_left:GetRight()
+
+		if(bg_right_point > ui_right)then 
+			Wc3_UI_extensionBackground:SetWidth(Wc3_UI_extensionBackground:GetWidth() - (bg_right_point - ui_right))
+		end
+
+		right_point = Wc3_UI_right_left:GetRight()
+		rightPart_middle.centerSlimNoInvDone = true
+
+		if(wc3UI_Options.theme == "nightelf")then
+			right_point = right_point + 18
+		end
+
+	-- If Chat part is hidden and not inventory
+	elseif(WIIIUI_rightpartBackground:IsVisible() == nil)then
+
+		local pixel = (1/512)
+		local remove_width = 0
+		
+		if(wc3UI_Options.theme == "human")then
+			remove_width = (512-209)
+
+		elseif(wc3UI_Options.theme == "orc")then
+			remove_width = 512-210
+
+		elseif(wc3UI_Options.theme == "undead")then
+			remove_width = 512-221
+
+		elseif(wc3UI_Options.theme == "nightelf")then
+			remove_width = 512-254
+
+		else
+			remove_width = 302
+		end
+		
+		local base_1 = wc3UI_Options.uiScale*0.0038461
+		local base_2 = wc3UI_Options.uiScale*0.00769230
+		local base_5 = wc3UI_Options.uiScale*0.0192307
+		local base_6 = wc3UI_Options.uiScale*0.023076923
+		local base_7 = wc3UI_Options.uiScale*0.0269230
+		local nightelf_5 = wc3UI_Options.uiScale*0.0192307
+		local undead_7 = wc3UI_Options.uiScale*0.026923
+
+		rightPart_middle:SetTexCoord(0, (1 - pixel*remove_width), 0, 1)
+		rightPart_middle:SetWidth((512 - remove_width)/2) -- + 
+
+		if(wc3UI_Options.theme == "nightelf" or wc3UI_Options.theme == "undead")then
+			rightPart_middle:SetTexture("Interface\\Addons\\WIIIUI\\art\\"..wc3UI_Options.theme.."\\inventory\\slim")
+		end
+
+		local column = 0
+		local row = 0
+		for inventoryNumber = 1, 6, 1 do
+
+			local inventoryActionSlot = _G['ActionButton_CustomInventory_'..inventoryNumber]
+			local inv_width = rightPart_middle:GetWidth()
+			local offset_slot = inv_width*0.3714285714
+			local slot_size = inv_width*0.28571428 + (
+				(wc3UI_Options.theme == "undead" and wc3UI_Options.uiScale >= 245 and wc3UI_Options.uiScale <= 250 and -wc3UI_Options.uiScale*(0.3/110))
+				or (wc3UI_Options.theme == "undead" and wc3UI_Options.uiScale < 245 and -wc3UI_Options.uiScale*(0.5/110))
+				or (wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale < 243 and -wc3UI_Options.uiScale*(4/127))
+				or (wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale < 250 and -wc3UI_Options.uiScale*(3.5/127))
+				or (wc3UI_Options.theme == "nightelf" and -wc3UI_Options.uiScale*(3/127))
+				or 0
+			)
+			local extra_offset_y = (
+				( wc3UI_Options.theme == "human" and (wc3UI_Options.uiScale*(1/260)) ) 
+				or (wc3UI_Options.theme == "undead" and wc3UI_Options.uiScale*(1/250) )
+				or 0
+			)
+			local extra_offset_x = (
+				( wc3UI_Options.theme == "undead" and -wc3UI_Options.uiScale*(3/260) )
+				or ( wc3UI_Options.theme == "nightelf" and -wc3UI_Options.uiScale*(8/260) )
+				or 0 
+			)
+			local extra_offset_nightelf_x = (
+				( wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale < 250 and wc3UI_Options.uiScale*(2/260) )
+				or wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale*(1/260)
+				or 0
+			)
+
+			inventoryActionSlot:SetWidth(slot_size)
+			inventoryActionSlot:SetHeight(slot_size)
+			inventoryActionSlot:ClearAllPoints()
+			inventoryActionSlot:SetPoint(
+				"BOTTOMLEFT", 
+				WIIIUI_inventorySlots, 
+				"CENTER", 
+				--column* (wc3UI_Options.uiScale*0.156)- (1-column) + (wc3UI_Options.theme == "undead" and 1/inventoryActionSlot:GetWidth() or 0),  
+				(column* (offset_slot)) - (1-column) + (extra_offset_x * column) + extra_offset_nightelf_x - (column == 1 and wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale < 250 and wc3UI_Options.uiScale*(1/260) or 0),
+				row*(wc3UI_Options.uiScale*0.148076) - extra_offset_y - (row == 2 and wc3UI_Options.theme == "undead" and -wc3UI_Options.uiScale*(1/250) or 0 )
+			)
+
+			if( math.mod(inventoryNumber, 2) == 1 )then
+			
+				column = 0
+				if(inventoryNumber == 1)then
+					column = 1
+				end
+			else
+				column = 1
+				row = row + 1
+			end
+		end
+
+		local bg_right_point = Wc3_UI_extensionBackground:GetRight()
+		local ui_left = rightPart_middle:GetLeft()
+
+		Wc3_UI_extensionBackground:SetWidth(Wc3_UI_extensionBackground:GetWidth() - (bg_right_point - ui_left))
+		
+		right_point = rightPart_middle:GetRight()
+		rightPart_middle.centerSlimDone = true
+	end
+
+	minimapFrame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", (UIParent_right - right_point)/2, 0)
+
+end
+
+-- WIIIUI_rightpartBackground
+
 function Wc3UI_OnLoad()
 
 	local time, time2
@@ -4583,7 +4847,6 @@ function Wc3UI_OnLoad()
 
 				AlignMiddleExtension()	-- Middle UI, extension of grid area
 				AlignActionBarUIGrid()	-- Middle UI, Grid area (does not align actionbar, only the GUI)
-				
 				AlignRightPart()		-- Right UI, The right part of the UI
 				AlignInventorySlots()	-- Align main inventory frame
 				
@@ -4630,6 +4893,10 @@ function Wc3UI_OnLoad()
 			CheckMultiBarAxis()
 			CheckEnableCustomize()
 			CheckVPlus()
+			CheckUltrawide()
+			CheckRightBlackChatPart()
+			CheckCenterSlim()
+			CheckCenterSlimNoInv()
 
 			InventorySlots()		-- Position our 2x3 inventory slots and edits the frames
 			ModifyPlayerPortrait()	-- Changes size and so we get the face camera
@@ -4682,6 +4949,18 @@ function Wc3UI_OnLoad()
 							MainMenuBarPerformanceBar:Hide()
 							ApplyCustomThemeOptions() -- We must use this last to apply customized positioning, size, transparency etc.
 							CustomizationInfo()
+
+							-- fix for texts not showing because scaling change the width which makes it not show properly
+							xpCharName:SetHeight(100) -- dirty fix
+							xpCharName:SetWidth(WIIIUI_xpHoverFrame:GetWidth()) -- dirty fix
+							xpCurrLevel:SetWidth(WIIIUI_xpHoverFrame:GetWidth()) -- dirty fix
+							WIIIUI_HealthText:SetWidth(WIIIUI_xpHoverFrame:GetWidth()) -- dirty fix
+							WIIIUI_PowerText:SetWidth(WIIIUI_xpHoverFrame:GetWidth()) -- dirty fix
+
+							ChangeRightBlackChatPart()
+							if(wc3UI_Options.ultraWide or wc3UI_Options.centerSlim or wc3UI_Options.centerSlimNoInv)then
+								AlignUltraWide()
+							end
 
 							dummyFrame:SetScript("OnUpdate", nil)
 						end
@@ -4854,6 +5133,57 @@ function ChangeHideMicro()
 		wc3UI_Options.hideMicroButtons = true
 	end
 	AlignMicroButtons()
+end
+
+function ChangeUltrawide()
+	if(WIIIUI_Config_UltraWide:GetChecked())then
+		wc3UI_Options.ultraWide = false
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO APPLY CHANGE")
+	else
+		wc3UI_Options.ultraWide = true
+	end
+end
+
+function CheckUltrawide()
+	if(wc3UI_Options.ultraWide)then
+		WIIIUI_Config_UltraWide:SetChecked(true)
+	else
+		WIIIUI_Config_UltraWide:SetChecked(false)
+	end
+end
+
+function ChangeCenterSlim()
+	if(WIIIUI_Config_CenterSlim:GetChecked())then
+		wc3UI_Options.centerSlim = false
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO APPLY CHANGE")
+	else
+		wc3UI_Options.centerSlim = true
+	end
+end
+
+function CheckCenterSlim()
+	if(wc3UI_Options.centerSlim)then
+		WIIIUI_Config_CenterSlim:SetChecked(true)
+	else
+		WIIIUI_Config_CenterSlim:SetChecked(false)
+	end
+end
+
+function ChangeCenterSlimNoInv()
+	if(WIIIUI_Config_CenterSlimNoInv:GetChecked())then
+		wc3UI_Options.centerSlimNoInv = false
+		ChatFrame1:AddMessage("|cffff0000WIIIUI WARNING - PLEASE RELOAD UI TO APPLY CHANGE")
+	else
+		wc3UI_Options.centerSlimNoInv = true
+	end
+end
+
+function CheckCenterSlimNoInv()
+	if(wc3UI_Options.centerSlimNoInv)then
+		WIIIUI_Config_CenterSlimNoInv:SetChecked(true)
+	else
+		WIIIUI_Config_CenterSlimNoInv:SetChecked(false)
+	end
 end
 
 function UpdateRestedXPColor(color)
@@ -5283,13 +5613,24 @@ function CheckVPlus()
 	end
 end
 
+function ChangeRightBlackChatPart()
 
+	local number
 
+	editbox = _G['WIIIUI_Config_RightPartWidth']
+	number = tonumber(editbox:GetText())
 
---ChatFrameMenuButton
---[[
-local testFrame = CreateFrame("Button", "testFrame", ChatFrameMenuButton, "UIPanelButtonTemplate")
-testFrame:SetWidth(40)
-testFrame:SetHeight(40)
-testFrame:SetPoint("CENTER", 0, 40)
-]]
+	wc3UI_Options.rightPartWidth  = number
+	WIIIUI_rightpartBackground:SetWidth(number)
+
+	if(wc3UI_Options.ultraWide)then
+		AlignUltraWide()
+	end
+
+end
+
+function CheckRightBlackChatPart()
+
+	local editbox = _G['WIIIUI_Config_RightPartWidth']
+	editbox:SetText( math.floor(tonumber(wc3UI_Options.rightPartWidth)) )
+end

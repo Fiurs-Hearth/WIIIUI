@@ -1,3 +1,28 @@
+## $\color{#f00}{\textsf{NEW - Align Center Option, Chat area width option.}}$
+- Option to center entire UI
+- **Disabled** (default) → The UI uses the classic Warcraft III–style anchoring based on the screen edges.  
+- Three modes, With chat area, no chat area with inventory, no chat area
+- Option to change the width of the chat area.
+- Fixed issues where the UI would look wrong when UI Scale was enabled from the 'Video Options → Use UI Scale'
+
+### How to use
+1. Open the WIIIUI config menu from the cogwheel at bottom right corner.  
+2. Check any of the **Center UI** to shift the layout to screen center.  
+3. Uncheck and reload to restore classic edge-anchored layout.
+4. Reload UI when changing 'Center UI'-modes
+
+Center UI  
+<img width="1920" height="250" alt="image" src="https://github.com/user-attachments/assets/35bf1ca5-cb06-44be-884c-b53277fa420a" />  
+
+Center UI, no chat area
+<img width="1920" height="233" alt="image" src="https://github.com/user-attachments/assets/105f6a67-de2a-4979-8da6-fea4dbf3bbfe" />
+
+Center UI, no chat area and no inventory  
+<img width="1920" height="227" alt="image" src="https://github.com/user-attachments/assets/07fa06e6-b87f-4def-a9e1-76e50236dc0f" />
+
+***
+
+
 ![WIIIUI_cover_text_2](https://user-images.githubusercontent.com/97316608/149594045-c5f69b42-0634-4792-a9a6-820b3527971b.png)
 
 
@@ -16,7 +41,7 @@ Don't forget to check out [Known issues](https://github.com/Fiurs-Hearth/Warcraf
 Contact me on Discord: Fiur#8658
 
 ## Installation
-* [Download the addon](https://github.com/Fiurs-Hearth/WIIIUI/archive/refs/heads/master.zip)
+* [Download the addon](https://github.com/Fiurs-Hearth/WIIIUI/archive/refs/heads/center-support.zip)
 * Unpack the file
 * Open the unpacked file and rename the folder named `WIIIUI-master` to `WIIIUI`
 * Put the renamed folder into the AddOns folder: `World of Warcraft\Interface\AddOns`
@@ -118,24 +143,6 @@ Since it takes current settings and uses that as a base, some frames are set as 
 - Changing position of either Pos X or Pos Y does not work? If `Point` and `Relative to` are both or either is set to CENTER, try changing it to BOTTOMLEFT on `Point` and BOTTOMRIGHT on `Relative to`, requires you to reload UI. Other settings might work as well, if the frame disappears after this change it might be outside of the screen and you may have to put in negative value on Pos X or Pos Y.
   
 #### Here are some example edits.
-   
-![image](https://user-images.githubusercontent.com/97316608/154354056-2f22bd87-45c0-4e0a-bbc3-24386153ee69.png)  
-Centered with space on sides (Useful for ultra wide screens)  
-For above solution you want to:
-1. (Optional) Edit the UI scale in the General tab.
-2. Go to page 9,  `WIIIUI_leftpart`, Pos X, if you are running wide screen and not ultra wide then remember how much you increase this with so you can apply the same value to the parts on the right side of the UI.
-3. Go to page 22, `WIIIUI_rightpartBackground`, change Point to BOTTOMLEFT and change the Pos X value, reload UI after edit if nothing happens otherwise it wont display properly while editing. Now change it again and try changing width as well if needed, you might have to come back to this one.
-4. Go to page 23, `Wc3_UI_bottom_right_top`, change Pos X value
-5. Go to page 24, `Wc3_UI_bottom_right_middle`, change Pos X value
-6. Go to page 24, `Wc3_UI_bottom_right_bottom`, change Pos X value
-7. Go to page 24-25, `Wc3_UI_right_right_extendedFillerBottom_1` (and ...extendedFillerBottom_2 and ...extendedFillerBottom_3) , change Pos X value if needed
-
-![image](https://user-images.githubusercontent.com/97316608/154283280-134b61f1-69dd-4947-9343-60b7f7959dbd.png)  
-No chatframe area  
-For above solution you want to:
-1. Go to page 22, check Hide for `WIIIUI_rightpart`.
-2. Go to page 8 and change `Wc3_UI_extensionsBackground`'s width.
-3. Go to page 9 and change `WIIIUI_leftpart`'s Pos X.
 
 ![image](https://user-images.githubusercontent.com/97316608/154311175-3a032b69-6757-40a8-aa4c-97cf303bfb4b.png)  
 No inventory slots    
@@ -252,3 +259,9 @@ https://www.mediafire.com/file/x8bv3xbspxc6u2l/TaurenUI.rar/file
 * When adding something to an empty actionslot in the actiongrid the icon is enlarged, please pick it up with left mouse click and put it back or reload UI.
 * Undead male's animated portrait looks bugged, a fault caused by Blizzard and not the addon, this is the reason why I added the menu option to disable portrait animation.
 * If other issues arrive, try to note down what you did to create this issue and please contact me at Fiur#8648, in the meantime please reload UI. 
+
+
+
+
+
+

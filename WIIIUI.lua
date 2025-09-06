@@ -2821,10 +2821,16 @@ function InventorySlots()
 	for inventoryNumber = 1, 6, 1 do
 
 		inventoryActionSlot = _G['ActionButton_CustomInventory_'..inventoryNumber]
-		inventoryActionSlot:SetWidth(wc3UI_Options.uiScale*0.1185185)
+		inventoryActionSlot:SetWidth(wc3UI_Options.uiScale*0.1185185) -- 30,81481
 		inventoryActionSlot:SetHeight(wc3UI_Options.uiScale*0.1185185)
 		inventoryActionSlot:ClearAllPoints()
-		inventoryActionSlot:SetPoint( "BOTTOMLEFT", WIIIUI_inventorySlots, "CENTER", column* (wc3UI_Options.uiScale*0.156)- (1-column),  row*(wc3UI_Options.uiScale*0.148) )
+		inventoryActionSlot:SetPoint( 
+			"BOTTOMLEFT",
+			WIIIUI_inventorySlots, 
+			"CENTER", 
+			column* (wc3UI_Options.uiScale*0.156)- (1-column),  
+			row*(wc3UI_Options.uiScale*0.148) 
+		)
 		
 		if( math.mod(inventoryNumber, 2) == 1 )then
 			
@@ -4689,6 +4695,7 @@ function AlignUltraWide()
 	
 	-- If Inventory part is hidden
 	elseif(WIIIUI_rightpart:IsVisible() == nil)then
+		
 		--Wc3_UI_right_left
 		local bg_right_point = Wc3_UI_extensionBackground:GetRight()
 		local ui_right = Wc3_UI_right_left:GetRight()
@@ -4711,7 +4718,7 @@ function AlignUltraWide()
 		local remove_width = 0
 		
 		if(wc3UI_Options.theme == "human")then
-			remove_width = 512-209
+			remove_width = (512-209)
 
 		elseif(wc3UI_Options.theme == "orc")then
 			remove_width = 512-210
@@ -4735,56 +4742,65 @@ function AlignUltraWide()
 		local undead_7 = wc3UI_Options.uiScale*0.026923
 
 		rightPart_middle:SetTexCoord(0, (1 - pixel*remove_width), 0, 1)
-		rightPart_middle:SetWidth((512-remove_width)/2 + (wc3UI_Options.theme == "nightelf" and nightelf_5/2 or wc3UI_Options.theme == "undead" and undead_7/2 or 0))
+		rightPart_middle:SetWidth((512 - remove_width)/2) -- + 
 
-		-- fix to remove the bottom panel for NE
 		if(wc3UI_Options.theme == "nightelf" or wc3UI_Options.theme == "undead")then
+			rightPart_middle:SetTexture("Interface\\Addons\\WIIIUI\\art\\"..wc3UI_Options.theme.."\\inventory\\slim")
+		end
 
-			rightPart_middle:SetHeight( rightPart_middle:GetHeight() + (1/rightPart_middle:GetHeight() + (nightelf_5/2 + (wc3UI_Options.theme == "undead" and base_2/2 or 0))) )
-			local points = {rightPart_middle:GetPoint()}
-			rightPart_middle:ClearAllPoints()
-			rightPart_middle:SetPoint(
-				points[1],
-				points[2],
-				points[3],
-				points[4],
-				points[5] - (wc3UI_Options.theme == "nightelf" and base_6 or wc3UI_Options.theme == "undead" and base_7 or 0)
+		local column = 0
+		local row = 0
+		for inventoryNumber = 1, 6, 1 do
+
+			local inventoryActionSlot = _G['ActionButton_CustomInventory_'..inventoryNumber]
+			local inv_width = rightPart_middle:GetWidth()
+			local offset_slot = inv_width*0.3714285714
+			local slot_size = inv_width*0.28571428 + (
+				(wc3UI_Options.theme == "undead" and wc3UI_Options.uiScale >= 245 and wc3UI_Options.uiScale <= 250 and -wc3UI_Options.uiScale*(0.3/110))
+				or (wc3UI_Options.theme == "undead" and wc3UI_Options.uiScale < 245 and -wc3UI_Options.uiScale*(0.5/110))
+				or (wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale < 243 and -wc3UI_Options.uiScale*(4/127))
+				or (wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale < 250 and -wc3UI_Options.uiScale*(3.5/127))
+				or (wc3UI_Options.theme == "nightelf" and -wc3UI_Options.uiScale*(3/127))
+				or 0
+			)
+			local extra_offset_y = (
+				( wc3UI_Options.theme == "human" and (wc3UI_Options.uiScale*(1/260)) ) 
+				or (wc3UI_Options.theme == "undead" and wc3UI_Options.uiScale*(1/250) )
+				or 0
+			)
+			local extra_offset_x = (
+				( wc3UI_Options.theme == "undead" and -wc3UI_Options.uiScale*(3/260) )
+				or ( wc3UI_Options.theme == "nightelf" and -wc3UI_Options.uiScale*(8/260) )
+				or 0 
+			)
+			local extra_offset_nightelf_x = (
+				( wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale < 250 and wc3UI_Options.uiScale*(2/260) )
+				or wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale*(1/260)
+				or 0
 			)
 
+			inventoryActionSlot:SetWidth(slot_size)
+			inventoryActionSlot:SetHeight(slot_size)
+			inventoryActionSlot:ClearAllPoints()
+			inventoryActionSlot:SetPoint(
+				"BOTTOMLEFT", 
+				WIIIUI_inventorySlots, 
+				"CENTER", 
+				--column* (wc3UI_Options.uiScale*0.156)- (1-column) + (wc3UI_Options.theme == "undead" and 1/inventoryActionSlot:GetWidth() or 0),  
+				(column* (offset_slot)) - (1-column) + (extra_offset_x * column) + extra_offset_nightelf_x - (column == 1 and wc3UI_Options.theme == "nightelf" and wc3UI_Options.uiScale < 250 and wc3UI_Options.uiScale*(1/260) or 0),
+				row*(wc3UI_Options.uiScale*0.148076) - extra_offset_y - (row == 2 and wc3UI_Options.theme == "undead" and -wc3UI_Options.uiScale*(1/250) or 0 )
+			)
 
-			local column = 0
-			local row = 0
-			for inventoryNumber = 1, 6, 1 do
-
-				inventoryActionSlot = _G['ActionButton_CustomInventory_'..inventoryNumber]
-				--260
-				--30.814810
-				inventoryActionSlot:SetWidth(wc3UI_Options.uiScale*0.1185185 + base_2)
-				inventoryActionSlot:SetHeight(wc3UI_Options.uiScale*0.1185185 + base_2)
-				inventoryActionSlot:ClearAllPoints()
-				inventoryActionSlot:SetPoint(
-					"BOTTOMLEFT", 
-					WIIIUI_inventorySlots, 
-					"CENTER", 
-					column* (wc3UI_Options.uiScale*0.156)- (1-column) + (wc3UI_Options.theme == "undead" and 1/inventoryActionSlot:GetWidth() or 0),  
-					row*(wc3UI_Options.uiScale*0.148)
-				)
-
-				if( math.mod(inventoryNumber, 2) == 1 )then
-				
-					column = 0
-					if(inventoryNumber == 1)then
-						column = 1
-					end
-				else
+			if( math.mod(inventoryNumber, 2) == 1 )then
+			
+				column = 0
+				if(inventoryNumber == 1)then
 					column = 1
-					row = row + 1
 				end
+			else
+				column = 1
+				row = row + 1
 			end
-
-
-				
-
 		end
 
 		local bg_right_point = Wc3_UI_extensionBackground:GetRight()

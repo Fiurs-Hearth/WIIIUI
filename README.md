@@ -45,10 +45,21 @@ Contact me on Discord: Fiur#8658
 * Unpack the file
 * Open the unpacked file and rename the folder named `WIIIUI-master` to `WIIIUI`
 * Put the renamed folder into the AddOns folder: `World of Warcraft\Interface\AddOns`
-* Start or restart WoW if already running 
+* Start or restart WoW if already running
 * Recommended: [Set script memory to 0](https://imgur.com/a/V65UiKd), this helps against most game crashes caused by addons, click link for instructions.
 
-Download MoveAnything addon [here](https://legacy-wow.com/vanilla-addons/MoveAnything/).  
+### WoW Classic Anniversary / Classic Era
+
+WIIIUI now declares compatibility with both Vanilla `11200` and Classic Era / Anniversary `11508`.
+
+If the addon still does not appear in the AddOns list:
+
+1. Make sure the installed folder is exactly `World of Warcraft\_classic_era_\Interface\AddOns\WIIIUI`.
+2. Make sure `WIIIUI.toc` is directly inside that folder, not nested under `WIIIUI-master\WIIIUI`.
+3. Enable **Load out of date AddOns** once from the character-select AddOns menu if your client build is newer than the TOC version.
+4. Enable Lua errors with `/console scriptErrors 1`, reload the UI, and copy the first WIIIUI error if one appears.
+
+Download MoveAnything addon [here](https://legacy-wow.com/vanilla-addons/MoveAnything/).
 *With this addon you can move basically any UI part that was not added by addons (such as mine)*
 
 ### Don't forgot to open the config menu for configuration options, accessible in the lower right corner!

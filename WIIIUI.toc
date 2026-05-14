@@ -1,7 +1,8 @@
-## Interface: 11200
+## Interface: 11200, 11508
 ## Title: Warcraft III - UI
-## Version: 1.0
+## Version: 1.0.1
 ## Notes: WIIIUI
+## X-Compatible-With: Vanilla 1.12, Classic Era / Anniversary 1.15.8
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariablesPerCharacter: wc3UI_Options

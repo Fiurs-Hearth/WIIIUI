@@ -1,7 +1,7 @@
-## Interface: 11200
+## Interface: 20505
 ## Title: Warcraft III - UI
-## Version: 1.0
-## Notes: WIIIUI
+## Version: 1.1
+## Notes: WIIIUI compatibility build for WoW Classic/TBC Anniversary
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariablesPerCharacter: wc3UI_Options

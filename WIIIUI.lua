@@ -1,5 +1,44 @@
 local _G, _ = _G or getfenv()
 
+local function WIIIUI_InstallLegacyScriptGlobals()
+	local probe = CreateFrame and CreateFrame("Frame")
+	local meta = probe and getmetatable(probe)
+	local methods = meta and meta.__index
+	local originalSetScript = methods and methods.SetScript
+
+	if not originalSetScript or methods.__WIIIUI_LegacyScriptGlobals then
+		return
+	end
+
+	methods.__WIIIUI_LegacyScriptGlobals = true
+	methods.SetScript = function(frame, scriptType, handler)
+		if type(handler) ~= "function" then
+			return originalSetScript(frame, scriptType, handler)
+		end
+
+		return originalSetScript(frame, scriptType, function(self, ...)
+			_G.this = self
+
+			if scriptType == "OnEvent" then
+				_G.event = select(1, ...)
+				_G.arg1 = select(2, ...)
+				_G.arg2 = select(3, ...)
+				_G.arg3 = select(4, ...)
+				_G.arg4 = select(5, ...)
+			else
+				_G.arg1 = select(1, ...)
+				_G.arg2 = select(2, ...)
+				_G.arg3 = select(3, ...)
+				_G.arg4 = select(4, ...)
+			end
+
+			return handler(self, ...)
+		end)
+	end
+end
+
+WIIIUI_InstallLegacyScriptGlobals()
+
 BINDING_HEADER_WC3HEADER = "Warcraft III - UI"
 MAX_LEVEL = 60
 

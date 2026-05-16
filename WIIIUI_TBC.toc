@@ -1,0 +1,10 @@
+## Interface: 20505
+## Title: Warcraft III - UI
+## Version: 1.1
+## Notes: WIIIUI compatibility build for Burning Crusade Classic Anniversary
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariablesPerCharacter: wc3UI_Options
+WIIIUI.lua
+WIIIUI.xml
+

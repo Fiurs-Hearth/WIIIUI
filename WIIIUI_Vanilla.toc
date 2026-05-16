@@ -1,0 +1,10 @@
+## Interface: 11508
+## Title: Warcraft III - UI
+## Version: 1.1
+## Notes: WIIIUI compatibility build for WoW Classic Era
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariablesPerCharacter: wc3UI_Options
+WIIIUI.lua
+WIIIUI.xml
+

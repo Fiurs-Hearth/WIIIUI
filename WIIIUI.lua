@@ -1846,17 +1846,26 @@ function ModifyPlayerPortrait()
 	PortraitBackground:SetHeight(wc3UI_Options.uiScale*0.35 + 20)
 end
 
-function AlignMinimap()
+function AlignMinimap(repositionMinimap)
 
 	local extraAlign, zoomInPixels
 
 	minimapFrame:SetWidth(wc3UI_Options.uiScale)
 	minimapFrame:SetHeight(wc3UI_Options.uiScale)
 
-	Minimap:ClearAllPoints()
-	Minimap:SetParent(UIParent)
+	if repositionMinimap ~= false then
+		Minimap:ClearAllPoints()
+		Minimap:SetParent(UIParent)
+		Minimap:SetPoint(
+			"CENTER",
+			minimapFrame,
+			"CENTER",
+			wc3UI_Options.uiScale * -0.189,
+			wc3UI_Options.uiScale * -0.20
+		)
+	end
+
 	Minimap:Show()
-	Minimap:SetPoint("CENTER", minimapFrame, "CENTER", wc3UI_Options.uiScale*-0.189, wc3UI_Options.uiScale*-0.20)
 	Minimap:SetFrameStrata("LOW")
 	Minimap:SetFrameLevel(1)
 	Minimap:SetWidth(wc3UI_Options.uiScale*0.55)
@@ -3833,7 +3842,7 @@ function AlignUI()
 			-- Frame pos and size
 			AlignBuffFrame()		-- Buff position
 			
-			AlignMinimap()			-- Bottom left UI, Minimap ½portrait
+			AlignMinimap(true)			-- Bottom left UI, Minimap ½portrait
 			AlignPortrait()			-- Bottom left UI, ½portrait info area
 			AlignZoneText()
 
@@ -4388,7 +4397,37 @@ function InitiateMiniMap()
 	end)
 	MinimapCluster:SetParent(UIParent)
 	MinimapCluster:Hide()
-	MinimapBackdrop:Hide()
+	MinimapBackdrop:ClearAllPoints()
+	MinimapBackdrop:SetPoint("CENTER", Minimap, "CENTER", -9, -24)
+	MinimapBackdrop:Show()
+
+	if MinimapBorder then
+		MinimapBorder:Hide()
+	end
+
+	if MinimapNorthTag then
+		MinimapNorthTag:Hide()
+	end
+
+	if MinimapCompassTexture then
+		MinimapCompassTexture:Hide()
+	end
+
+	if MiniMapWorldMapButton then
+		MiniMapWorldMapButton:Hide()
+	end
+
+	if MiniMapTracking then
+		MiniMapTracking:Hide()
+	end
+
+	if MinimapZoomIn then
+		MinimapZoomIn:Hide()
+	end
+
+	if MinimapZoomOut then
+		MinimapZoomOut:Hide()
+	end
 end
 
 function Wc3UI_OnLoad()
@@ -4415,7 +4454,7 @@ function Wc3UI_OnLoad()
 				InitiateMiniMap()
 
 				-- Frame pos and size
-				AlignMinimap()			-- Bottom left UI, Minimap ½portrait
+				AlignMinimap(true)			-- Bottom left UI, Minimap ½portrait
 				AlignPortrait()			-- Bottom left UI, ½portrait info area
 
 				AlignMiddleExtension()	-- Middle UI, extension of grid area
@@ -4473,7 +4512,7 @@ function Wc3UI_OnLoad()
 			HPBarDamageGradiant()		-- Checks current HP and changes the bar color towards red
 			CombatTextPortrait()
 			EnableChatScroll()
-			AlignMinimap()			-- Bottom left UI, Minimap ½portrait
+			AlignMinimap(false)			-- Bottom left UI, Minimap ½portrait
 			SwitchMainActionBarEvent()	-- Creates events to check if BonusActionBar is displayed so we can Hide/Show the MainMenuBar buttons
 			AlignZoneText()
 			ApplyOnDragFunction()
